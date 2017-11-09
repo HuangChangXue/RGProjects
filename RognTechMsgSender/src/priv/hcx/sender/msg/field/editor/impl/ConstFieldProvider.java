@@ -8,6 +8,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import priv.hcx.sender.msg.field.editor.FieldEditor;
+import priv.hcx.sender.msg.field.editor.impl.ui.ConstFieldEditor;
 
 public class ConstFieldProvider implements FieldEditor {
 
@@ -24,10 +25,7 @@ public class ConstFieldProvider implements FieldEditor {
 
 	@Override
 	public JPanel getEditPaneByFieldId(String fieldId) {
-		JPanel panel=new JPanel();
-		panel.add(new JLabel("常量值:"));
-		panel.add(new JTextField());
-		return panel;
+		return new ConstFieldEditor();
 	}
 
 	@Override

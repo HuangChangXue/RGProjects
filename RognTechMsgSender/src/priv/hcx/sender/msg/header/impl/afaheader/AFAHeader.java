@@ -1,4 +1,4 @@
-package priv.hcx.sender.msg.header.impl;
+package priv.hcx.sender.msg.header.impl.afaheader;
 
 import java.util.ArrayList;
 import java.util.List;

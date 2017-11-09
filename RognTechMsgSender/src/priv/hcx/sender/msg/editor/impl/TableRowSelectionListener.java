@@ -10,6 +10,7 @@ import javax.swing.event.ListSelectionListener;
 
 import priv.hcx.sender.bean.MsgField;
 import priv.hcx.sender.msg.field.editor.FieldEditor;
+import priv.hcx.sender.msg.field.editor.impl.ConstFieldProvider;
 import priv.hcx.sender.tool.CommonTools;
 import priv.hcx.sender.view.SenderMainFrame;
 
@@ -42,8 +43,9 @@ public class TableRowSelectionListener implements ListSelectionListener {
 						aviliable.add(editor);
 					}
 				}
-			}
-			SenderMainFrame.getMainFrame().setFieldEdirot(aviliable.get(0).getEditPaneByFieldId(field.getId()));
+			}//aviliable.get(0).getEditPaneByFieldId(field.getId())
+			
+			SenderMainFrame.getMainFrame().setFieldEdirot(new ConstFieldProvider().getEditPaneByFieldId(null));
 		}
 
 	}
