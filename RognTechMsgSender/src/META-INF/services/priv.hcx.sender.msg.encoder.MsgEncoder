@@ -1,0 +1,2 @@
+priv.hcx.sender.msg.encoder.impl.XmlEncoder
+priv.hcx.sender.msg.encoder.impl.String2HexEncoder

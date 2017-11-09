@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="priv.hcx.sender.bean.res.MsgFieldDao">
+	<resultMap type="msgField" id="msgfield">
+		<id column="id" property="id" />
+		<result column="name" property="name" />
+
+		<result column="src" property="src"
+			typeHandler="org.apache.ibatis.type.EnumTypeHandler" />
+		<result column="transactionid" property="transactionid" />
+	</resultMap>
+	<sql id="baseCol">
+		id,name,src,transactionid
+	</sql>
+	<sql id="table">sender_transaction_field</sql>
+	<sql id="notnullCol">
+		<trim suffix=" " suffixOverrides=",">
+			<if test="id != null"> id,</if>
+			<if test="name != null"> name,</if>
+
+			<if test="src != null"> src,</if>
+			<if test="transactionid != null"> transactionid,</if>
+		</trim>
+	</sql>
+	<sql id="notnullvalue">
+		<trim suffix=" " suffixOverrides=",">
+			<if test="id != null"> #{id},</if>
+			<if test="name != null"> #{name},</if>
+			<if test="src != null"> #{src},</if>
+			<if test="transactionid != null"> #{transactionid}</if>
+		</trim>
+	</sql>
+	<sql id="notnullKeyValues">
+		<trim suffix=" " suffixOverrides=",">
+			<if test="id != null"> id=#{id},</if>
+			<if test="name != null"> name=#{name},</if>
+			<if test="src != null"> src=#{src},</if>
+			<if test="transactionid != null"> transactionid=#{transactionid}</if>
+		</trim>
+	</sql>
+	<select id="queryById" resultType="msgField">
+		select
+		<include refid="baseCol"></include>
+		from
+		<include refid="table"></include>
+		<where>
+			id=#{id}
+		</where>
+	</select>
+
+	<select id="queryByTransactonId" resultType="msgField"
+		resultMap="msgfield">
+		select
+		<include refid="baseCol"></include>
+		from
+		<include refid="table"></include>
+		<where>
+			transactionid=#{transactionid}
+		</where>
+	</select>
+
+	<insert id="saveMsg">
+		insert into
+		<include refid="table"></include>
+		(
+		<include refid="notnullCol"></include>
+		)values (
+		<include refid="notnullvalue"></include>
+		)
+	</insert>
+	<update id="update">
+		update
+		<include refid="table"></include>
+		<set>
+			<include refid="notnullKeyValues"></include>
+		</set>
+	</update>
+</mapper>
