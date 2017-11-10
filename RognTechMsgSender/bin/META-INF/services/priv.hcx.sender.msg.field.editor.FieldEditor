@@ -3,3 +3,4 @@ priv.hcx.sender.msg.field.editor.impl.DatabaseFieldProvider
 priv.hcx.sender.msg.field.editor.impl.FileFieldProvider
 priv.hcx.sender.msg.field.editor.impl.RandomFieldProvider
 priv.hcx.sender.msg.field.editor.impl.TimeFieldProvider 
+priv.hcx.sender.msg.field.editor.impl.SequenceFieldProvider

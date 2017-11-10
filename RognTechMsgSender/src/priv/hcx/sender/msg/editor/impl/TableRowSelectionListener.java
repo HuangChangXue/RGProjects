@@ -28,13 +28,13 @@ public class TableRowSelectionListener implements ListSelectionListener {
 	@Override
 	public void valueChanged(ListSelectionEvent e) {
 		if (!e.getValueIsAdjusting()) {
-			int viewIdx=table.getSelectedRow();
-			int selectedrow = table.convertColumnIndexToModel(viewIdx);
+			int viewIdx = table.getSelectedRow();
+			int selectedrow = table.convertRowIndexToModel(viewIdx);
 			FieldTableModel model = (FieldTableModel) table.getModel();
 			List<FieldEditor> editors = CommonTools.loadService(FieldEditor.class);
 			List<FieldEditor> aviliable = new ArrayList<FieldEditor>();
 			MsgField field = model.getFieldAt(selectedrow);
-			if(selectedrow<0){
+			if (selectedrow < 0) {
 				return;
 			}
 			if (editors.size() > 0) {
@@ -43,9 +43,8 @@ public class TableRowSelectionListener implements ListSelectionListener {
 						aviliable.add(editor);
 					}
 				}
-			}//aviliable.get(0).getEditPaneByFieldId(field.getId())
-			
-			SenderMainFrame.getMainFrame().setFieldEdirot(new ConstFieldProvider().getEditPaneByFieldId(null));
+			}
+			SenderMainFrame.getMainFrame().setFieldEdirot(aviliable.get(0).getEditPaneByFieldId(field.getId()));
 		}
 
 	}

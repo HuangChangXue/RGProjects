@@ -179,8 +179,9 @@ public class SenderMainFrame extends JFrame implements Const {
 	JPanel fieldEditorPanel = new JPanel();
 
 	public void setFieldEdirot(Component comp) {
+		fieldEditorPanel.setLayout(new BorderLayout());
 		fieldEditorPanel.removeAll();
-		fieldEditorPanel.add(comp);
+		fieldEditorPanel.add(comp,BorderLayout.CENTER);
 		split.setRightComponent(fieldEditorPanel);
 	}
 

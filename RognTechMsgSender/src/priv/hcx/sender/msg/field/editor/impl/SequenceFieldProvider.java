@@ -13,9 +13,9 @@ public class SequenceFieldProvider implements FieldEditor {
 	@Override
 	public String getEditorName() {
 		// TODO Auto-generated method stub
-		return null;
+		return name;
 	}
-
+private String name="SequenceFieldProvider";
 	@Deprecated
 	public
 	String getFieldConfName() {
@@ -44,7 +44,7 @@ public class SequenceFieldProvider implements FieldEditor {
 	@Override
 	public boolean isAviableforName(String name) {
 		// TODO Auto-generated method stub
-		return false;
+		return name.equals(this.name);
 	}
 
 }

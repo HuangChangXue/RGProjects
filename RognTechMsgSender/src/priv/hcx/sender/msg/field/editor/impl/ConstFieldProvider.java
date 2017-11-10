@@ -11,12 +11,16 @@ import priv.hcx.sender.msg.field.editor.FieldEditor;
 import priv.hcx.sender.msg.field.editor.impl.ui.ConstFieldEditor;
 
 public class ConstFieldProvider implements FieldEditor {
-
+	private String name="ConstFieldProvider";
 	@Override
 	public String getEditorName() {
-		return "ConstFieldProvider";
+		return name;
 	}
-
+	@Override
+	public boolean isAviableforName(String name) {
+		// TODO Auto-generated method stub
+		return name.equalsIgnoreCase(this.name);
+	}
 	@Override
 	public String getFieldConfName() {
 		
@@ -40,11 +44,7 @@ public class ConstFieldProvider implements FieldEditor {
 		return null;
 	}
 
-	@Override
-	public boolean isAviableforName(String name) {
-		// TODO Auto-generated method stub
-		return true;
-	}
+	
 
 
 }

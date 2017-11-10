@@ -31,7 +31,6 @@ import priv.hcx.sender.tool.CommonTools;
 import priv.hcx.sender.tool.GUITool;
 import priv.hcx.sender.view.ComboboxListCellRender;
 import priv.hcx.sender.view.Const;
-import priv.hcx.sender.view.actions.FieldSouceChangeListener;
 
 public class DefaultMsgEditor implements MsgEditor, Const {
 	/*
