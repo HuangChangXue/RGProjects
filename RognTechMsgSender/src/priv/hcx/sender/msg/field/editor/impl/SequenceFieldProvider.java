@@ -6,18 +6,19 @@ import java.util.Map;
 import javax.swing.JPanel;
 
 import priv.hcx.sender.msg.field.editor.FieldEditor;
-import priv.hcx.sender.msg.field.editor.impl.ui.TimeFieldEditor;
+import priv.hcx.sender.msg.field.editor.impl.ui.SequenceFieldEditor;
 
-public class TimeFieldProvider implements FieldEditor {
+public class SequenceFieldProvider implements FieldEditor {
 
 	@Override
 	public String getEditorName() {
 		// TODO Auto-generated method stub
-		return "TimeFieldProvider";
+		return null;
 	}
 
-	@Override
-	public String getFieldConfName() {
+	@Deprecated
+	public
+	String getFieldConfName() {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -25,7 +26,7 @@ public class TimeFieldProvider implements FieldEditor {
 	@Override
 	public JPanel getEditPaneByFieldId(String fieldId) {
 		// TODO Auto-generated method stub
-		return new TimeFieldEditor();
+		return new SequenceFieldEditor();
 	}
 
 	@Override
@@ -45,6 +46,5 @@ public class TimeFieldProvider implements FieldEditor {
 		// TODO Auto-generated method stub
 		return false;
 	}
-
 
 }

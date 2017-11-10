@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.ServiceLoader;
 import java.util.UUID;
 
@@ -49,5 +50,15 @@ public class CommonTools {
 
 	public static String createRandomID() {
 		return UUID.randomUUID().toString().replaceAll("-", "").toUpperCase();
+	}
+	private static char[] charactor="0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ,./;'.+-*\\|<>?:\"{}[]`~!@#$%^&*()_+-=".toCharArray();
+	
+	
+	public static String createRandomString(int len){
+		StringBuilder sb=new StringBuilder();
+		while(--len>0){
+			sb.append(charactor[(int)(Math.random()*charactor.length)]);
+		}
+		return sb.toString();
 	}
 }

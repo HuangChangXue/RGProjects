@@ -6,6 +6,7 @@ import java.util.Map;
 import javax.swing.JPanel;
 
 import priv.hcx.sender.msg.field.editor.FieldEditor;
+import priv.hcx.sender.msg.field.editor.impl.ui.DataBaseFieldEditor;
 
 public class DatabaseFieldProvider implements FieldEditor {
 
@@ -23,8 +24,7 @@ public class DatabaseFieldProvider implements FieldEditor {
 
 	@Override
 	public JPanel getEditPaneByFieldId(String fieldId) {
-		// TODO Auto-generated method stub
-		return null;
+		return new DataBaseFieldEditor();
 	}
 
 	@Override
