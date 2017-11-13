@@ -12,11 +12,13 @@ public static String MAIN_WINDOW_MENU_FILE_SAVE_TRANSACTION="menufilesaveTransac
 //工具菜单
 public static String MAIN_WINDOW_MENU_CONFIG="menuconf";
 public static String MAIN_WINDOW_MENU_CONFIG_SERVER="menuconfserver";
+public static String MAIN_WINDOW_MENU_CONFIG_SERVER_ADD="newServer";
+public static String MAIN_WINDOW_MENU_CONFIG_SERVER_EDIT="editServer";
 public static String MAIN_WINDOW_MENU_CONFIG_MSG="menuconfmsg";
 public static String MAIN_WINDOW_MENU_CONFIG_MSG_HEAD="menuconfmsghead";
 public static String MAIN_WINDOW_MENU_CONFIG_MSG_ENCODER="menuconfmsgencoder";
 public static String MAIN_WINDOW_MENU_CONFIG_DATABASE="database";
-
+public static String MAIN_WINDOW_MENU_CONFIG_DATABASE_NEW="newDataBase";
 //工作区
 public static String  MAIN_WINDOW_CONTENT_TREE_BORDER="transList";
 

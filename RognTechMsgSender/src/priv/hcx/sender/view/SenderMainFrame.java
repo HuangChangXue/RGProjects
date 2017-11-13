@@ -10,6 +10,7 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JSeparator;
 import javax.swing.JSplitPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
@@ -26,8 +27,12 @@ import priv.hcx.sender.bean.Folder;
 import priv.hcx.sender.bean.Transaction;
 import priv.hcx.sender.bean.res.FolderDao;
 import priv.hcx.sender.bean.res.TransactionDao;
+import priv.hcx.sender.db.DBConf;
+import priv.hcx.sender.db.DataBase;
 import priv.hcx.sender.msg.encoder.MsgEncoder;
 import priv.hcx.sender.msg.header.HeaderEditor;
+import priv.hcx.sender.server.Server;
+import priv.hcx.sender.server.ServerConf;
 import priv.hcx.sender.tool.CommonTools;
 import priv.hcx.sender.tool.GUITool;
 import priv.hcx.sender.view.tree.JTreePopupMenu;
@@ -167,7 +172,7 @@ public class SenderMainFrame extends JFrame implements Const {
 		mansplit.setRightComponent(split);
 		mansplit.setBorder(null);
 		fieldEditorPanel.setBorder(new TitledBorder(GUITool.getName(MAIN_WINDOW_MSG_FIELD_SETTING_BORDER)));
-		
+
 		this.add(mansplit, BorderLayout.CENTER);
 	}
 
@@ -181,7 +186,7 @@ public class SenderMainFrame extends JFrame implements Const {
 	public void setFieldEdirot(Component comp) {
 		fieldEditorPanel.setLayout(new BorderLayout());
 		fieldEditorPanel.removeAll();
-		fieldEditorPanel.add(comp,BorderLayout.CENTER);
+		fieldEditorPanel.add(comp, BorderLayout.CENTER);
 		split.setRightComponent(fieldEditorPanel);
 	}
 
@@ -193,9 +198,24 @@ public class SenderMainFrame extends JFrame implements Const {
 		this.setJMenuBar(menubar);
 	}
 
+	private JMenu createServerMenu() {
+		JMenu menu = new JMenu(GUITool.getName(MAIN_WINDOW_MENU_CONFIG_SERVER));
+		menu.add(GUITool.createMenuItem(MAIN_WINDOW_MENU_CONFIG_SERVER_ADD));
+//		JMenu edit=new JMenu(GUITool.getName(MAIN_WINDOW_MENU_CONFIG_SERVER_EDIT));
+//		menu.add(edit);
+		menu.add(new JSeparator());
+		List<ServerConf> servers=Server.getAllServerConf();
+		for(ServerConf s:servers){
+//			edit.add(GUITool.createMenuItem(s.getName()));
+			menu.add(GUITool.createMenuItem(s.getName()));
+		}
+		return menu;
+	}
+
+	
 	private JMenu createToolMenu() {
-		JMenu menu = new JMenu(GUITool.getName(MAIN_WINDOW_MENU_FILE));
-		menu.add(GUITool.createMenuItem(MAIN_WINDOW_MENU_CONFIG_SERVER));
+		JMenu menu = new JMenu(GUITool.getName(MAIN_WINDOW_MENU_CONFIG));
+		menu.add(createServerMenu());
 		menu.addSeparator();
 		JMenu msg = new JMenu(GUITool.getName(MAIN_WINDOW_MENU_CONFIG_MSG));
 		JMenu encoder = new JMenu(GUITool.getName(MAIN_WINDOW_MENU_CONFIG_MSG_ENCODER));
@@ -211,15 +231,20 @@ public class SenderMainFrame extends JFrame implements Const {
 		}
 		msg.add(encoder);
 		menu.add(msg);
-		JMenu database = new JMenu(GUITool.getName(MAIN_WINDOW_MENU_CONFIG_DATABASE));
-		List<java.sql.Driver> drivers = CommonTools.loadService(java.sql.Driver.class);
-		for (java.sql.Driver driver : drivers) {
-			database.add(GUITool.createMenuItem(driver.getClass().getName()));
-		}
-		menu.add(database);
+		
+		menu.add(createDatatbaseMenu());
 		return menu;
 	}
+private JMenu createDatatbaseMenu(){
+	JMenu database = new JMenu(GUITool.getName(MAIN_WINDOW_MENU_CONFIG_DATABASE));
+	database.add(GUITool.createMenuItem(MAIN_WINDOW_MENU_CONFIG_DATABASE_NEW));
+	List<DBConf> dbconfs=DataBase.getAllDbConf();
+	for(DBConf conf:dbconfs){
+		database.add(GUITool.createMenuItem(conf.getName()));
+	}
 
+	return database;
+}
 	private JMenu createFileMenu() {
 		JMenu menu = new JMenu(GUITool.getName(MAIN_WINDOW_MENU_FILE));
 		menu.add(GUITool.createMenuItem(MAIN_WINDOW_MENU_FILE_CREATE_NEW_TRANSACTION_TYPE));
