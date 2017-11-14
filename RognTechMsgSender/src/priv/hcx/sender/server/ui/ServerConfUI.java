@@ -5,18 +5,22 @@ import java.awt.BorderLayout;
 import javax.swing.JPanel;
 import javax.swing.JLabel;
 import java.awt.FlowLayout;
+
+import javax.swing.JDialog;
 import javax.swing.JTextField;
 import javax.swing.BoxLayout;
 import javax.swing.JComboBox;
 import javax.swing.JButton;
 
-public class ServerConfUI extends JFrame {
+public class ServerConfUI extends JDialog {
 	private JTextField textField_1;
 	private JTextField textField_2;
 	private JTextField textField;
-	public ServerConfUI() {
+	public ServerConfUI(JFrame frame) {
+		super(frame,true);
 		setTitle("服务器设置");
 		setResizable(false);
+		this.setSize(453, 267);
 		getContentPane().setLayout(new BorderLayout(0, 0));
 		
 		JPanel panel = new JPanel();

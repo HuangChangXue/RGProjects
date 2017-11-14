@@ -7,6 +7,7 @@ import javax.swing.JDialog;
 import javax.swing.JFrame;
 
 import priv.hcx.sender.db.ui.DataBaseConnectionEditorUI;
+import priv.hcx.sender.server.ui.ServerConfUI;
 import priv.hcx.sender.tool.GUITool;
 import priv.hcx.sender.view.Const;
 import priv.hcx.sender.view.SenderMainFrame;
@@ -28,6 +29,11 @@ public class MenuActionListener implements ActionListener ,Const {
 //			GUITool.adjustFrame(frame,false);
 //			frame.setVisible(true);
 //			frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		}
+		else if (cmd.equals(MAIN_WINDOW_MENU_CONFIG_SERVER_ADD)){
+			JDialog frame=new ServerConfUI(SenderMainFrame.getMainFrame());
+			GUITool.adjustFrame(frame, false);
+			frame.setVisible(true);
 		}
 	}
 
