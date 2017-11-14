@@ -12,10 +12,13 @@ import javax.swing.SwingConstants;
 import javax.swing.AbstractAction;
 
 import priv.hcx.sender.tool.CommonTools;
+import priv.hcx.sender.view.SenderMainFrame;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class DataBaseConnectionEditorUI extends JDialog {
 	/**
@@ -28,6 +31,17 @@ public class DataBaseConnectionEditorUI extends JDialog {
 	private JTextField password;
 	private JTextField testSql;
 
+	static private Map<String ,DataBaseConnectionEditorUI> mapping=new HashMap<String,DataBaseConnectionEditorUI>();
+	public static  void loadConfig(String config){
+		DataBaseConnectionEditorUI inst=null;
+		if(mapping.containsKey(config)){
+			inst=mapping.get(config);
+		}
+		else {
+			inst=new DataBaseConnectionEditorUI(SenderMainFrame.getMainFrame(),true);
+		}
+		inst.setVisible(true);
+	}
 	public DataBaseConnectionEditorUI(JFrame owner,  boolean modal ) {
 		super(owner,"数据库连接设置",true);
 		this.setSize(444, 272);

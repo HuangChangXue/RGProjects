@@ -5,6 +5,8 @@ import java.awt.BorderLayout;
 import javax.swing.JPanel;
 import javax.swing.JLabel;
 import java.awt.FlowLayout;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.swing.JDialog;
 import javax.swing.JTextField;
@@ -12,10 +14,26 @@ import javax.swing.BoxLayout;
 import javax.swing.JComboBox;
 import javax.swing.JButton;
 
+import priv.hcx.sender.view.SenderMainFrame;
+
 public class ServerConfUI extends JDialog {
 	private JTextField textField_1;
 	private JTextField textField_2;
 	private JTextField textField;
+	public static void  loadConfig(String config){
+		ServerConfUI inst=null;
+			if(serverUIs.containsKey(config)){
+				inst=serverUIs.get(config);
+			}
+			else {
+				inst=new ServerConfUI(SenderMainFrame.getMainFrame());
+			}
+			//TODO 加载配置文件
+			
+			
+			inst.setVisible(true);
+	}
+	static private Map<String , ServerConfUI > serverUIs=new HashMap<String,ServerConfUI>();
 	public ServerConfUI(JFrame frame) {
 		super(frame,true);
 		setTitle("服务器设置");

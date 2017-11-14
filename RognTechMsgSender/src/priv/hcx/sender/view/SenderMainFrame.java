@@ -100,7 +100,10 @@ public class SenderMainFrame extends JFrame implements Const {
 
 		CommonTools.closeSession(session);
 	}
-
+	private  static JTree tree=null;
+	public static JTree getNaviTree(){
+		return tree;
+	}
 	private void initMainPanel() {
 
 		DefaultMutableTreeNode root = GUITool.createTreeNode(new Folder("交易类型"));
@@ -151,7 +154,7 @@ public class SenderMainFrame extends JFrame implements Const {
 			}
 		});
 		SenderMainFrame.treeModel = treeModel;
-		JTree tree = new JTree(treeModel);
+		 tree= new JTree(treeModel);
 		// tree.setRootVisible(false);
 		new JTreePopupMenu(tree);
 		JScrollPane jsp = new JScrollPane(tree);
