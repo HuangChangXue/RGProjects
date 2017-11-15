@@ -40,3 +40,15 @@ create table if not exists sender_dbconf(
 	driverclass varchar2(128) not null, 
 	testsql  varchar2(256) not null
 );
+
+ private String id, name, host, port, protel, encoder, decoder; -->
+
+create table if not exists server_conf(
+	id  VARCHAR_IGNORECASE(32) primary key,
+	name varchar2(16) not null , 
+	host varchar2(64) not null, 
+	port varchar2(32) not null,
+	protel varchar2(32) not null, 
+	encoder varchar2(128) not null, 
+	decoder  varchar2(256) not null
+);

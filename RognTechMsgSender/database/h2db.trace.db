@@ -106,3 +106,6 @@ Caused by: java.lang.IllegalStateException: The file is locked: nio:I:/WorkSpace
 	at org.h2.mvstore.FileStore.open(FileStore.java:173)
 	at org.h2.mvstore.MVStore.<init>(MVStore.java:347)
 	... 42 more
+2017-11-15 21:17:07 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLException: Syntax error in SQL statement "PRIVATE[*] STRING ID, NAME, HOST, PORT, PROTEL, ENCODER, DECODER;                                                                                                                                                                                                                                                                        ) "; expected "PREPARE, {"; SQL statement:
+private String id, name, host, port, protel, encoder, decoder; --> create table if not exists server_conf( id  VARCHAR_IGNORECASE(32) primary key, name varchar2(16) not null , host varchar2(64) not null, port varchar2(32) not null, protel varchar2(32) not null, encoder varchar2(128) not null, decoder  varchar2(256) not null ) [42001-195]

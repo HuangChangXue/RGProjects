@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="priv.hcx.sender.db.dao.DBConfDao">
+	<resultMap type="dbconf" id="dbconf">
+		<id column="id" property="id" />
+		<result column="name" property="name" />
+		<result column="url" property="url" />
+		<result column="user" property="user" />
+		<result column="pass" property="pass" />
+		<result column="driverclass" property="driverclass" />
+		<result column="testsql" property="testsql" />
+		<!--String id,name, url, user, pass, driverclass, testsql;
+	 -->
+	</resultMap>
+	<sql id="baseCol">
+		id,name, url, user, pass, driverclass, testsql
+	</sql>
+	<sql id="table">sender_dbconf</sql>
+	<sql id="notnullCol">
+		<trim suffix=" " suffixOverrides=",">
+			<if test="id != null"> id,</if>
+			<if test="name != null"> name,</if>
+			<if test="url != null"> url,</if>
+			<if test="user != null"> user,</if>
+			<if test="pass != null"> pass,</if>
+			<if test="driverclass != null"> driverclass,</if>
+			<if test="testsql != null"> testsql,</if>
+		</trim>
+	</sql>
+	<sql id="notnullvalue">
+		<trim suffix=" " suffixOverrides=",">
+			<if test="id != null"> #{id},</if>
+			<if test="name != null"> #{name},</if>
+			<if test="url != null"> #{url},</if>
+			<if test="user != null"> #{user},</if>
+			<if test="pass != null"> #{pass},</if>
+			<if test="driverclass != null"> #{driverclass},</if>
+			<if test="testsql != null"> #{testsql},</if>
+		</trim>
+	</sql>
+	<sql id="notnullKeyValues">
+		<trim suffix=" " suffixOverrides=",">
+			<if test="id != null"> id=#{id},</if>
+			<if test="name != null"> name=#{name},</if>
+			<if test="url != null">url= #{url},</if>
+			<if test="user != null"> user=#{user},</if>
+			<if test="pass != null">pass= #{pass},</if>
+			<if test="driverclass != null">driverclass= #{driverclass},</if>
+			<if test="testsql != null"> testsql=#{testsql},</if>
+		</trim>
+	</sql>
+
+	<select id="queryById" resultType="dbconf">
+		select
+		<include refid="baseCol"></include>
+		from
+		<include refid="table"></include>
+		<where>
+			id=#{id}
+		</where>
+	</select>
+
+	<select id="queryAll" resultType="dbconf">
+		select
+		<include refid="baseCol"></include>
+		from
+		<include refid="table"></include>
+
+	</select>
+
+	<insert id="save">
+		insert into
+		<include refid="table"></include>
+		(
+		<include refid="notnullCol"></include>
+		)values (
+		<include refid="notnullvalue"></include>
+		)
+	</insert>
+	<update id="update">
+		update
+		<include refid="table"></include>
+		<set>
+			<include refid="notnullKeyValues"></include>
+		</set>
+	</update>
+</mapper>

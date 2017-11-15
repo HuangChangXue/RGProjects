@@ -15,11 +15,14 @@ import javax.swing.JComboBox;
 import javax.swing.JButton;
 
 import priv.hcx.sender.view.SenderMainFrame;
+import javax.swing.DefaultComboBoxModel;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class ServerConfUI extends JDialog {
-	private JTextField textField_1;
-	private JTextField textField_2;
-	private JTextField textField;
+	private JTextField hostname;
+	private JTextField hostport;
+	private JTextField configName;
 	public static void  loadConfig(String config){
 		ServerConfUI inst=null;
 			if(serverUIs.containsKey(config)){
@@ -69,41 +72,46 @@ public class ServerConfUI extends JDialog {
 		label_5.setBounds(10, 140, 83, 15);
 		panel_1.add(label_5);
 		
-		textField_1 = new JTextField();
-		textField_1.setBounds(82, 11, 352, 21);
-		panel_1.add(textField_1);
-		textField_1.setColumns(10);
+		hostname = new JTextField();
+		hostname.setBounds(82, 11, 352, 21);
+		panel_1.add(hostname);
+		hostname.setColumns(10);
 		
-		textField_2 = new JTextField();
-		textField_2.setColumns(10);
-		textField_2.setBounds(82, 43, 352, 21);
-		panel_1.add(textField_2);
+		hostport = new JTextField();
+		hostport.setColumns(10);
+		hostport.setBounds(82, 43, 352, 21);
+		panel_1.add(hostport);
 		
-		JComboBox comboBox = new JComboBox();
-		comboBox.setBounds(82, 106, 352, 21);
-		panel_1.add(comboBox);
+		JComboBox encoder = new JComboBox();
+		encoder.setBounds(82, 106, 352, 21);
+		panel_1.add(encoder);
 		
-		JComboBox comboBox_1 = new JComboBox();
-		comboBox_1.setBounds(82, 137, 352, 21);
-		panel_1.add(comboBox_1);
+		JComboBox decoder = new JComboBox();
+		decoder.setBounds(82, 137, 352, 21);
+		panel_1.add(decoder);
 		
 		JLabel label = new JLabel("配置文件名称：");
 		label.setBounds(10, 170, 95, 15);
 		panel_1.add(label);
 		
-		textField = new JTextField();
-		textField.setColumns(10);
-		textField.setBounds(100, 167, 334, 21);
-		panel_1.add(textField);
+		configName = new JTextField();
+		configName.setColumns(10);
+		configName.setBounds(100, 167, 334, 21);
+		panel_1.add(configName);
 		
-		JComboBox comboBox_2 = new JComboBox();
-		comboBox_2.setBounds(82, 75, 352, 21);
-		panel_1.add(comboBox_2);
+		JComboBox comunitationProtel = new JComboBox();
+		comunitationProtel.setModel(new DefaultComboBoxModel(new String[] {"TCP/IP", "UDP", "SOAP", "HTTP", "HTTPS", "FTP", "SSH", "SFTP", "WebService"}));
+		comunitationProtel.setBounds(82, 75, 352, 21);
+		panel_1.add(comunitationProtel);
 		
 		JPanel panel_2 = new JPanel();
 		getContentPane().add(panel_2, BorderLayout.SOUTH);
 		
 		JButton btnNewButton = new JButton("保存");
+		btnNewButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
 		panel_2.add(btnNewButton);
 	}
 }

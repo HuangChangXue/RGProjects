@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="priv.hcx.sender.server.dao.ServerConfDao">
+	<resultMap type="server" id="server">
+		<id column="id" property="id" />
+		<result column="name" property="name" />
+		<result column="host" property="host" />
+		<result column="port" property="port" />
+		<result column="protel" property="protel" />
+		<result column="encoder" property="encoder" />
+		<result column="decoder" property="decoder" />
+		<!-- private String id, name, host, port, protel, encoder, decoder; -->
+	</resultMap>
+	<sql id="baseCol">
+		id, name, host, port, protel, encoder, decoder
+	</sql>
+	<sql id="table">server_conf</sql>
+	<sql id="notnullCol">
+		<trim suffix=" " suffixOverrides=",">
+			<if test="id != null"> id,</if>
+			<if test="name != null"> name,</if>
+			<if test="host != null"> host,</if>
+			<if test="port != null"> port,</if>
+			<if test="protel != null"> protel,</if>
+			<if test="encoder != null"> encoder,</if>
+			<if test="decoder != null"> decoder,</if>
+		</trim>
+	</sql>
+	<sql id="notnullvalue">
+		<trim suffix=" " suffixOverrides=",">
+			<if test="id != null"> #{id},</if>
+			<if test="name != null"> #{name},</if>
+			<if test="host != null"> #{host},</if>
+			<if test="port != null"> #{port},</if>
+			<if test="protel != null"> #{protel},</if>
+			<if test="encoder != null"> #{encoder},</if>
+			<if test="decoder != null"> #{decoder},</if>
+		</trim>
+	</sql>
+	<sql id="notnullKeyValues">
+		<trim suffix=" " suffixOverrides=",">
+			<if test="id != null"> id=#{id},</if>
+			<if test="name != null"> name=#{name},</if>
+			<if test="host != null">host= #{host},</if>
+			<if test="port != null"> port=#{port},</if>
+			<if test="protel != null">protel= #{protel},</if>
+			<if test="encoder != null">encoder= #{encoder},</if>
+			<if test="decoder != null"> decoder=#{decoder},</if>
+		</trim>
+	</sql>
+
+	<select id="queryById" resultType="server">
+		select
+		<include refid="baseCol"></include>
+		from
+		<include refid="table"></include>
+		<where>
+			id=#{id}
+		</where>
+	</select>
+
+	<select id="queryAll" resultType="server">
+		select
+		<include refid="baseCol"></include>
+		from
+		<include refid="table"></include>
+
+	</select>
+
+	<insert id="save">
+		insert into
+		<include refid="table"></include>
+		(
+		<include refid="notnullCol"></include>
+		)values (
+		<include refid="notnullvalue"></include>
+		)
+	</insert>
+	<update id="update">
+		update
+		<include refid="table"></include>
+		<set>
+			<include refid="notnullKeyValues"></include>
+		</set>
+	</update>
+</mapper>

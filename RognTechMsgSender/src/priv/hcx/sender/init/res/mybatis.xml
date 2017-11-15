@@ -12,6 +12,8 @@
 		<typeAlias type="priv.hcx.sender.bean.MsgField" alias="msgField" />
 		<typeAlias type="priv.hcx.sender.bean.Transaction" alias="transaction" />
 		<typeAlias type="priv.hcx.sender.bean.Folder" alias="folder" />
+		<typeAlias type="priv.hcx.sender.server.ServerConf" alias="server"/>
+		<typeAlias type="priv.hcx.sender.db.DBConf" alias ="dbconf"/>
 	</typeAliases>
 	<environments default="development">
 		<environment id="development">
@@ -30,5 +32,7 @@
 		<mapper resource="priv/hcx/sender/bean/res/MsgField.xml" />
 		<mapper resource="priv/hcx/sender/bean/res/Transaction.xml" />
 		<mapper resource="priv/hcx/sender/bean/res/Folder.xml" />
+		<mapper resource="priv/hcx/sender/bean/res/Server.xml" />
+		<mapper resource="priv/hcx/sender/bean/res/DataBase.xml" />
 	</mappers>
 </configuration>
