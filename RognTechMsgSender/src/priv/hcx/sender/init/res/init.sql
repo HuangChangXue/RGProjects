@@ -31,9 +31,10 @@ create table if not exists sender_transaction_field(
   	reserved2 varchar2(64),
   	reserved3 varchar2(64)
 );
+
 create table if not exists sender_dbconf(
 	id  VARCHAR_IGNORECASE(32) primary key,
-	name varchar2(16) not null , 
+	name varchar2(16) not null unique , 
 	url varchar2(64) not null, 
 	user varchar2(32) not null,
 	pass varchar2(32) not null, 
@@ -41,11 +42,11 @@ create table if not exists sender_dbconf(
 	testsql  varchar2(256) not null
 );
 
- private String id, name, host, port, protel, encoder, decoder; -->
+
 
 create table if not exists server_conf(
 	id  VARCHAR_IGNORECASE(32) primary key,
-	name varchar2(16) not null , 
+	name varchar2(16) not null unique , 
 	host varchar2(64) not null, 
 	port varchar2(32) not null,
 	protel varchar2(32) not null, 

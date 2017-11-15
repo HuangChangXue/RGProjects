@@ -11,6 +11,10 @@ import java.awt.Component;
 import javax.swing.SwingConstants;
 import javax.swing.AbstractAction;
 
+import org.apache.ibatis.session.SqlSession;
+
+import priv.hcx.sender.db.DBConf;
+import priv.hcx.sender.db.dao.DBConfDao;
 import priv.hcx.sender.tool.CommonTools;
 import priv.hcx.sender.view.SenderMainFrame;
 
@@ -30,7 +34,7 @@ public class DataBaseConnectionEditorUI extends JDialog {
 	private JTextField user;
 	private JTextField password;
 	private JTextField testSql;
-
+	JComboBox driverClass;
 	static private Map<String ,DataBaseConnectionEditorUI> mapping=new HashMap<String,DataBaseConnectionEditorUI>();
 	public static  void loadConfig(String config){
 		DataBaseConnectionEditorUI inst=null;
@@ -69,7 +73,7 @@ public class DataBaseConnectionEditorUI extends JDialog {
 			ds[i++]=driver.getClass().getName();
 		}
 		
-		JComboBox driverClass = new JComboBox();
+		 driverClass = new JComboBox(ds);
 		driverClass.setBounds(119, 41, 315, 21);
 		getContentPane().add(driverClass);
 
@@ -121,6 +125,17 @@ public class DataBaseConnectionEditorUI extends JDialog {
 		JButton button_1 = new JButton("保存");
 		button_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				DBConf conf=new DBConf();
+				conf.setDriverclass(driverClass.getSelectedItem().toString());
+				conf.setName(configName.getText());
+				conf.setPass(password.getText());
+				conf.setTestsql(testSql.getText());
+				conf.setUrl(url.getText());
+				conf.setUser(user.getText());
+				SqlSession session=CommonTools.getSQLSession(true);
+				DBConfDao dao=CommonTools.getMapper(session, DBConfDao.class);
+				dao.save(conf);
+				CommonTools.closeSession(session);
 			}
 		});
 		button_1.setBounds(357, 7, 57, 23);
@@ -133,13 +148,5 @@ public class DataBaseConnectionEditorUI extends JDialog {
 
 	}
 
-	private class SwingAction extends AbstractAction {
-		public SwingAction() {
-			putValue(NAME, "SwingAction");
-			putValue(SHORT_DESCRIPTION, "Some short description");
-		}
 
-		public void actionPerformed(ActionEvent e) {
-		}
-	}
 }
