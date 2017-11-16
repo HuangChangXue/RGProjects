@@ -16,6 +16,8 @@ import javax.swing.BoxLayout;
 import javax.swing.JComboBox;
 import javax.swing.JButton;
 
+import priv.hcx.sender.msg.decoder.MsgDecoder;
+import priv.hcx.sender.msg.encoder.MsgEncoder;
 import priv.hcx.sender.server.ServerConf;
 import priv.hcx.sender.server.dao.ServerConfDao;
 import priv.hcx.sender.tool.CommonTools;
@@ -120,10 +122,24 @@ public class ServerConfUI extends JDialog {
 		hostport.setColumns(10);
 		hostport.setBounds(82, 43, 352, 21);
 		panel_1.add(hostport);
-
+		List<MsgEncoder> encoders=CommonTools.loadService(priv.hcx.sender.msg.encoder.MsgEncoder.class);
+		String [] names=new String[encoders.size()];
+		int i =0;
+		for(MsgEncoder encoder:encoders){
+			names[i++]=encoder.getEncoderName();
+		}
+		encoder=new JComboBox(names);
 		encoder.setBounds(82, 106, 352, 21);
+		
 		panel_1.add(encoder);
-
+		List<MsgDecoder> decoders=CommonTools.loadService(MsgDecoder.class);
+		names=new String[decoders.size()];
+		 i =0;
+		 
+		for(MsgDecoder dncoder:decoders){
+			names[i++]=dncoder.getDecoderName();
+		}
+		decoder= new JComboBox(names);
 		decoder.setBounds(82, 137, 352, 21);
 		panel_1.add(decoder);
 
@@ -170,6 +186,6 @@ public class ServerConfUI extends JDialog {
 		panel_2.add(btnNewButton);
 	}
 
-	JComboBox encoder = new JComboBox();
-	JComboBox decoder = new JComboBox();
+	JComboBox encoder;
+	JComboBox decoder ;
 }
