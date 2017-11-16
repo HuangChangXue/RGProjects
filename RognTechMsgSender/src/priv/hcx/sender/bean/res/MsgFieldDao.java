@@ -10,5 +10,6 @@ public interface MsgFieldDao {
 	List<MsgField> queryByTransactonId(@Param("transactionid") String transactionid);
 	MsgField queryById(@Param("id") String id);
 	void update(MsgField msg);
-	void save(MsgField msg);
+	void saveMsg(MsgField msg);
+	void delete(MsgField msg);
 }

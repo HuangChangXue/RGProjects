@@ -4,6 +4,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.lang.reflect.InvocationTargetException;
 
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
@@ -11,6 +12,8 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
 import priv.hcx.sender.bean.MsgField;
+import priv.hcx.sender.bean.res.MsgFieldDao;
+import priv.hcx.sender.tool.CommonTools;
 import priv.hcx.sender.tool.GUITool;
 import priv.hcx.sender.view.Const;
 
@@ -51,11 +54,27 @@ private String transid=null;
 			int[] sel = table.getSelectedRows();
 			for (int i : sel) {
 				model.removeRow(table.convertColumnIndexToModel(i));
+				MsgField field=model.getFieldAt(table.convertColumnIndexToModel(i));
+				try {
+					CommonTools.doDBSaveOrUpdateOperation(MsgFieldDao.class, "delete", new Class[]{MsgField.class}, field);
+				} catch (Exception e1) {
+					
+					e1.printStackTrace();
+				}
 			}
+			
 
 		} else if (MAIN_WINDOW_MSG_EDITOT_TABLE_POPUP_NEW.equals(cmd)) {
 			FieldTableModel model = (FieldTableModel) table.getModel();
-			model.addRow(new MsgField(transid));
+			MsgField field=new MsgField(transid);
+			model.addRow(field);
+			try {
+				CommonTools.doDBSaveOrUpdateOperation(MsgFieldDao.class, "saveMsg", new Class[]{MsgField.class}, field);
+			} catch (Exception e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			
 		}
 	}
 

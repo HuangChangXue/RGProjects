@@ -2,6 +2,7 @@ package priv.hcx.sender.msg.header;
 
 import java.util.List;
 
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 
 import priv.hcx.sender.bean.MsgField;
@@ -13,7 +14,7 @@ public interface HeaderEditor {
 	/**
 	 * 通过请求头获取相应编辑窗口的名字
 	 */
-	public JFrame getEditorFrameByName(String name);
+	public JDialog getEditorFrameByName(String name);
 
 	/**
 	 * 获取Editor的名字

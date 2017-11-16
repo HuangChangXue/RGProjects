@@ -20,12 +20,18 @@ public class CommonTools {
 		
 		return sqlSessionFactory.openSession(autoCommit);
 	}
-	public static <T>List<T> doQuery(Class daoface,String method, Class<T>t,Class<?>[]  argtyps,Object...args ) throws NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException{
+	public static <T>List<T> doDBQueryOperation(Class daoface,String method, Class<T>t,Class<?>[]  argtyps,Object...args ) throws NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException{
 		SqlSession session=getSQLSession(true);
 		Object o =getMapper(session,daoface);
 		Method m=daoface.getDeclaredMethod(method, argtyps);
 		List<T> ret=(List<T>) m.invoke(o, args);
 		return ret;
+	}
+	public static void doDBSaveOrUpdateOperation(Class daoface,String method,Class<?>[]  argtyps,Object...args ) throws NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException{
+		SqlSession session=getSQLSession(true);
+		Object o =getMapper(session,daoface);
+		Method m=daoface.getDeclaredMethod(method, argtyps);
+		 m.invoke(o, args);
 	}
 	public static <T>T getMapper(SqlSession session,Class<T> t){
 		return session.getMapper(t);

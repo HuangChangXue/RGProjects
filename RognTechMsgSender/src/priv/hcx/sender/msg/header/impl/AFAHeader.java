@@ -1,8 +1,9 @@
-package priv.hcx.sender.msg.header.impl.afaheader;
+package priv.hcx.sender.msg.header.impl;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 
 import priv.hcx.sender.bean.MsgField;
@@ -14,9 +15,9 @@ public class AFAHeader implements HeaderEditor {
 
 
 	@Override
-	public JFrame getEditorFrameByName(String name) {
+	public JDialog getEditorFrameByName(String name) {
 		// TODO Auto-generated method stub
-		return null;
+		return null; 
 	}
 
 

@@ -46,7 +46,7 @@ public class ServerConfUI extends JDialog {
 		ServerConf conf = new ServerConf();
 		conf.setName(config);
 		try {
-			List<ServerConf> confs = CommonTools.doQuery(ServerConfDao.class, "queryByName", ServerConf.class, new Class[] { ServerConf.class }, conf);
+			List<ServerConf> confs = CommonTools.doDBQueryOperation(ServerConfDao.class, "queryByName", ServerConf.class, new Class[] { ServerConf.class }, conf);
 			if (confs.size() > 0) {
 				conf = confs.get(0);
 				inst.configName.setText(conf.getName());

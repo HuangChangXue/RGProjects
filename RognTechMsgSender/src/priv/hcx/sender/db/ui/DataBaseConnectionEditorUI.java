@@ -54,7 +54,7 @@ public class DataBaseConnectionEditorUI extends JDialog {
 		DBConf conf = new DBConf();
 		conf.setName(config);
 		try {
-			List<DBConf> confs = CommonTools.doQuery(DBConfDao.class, "queryByName", DBConf.class, new Class[] { DBConf.class }, conf);
+			List<DBConf> confs = CommonTools.doDBQueryOperation(DBConfDao.class, "queryByName", DBConf.class, new Class[] { DBConf.class }, conf);
 			if (confs.size() > 0) {
 				conf = confs.get(0);
 				inst.editid = conf.getId();
