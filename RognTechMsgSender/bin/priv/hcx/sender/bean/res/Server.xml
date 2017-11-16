@@ -60,6 +60,15 @@
 			id=#{id}
 		</where>
 	</select>
+	<select id="queryByName" resultType="server">
+		select
+		<include refid="baseCol"></include>
+		from
+		<include refid="table"></include>
+		<where>
+			name=#{name}
+		</where>
+	</select>
 
 	<select id="queryAll" resultType="server">
 		select

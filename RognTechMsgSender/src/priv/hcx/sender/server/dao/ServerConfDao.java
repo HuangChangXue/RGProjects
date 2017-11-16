@@ -10,4 +10,5 @@ public interface ServerConfDao {
 	 void delete(ServerConf server);
 	List<ServerConf> queryById(ServerConf server);
 	List<ServerConf>  queryAll();
+	List<ServerConf> queryByName(ServerConf server);
 }

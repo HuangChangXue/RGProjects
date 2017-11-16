@@ -11,8 +11,7 @@
 		<result column="pass" property="pass" />
 		<result column="driverclass" property="driverclass" />
 		<result column="testsql" property="testsql" />
-		<!--String id,name, url, user, pass, driverclass, testsql;
-	 -->
+		<!--String id,name, url, user, pass, driverclass, testsql; -->
 	</resultMap>
 	<sql id="baseCol">
 		id,name, url, user, pass, driverclass, testsql
@@ -59,6 +58,15 @@
 		<include refid="table"></include>
 		<where>
 			id=#{id}
+		</where>
+	</select>
+	<select id="queryByName" resultType="dbconf">
+		select
+		<include refid="baseCol"></include>
+		from
+		<include refid="table"></include>
+		<where>
+			name=#{name}
 		</where>
 	</select>
 

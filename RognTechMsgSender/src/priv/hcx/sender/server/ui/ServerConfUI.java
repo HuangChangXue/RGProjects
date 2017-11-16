@@ -5,7 +5,9 @@ import java.awt.BorderLayout;
 import javax.swing.JPanel;
 import javax.swing.JLabel;
 import java.awt.FlowLayout;
+import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.swing.JDialog;
@@ -17,6 +19,7 @@ import javax.swing.JButton;
 import priv.hcx.sender.server.ServerConf;
 import priv.hcx.sender.server.dao.ServerConfDao;
 import priv.hcx.sender.tool.CommonTools;
+import priv.hcx.sender.tool.GUITool;
 import priv.hcx.sender.view.SenderMainFrame;
 import javax.swing.DefaultComboBoxModel;
 
@@ -24,21 +27,40 @@ import org.apache.ibatis.session.SqlSession;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 public class ServerConfUI extends JDialog {
 	private JTextField hostname;
 	private JTextField hostport;
 	private JTextField configName;
+	static ServerConfUI inst;
+	static String serverid;
 
 	public static void loadConfig(String config) {
-		ServerConfUI inst = null;
-		if (serverUIs.containsKey(config)) {
-			inst = serverUIs.get(config);
-		} else {
+		if (inst == null)
 			inst = new ServerConfUI(SenderMainFrame.getMainFrame());
+
+		ServerConf conf = new ServerConf();
+		conf.setName(config);
+		try {
+			List<ServerConf> confs = CommonTools.doQuery(ServerConfDao.class, "queryByName", ServerConf.class, new Class[] { ServerConf.class }, conf);
+			if (confs.size() > 0) {
+				conf = confs.get(0);
+				inst.configName.setText(conf.getName());
+				inst.decoder.setSelectedItem(conf.getDecoder());
+				inst.encoder.setSelectedItem(conf.getEncoder());
+				inst.hostname.setText(conf.getHost());
+				inst.hostport.setText(conf.getPort());
+				inst.comunitationProtel.setSelectedItem(conf.getProtel());
+				inst.serverid = conf.getId();
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 		// TODO 加载配置文件
-
+		GUITool.adjustFrame(inst, false);
 		inst.setVisible(true);
 	}
 
@@ -47,6 +69,15 @@ public class ServerConfUI extends JDialog {
 
 	public ServerConfUI(JFrame frame) {
 		super(frame, true);
+		inst.serverid = null;
+		this.addWindowListener(new WindowAdapter() {
+
+			@Override
+			public void windowClosing(WindowEvent e) {
+				inst.serverid = null;
+			}
+
+		});
 		setTitle("服务器设置");
 		setResizable(false);
 		this.setSize(453, 267);
@@ -117,6 +148,9 @@ public class ServerConfUI extends JDialog {
 			public void actionPerformed(ActionEvent e) {
 
 				ServerConf con = new ServerConf();
+				if (inst.serverid != null) {
+					con.setId(inst.serverid);
+				}
 				con.setDecoder(decoder.getSelectedItem().toString());
 				con.setEncoder(encoder.getSelectedItem().toString());
 				con.setHost(hostname.getText());
@@ -125,7 +159,11 @@ public class ServerConfUI extends JDialog {
 				con.setProtel(comunitationProtel.getSelectedItem().toString());
 				SqlSession session = CommonTools.getSQLSession(true);
 				ServerConfDao dao = CommonTools.getMapper(session, ServerConfDao.class);
-				dao.save(con);
+				if (inst.serverid != null) {
+					dao.update(con);
+				} else {
+					dao.save(con);
+				}
 				CommonTools.closeSession(session);
 			}
 		});

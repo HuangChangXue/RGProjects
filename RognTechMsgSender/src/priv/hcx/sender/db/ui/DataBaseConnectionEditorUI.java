@@ -15,14 +15,21 @@ import org.apache.ibatis.session.SqlSession;
 
 import priv.hcx.sender.db.DBConf;
 import priv.hcx.sender.db.dao.DBConfDao;
+import priv.hcx.sender.server.ServerConf;
+import priv.hcx.sender.server.dao.ServerConfDao;
 import priv.hcx.sender.tool.CommonTools;
+import priv.hcx.sender.tool.GUITool;
 import priv.hcx.sender.view.SenderMainFrame;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowStateListener;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.IntStream;
 
 public class DataBaseConnectionEditorUI extends JDialog {
 	/**
@@ -35,21 +42,50 @@ public class DataBaseConnectionEditorUI extends JDialog {
 	private JTextField password;
 	private JTextField testSql;
 	JComboBox driverClass;
-	static private Map<String ,DataBaseConnectionEditorUI> mapping=new HashMap<String,DataBaseConnectionEditorUI>();
-	public static  void loadConfig(String config){
-		DataBaseConnectionEditorUI inst=null;
-		if(mapping.containsKey(config)){
-			inst=mapping.get(config);
+	static DataBaseConnectionEditorUI inst = null;
+	static private Map<String, DataBaseConnectionEditorUI> mapping = new HashMap<String, DataBaseConnectionEditorUI>();
+	String editid = null;
+
+	public static void loadConfig(String config) {
+		if (inst == null) {
+			inst = new DataBaseConnectionEditorUI(SenderMainFrame.getMainFrame(), true);
 		}
-		else {
-			inst=new DataBaseConnectionEditorUI(SenderMainFrame.getMainFrame(),true);
+		GUITool.adjustFrame(inst, false);
+		DBConf conf = new DBConf();
+		conf.setName(config);
+		try {
+			List<DBConf> confs = CommonTools.doQuery(DBConfDao.class, "queryByName", DBConf.class, new Class[] { DBConf.class }, conf);
+			if (confs.size() > 0) {
+				conf = confs.get(0);
+				inst.editid = conf.getId();
+				inst.configName.setText(conf.getName());
+				inst.driverClass.setSelectedItem(conf.getDriverclass());
+				inst.password.setText(conf.getPass());
+				inst.testSql.setText(conf.getTestsql());
+				inst.url.setText(conf.getUrl());
+				inst.user.setText(conf.getUser());
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
+
 		inst.setVisible(true);
 	}
-	public DataBaseConnectionEditorUI(JFrame owner,  boolean modal ) {
-		super(owner,"数据库连接设置",true);
+
+	public DataBaseConnectionEditorUI(JFrame owner, boolean modal) {
+		super(owner, "数据库连接设置", true);
+		this.addWindowListener(new WindowAdapter() {
+
+			@Override
+			public void windowClosed(WindowEvent e) {
+				DataBaseConnectionEditorUI.inst.editid = null;
+			}
+		});
+		inst = this;
+		inst.editid = null;
 		this.setSize(444, 272);
-//		setTitle();
+		// setTitle();
 		setResizable(false);
 		getContentPane().setLayout(null);
 
@@ -66,14 +102,14 @@ public class DataBaseConnectionEditorUI extends JDialog {
 		label_1.setBounds(10, 45, 117, 15);
 		getContentPane().add(label_1);
 		List<java.sql.Driver> drivers = CommonTools.loadService(java.sql.Driver.class);
-		String [] ds=new String[]{};
-			ds=	new String[drivers.size()];
-		int i=0;
+		String[] ds = new String[] {};
+		ds = new String[drivers.size()];
+		int i = 0;
 		for (java.sql.Driver driver : drivers) {
-			ds[i++]=driver.getClass().getName();
+			ds[i++] = driver.getClass().getName();
 		}
-		
-		 driverClass = new JComboBox(ds);
+
+		driverClass = new JComboBox(ds);
 		driverClass.setBounds(119, 41, 315, 21);
 		getContentPane().add(driverClass);
 
@@ -115,6 +151,8 @@ public class DataBaseConnectionEditorUI extends JDialog {
 		JButton button = new JButton("测试连接");
 		button.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+//				TODO  Test Connection 
+				
 			}
 		});
 
@@ -125,16 +163,23 @@ public class DataBaseConnectionEditorUI extends JDialog {
 		JButton button_1 = new JButton("保存");
 		button_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				DBConf conf=new DBConf();
+				DBConf conf = new DBConf();
+				if (inst.editid != null) {
+					conf.setId(inst.editid);
+				}
 				conf.setDriverclass(driverClass.getSelectedItem().toString());
 				conf.setName(configName.getText());
 				conf.setPass(password.getText());
 				conf.setTestsql(testSql.getText());
 				conf.setUrl(url.getText());
 				conf.setUser(user.getText());
-				SqlSession session=CommonTools.getSQLSession(true);
-				DBConfDao dao=CommonTools.getMapper(session, DBConfDao.class);
-				dao.save(conf);
+				SqlSession session = CommonTools.getSQLSession(true);
+				DBConfDao dao = CommonTools.getMapper(session, DBConfDao.class);
+				if (inst.editid != null) {
+					dao.update(conf);
+				} else {
+					dao.save(conf);
+				}
 				CommonTools.closeSession(session);
 			}
 		});
@@ -147,6 +192,5 @@ public class DataBaseConnectionEditorUI extends JDialog {
 		getContentPane().add(label_5);
 
 	}
-
 
 }

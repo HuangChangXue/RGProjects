@@ -2,6 +2,8 @@ package priv.hcx.sender.tool;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -17,6 +19,13 @@ public class CommonTools {
 	public static SqlSession  getSQLSession(Boolean autoCommit){
 		
 		return sqlSessionFactory.openSession(autoCommit);
+	}
+	public static <T>List<T> doQuery(Class daoface,String method, Class<T>t,Class<?>[]  argtyps,Object...args ) throws NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException{
+		SqlSession session=getSQLSession(true);
+		Object o =getMapper(session,daoface);
+		Method m=daoface.getDeclaredMethod(method, argtyps);
+		List<T> ret=(List<T>) m.invoke(o, args);
+		return ret;
 	}
 	public static <T>T getMapper(SqlSession session,Class<T> t){
 		return session.getMapper(t);
