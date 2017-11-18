@@ -120,3 +120,20 @@ select
 	 
 		from
 		 server_conf [42102-195]
+2017-11-18 14:40:03 jdbc[6]: exception
+org.h2.jdbc.JdbcSQLException: Syntax error in SQL statement "UPDATE
+		 SENDER_TRANSACTION_FIELD 
+		 SET ID=?,
+			 NAME=?,
+			 SRC=?,
+			 TRANSACTIONID=?
+			 DESC[*]=? 
+		WHERE ID=? "; SQL statement:
+update
+		 sender_transaction_field 
+		 SET id=?,
+			 name=?,
+			 src=?,
+			 transactionid=?
+			 desc=? 
+		where id=? [42000-195]

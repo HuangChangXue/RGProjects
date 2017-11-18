@@ -2,6 +2,8 @@ package priv.hcx.sender.view;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.List;
 
 import javax.swing.DefaultCellEditor;
@@ -100,10 +102,13 @@ public class SenderMainFrame extends JFrame implements Const {
 
 		CommonTools.closeSession(session);
 	}
-	private  static JTree tree=null;
-	public static JTree getNaviTree(){
+
+	private static JTree tree = null;
+
+	public static JTree getNaviTree() {
 		return tree;
 	}
+
 	private void initMainPanel() {
 
 		DefaultMutableTreeNode root = GUITool.createTreeNode(new Folder("交易类型"));
@@ -113,7 +118,7 @@ public class SenderMainFrame extends JFrame implements Const {
 		DefaultTreeModel treeModel = new DefaultTreeModel(root) {
 			@Override
 			public boolean isLeaf(Object node) {
-
+				
 				if (node instanceof DefaultMutableTreeNode) {
 					Object bean = GUITool.treeNodeMapping.get(node);
 					if (bean != null) {
@@ -131,21 +136,34 @@ public class SenderMainFrame extends JFrame implements Const {
 
 			@Override
 			public void treeNodesChanged(TreeModelEvent e) {
-				System.out.println(e);
+
+				DefaultMutableTreeNode selected = (DefaultMutableTreeNode) e.getTreePath().getLastPathComponent();
+				selected = (DefaultMutableTreeNode) selected.getChildAt(e.getChildIndices()[0]);
+				
+				Object bean = GUITool.treeNodeMapping.get(selected);
+				if (Folder.class.isAssignableFrom(bean.getClass())) {
+					Folder folder=(Folder) bean;
+					folder.setName(selected.toString());
+					SqlSession session = CommonTools.getSQLSession(true);
+					FolderDao dao = CommonTools.getMapper(session, FolderDao.class);
+					dao.update(folder);
+					CommonTools.closeSession(session);
+				} else if (Transaction.class.isAssignableFrom(bean.getClass())) {
+					Transaction tran=(Transaction)bean;
+					tran.setName(selected.toString());
+					SqlSession session = CommonTools.getSQLSession(true);
+					TransactionDao dao = CommonTools.getMapper(session, TransactionDao.class);
+					dao.update( tran);
+					CommonTools.closeSession(session);
+				}
 
 			}
 
 			@Override
-			public void treeNodesInserted(TreeModelEvent e) {
-				// TODO Auto-generated method stub
-
-			}
+			public void treeNodesInserted(TreeModelEvent e) {}
 
 			@Override
-			public void treeNodesRemoved(TreeModelEvent e) {
-				// TODO Auto-generated method stub
-
-			}
+			public void treeNodesRemoved(TreeModelEvent e) {}
 
 			@Override
 			public void treeStructureChanged(TreeModelEvent e) {
@@ -154,7 +172,7 @@ public class SenderMainFrame extends JFrame implements Const {
 			}
 		});
 		SenderMainFrame.treeModel = treeModel;
-		 tree= new JTree(treeModel);
+		tree = new JTree(treeModel);
 		// tree.setRootVisible(false);
 		new JTreePopupMenu(tree);
 		JScrollPane jsp = new JScrollPane(tree);
@@ -202,20 +220,28 @@ public class SenderMainFrame extends JFrame implements Const {
 	}
 
 	private JMenu createServerMenu() {
-		JMenu menu = new JMenu(GUITool.getName(MAIN_WINDOW_MENU_CONFIG_SERVER));
-		menu.add(GUITool.createMenuItem(MAIN_WINDOW_MENU_CONFIG_SERVER_ADD));
-//		JMenu edit=new JMenu(GUITool.getName(MAIN_WINDOW_MENU_CONFIG_SERVER_EDIT));
-//		menu.add(edit);
-		menu.add(new JSeparator());
-		List<ServerConf> servers=Server.getAllServerConf();
-		for(ServerConf s:servers){
-//			edit.add(GUITool.createMenuItem(s.getName()));
-			menu.add(GUITool.createMenuItem(s.getName()));
-		}
+		final JMenu menu = new JMenu(GUITool.getName(MAIN_WINDOW_MENU_CONFIG_SERVER));
+		menu.addMouseListener(new MouseAdapter() {
+
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				menu.removeAll();
+				menu.add(GUITool.createMenuItem(MAIN_WINDOW_MENU_CONFIG_SERVER_ADD));
+				// JMenu edit=new
+				// JMenu(GUITool.getName(MAIN_WINDOW_MENU_CONFIG_SERVER_EDIT));
+				// menu.add(edit);
+				menu.add(new JSeparator());
+				List<ServerConf> servers = Server.getAllServerConf();
+				for (ServerConf s : servers) {
+					// edit.add(GUITool.createMenuItem(s.getName()));
+					menu.add(GUITool.createMenuItem(s.getName()));
+				}
+			}
+
+		});
 		return menu;
 	}
 
-	
 	private JMenu createToolMenu() {
 		JMenu menu = new JMenu(GUITool.getName(MAIN_WINDOW_MENU_CONFIG));
 		menu.add(createServerMenu());
@@ -234,20 +260,30 @@ public class SenderMainFrame extends JFrame implements Const {
 		}
 		msg.add(encoder);
 		menu.add(msg);
-		
+
 		menu.add(createDatatbaseMenu());
 		return menu;
 	}
-private JMenu createDatatbaseMenu(){
-	JMenu database = new JMenu(GUITool.getName(MAIN_WINDOW_MENU_CONFIG_DATABASE));
-	database.add(GUITool.createMenuItem(MAIN_WINDOW_MENU_CONFIG_DATABASE_NEW));
-	List<DBConf> dbconfs=DataBase.getAllDbConf();
-	for(DBConf conf:dbconfs){
-		database.add(GUITool.createMenuItem(conf.getName()));
+
+	private JMenu createDatatbaseMenu() {
+		final JMenu database = new JMenu(GUITool.getName(MAIN_WINDOW_MENU_CONFIG_DATABASE));
+		database.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				database.removeAll();
+				database.add(GUITool.createMenuItem(MAIN_WINDOW_MENU_CONFIG_DATABASE_NEW));
+				List<DBConf> dbconfs = DataBase.getAllDbConf();
+				database.add(new JSeparator());
+				for (DBConf conf : dbconfs) {
+					database.add(GUITool.createMenuItem(conf.getName()));
+				}
+			}
+
+		});
+
+		return database;
 	}
 
-	return database;
-}
 	private JMenu createFileMenu() {
 		JMenu menu = new JMenu(GUITool.getName(MAIN_WINDOW_MENU_FILE));
 		menu.add(GUITool.createMenuItem(MAIN_WINDOW_MENU_FILE_CREATE_NEW_TRANSACTION_TYPE));

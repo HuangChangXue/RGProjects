@@ -12,7 +12,7 @@
 		<result column="transactionid" property="transactionid" />
 	</resultMap>
 	<sql id="baseCol">
-		id,name,src,transactionid
+		id,name,src,transactionid,desc
 	</sql>
 	<sql id="table">sender_transaction_field</sql>
 	<sql id="notnullCol">
@@ -22,6 +22,7 @@
 
 			<if test="src != null"> src,</if>
 			<if test="transactionid != null"> transactionid,</if>
+			<if test="desc != null"> desc,</if>
 		</trim>
 	</sql>
 	<sql id="notnullvalue">
@@ -29,7 +30,8 @@
 			<if test="id != null"> #{id},</if>
 			<if test="name != null"> #{name},</if>
 			<if test="src != null"> #{src},</if>
-			<if test="transactionid != null"> #{transactionid}</if>
+			<if test="transactionid != null"> #{transactionid},</if>
+			<if test="desc != null"> #{desc},</if>
 		</trim>
 	</sql>
 	<sql id="notnullKeyValues">
@@ -37,7 +39,8 @@
 			<if test="id != null"> id=#{id},</if>
 			<if test="name != null"> name=#{name},</if>
 			<if test="src != null"> src=#{src},</if>
-			<if test="transactionid != null"> transactionid=#{transactionid}</if>
+			<if test="transactionid != null"> transactionid=#{transactionid},</if>
+			<if test="desc != null"> desc=#{desc},</if>
 		</trim>
 	</sql>
 	<select id="queryById" resultType="msgField">

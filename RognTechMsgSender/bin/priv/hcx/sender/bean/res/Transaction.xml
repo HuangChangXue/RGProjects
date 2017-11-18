@@ -45,7 +45,6 @@
 	</sql>
 	<sql id="condid">
 		<trim suffix=" " suffixOverrides="and">
-			1!=1 and
 			<trim suffix=" " suffixOverrides=",">
 				<if test="id!=null">id=#{id},</if>
 			</trim>

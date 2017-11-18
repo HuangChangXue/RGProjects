@@ -38,6 +38,7 @@ public class FieldSouceChangeListener implements ItemListener {
 				List<FieldEditor> editors = CommonTools.loadService(FieldEditor.class);
 				List<FieldEditor> aviliable = new ArrayList<FieldEditor>();
 				MsgField field = model.getFieldAt(selectedrow);
+				if(field==null) return ;
 				field.setSrc(m.invoke(e.getItem(), null).toString());
 				if(selectedrow<0){
 					return;

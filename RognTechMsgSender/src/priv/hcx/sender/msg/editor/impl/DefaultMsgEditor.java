@@ -121,24 +121,15 @@ public class DefaultMsgEditor implements MsgEditor, Const {
 			@Override
 			public void tableChanged(TableModelEvent e) {
 				if (e.getType() == TableModelEvent.UPDATE) {
-					tableModle.addTableModelListener(new TableModelListener() {
+					FieldTableModel model = (FieldTableModel) e.getSource();
+					MsgField field = model.getFieldAt(table.convertRowIndexToModel(table.getSelectedRow()));
 
-						@Override
-						public void tableChanged(TableModelEvent e) {
-							if (e.getType() == TableModelEvent.UPDATE) {
-								FieldTableModel model = (FieldTableModel) e.getSource();
-								MsgField field = model.getFieldAt(table.convertRowIndexToModel(table.getSelectedRow()));
-							
-								try {
-									CommonTools.doDBSaveOrUpdateOperation(MsgFieldDao.class, "update", new Class[]{MsgField.class}, field);
-								} catch (Exception e1) {
-									// TODO Auto-generated catch block
-									e1.printStackTrace();
-								}
-							}
-
-						}
-					});
+					try {
+						CommonTools.doDBSaveOrUpdateOperation(MsgFieldDao.class, "update", new Class[] { MsgField.class }, field);
+					} catch (Exception e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
 				}
 
 			}

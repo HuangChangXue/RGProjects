@@ -25,6 +25,7 @@ public class CommonTools {
 		Object o =getMapper(session,daoface);
 		Method m=daoface.getDeclaredMethod(method, argtyps);
 		List<T> ret=(List<T>) m.invoke(o, args);
+		closeSession(session);
 		return ret;
 	}
 	public static void doDBSaveOrUpdateOperation(Class daoface,String method,Class<?>[]  argtyps,Object...args ) throws NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException{
@@ -32,6 +33,7 @@ public class CommonTools {
 		Object o =getMapper(session,daoface);
 		Method m=daoface.getDeclaredMethod(method, argtyps);
 		 m.invoke(o, args);
+		 closeSession(session);
 	}
 	public static <T>T getMapper(SqlSession session,Class<T> t){
 		return session.getMapper(t);
