@@ -8,6 +8,8 @@ import priv.hcx.sender.bean.Folder;
 
 public interface FolderDao {
 	void update(Folder folder);
+
 	void save(Folder folder);
-	List<Folder> selectByParentId(@Param(value="parentid") String parentid);
+
+	List<Folder> selectByParentId(@Param(value = "parentid") String parentid);
 }

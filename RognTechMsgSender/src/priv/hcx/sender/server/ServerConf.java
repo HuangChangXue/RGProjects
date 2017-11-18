@@ -60,5 +60,5 @@ public class ServerConf {
 	public void setDecoder(String decoder) {
 		this.decoder = decoder;
 	}
-	
+
 }

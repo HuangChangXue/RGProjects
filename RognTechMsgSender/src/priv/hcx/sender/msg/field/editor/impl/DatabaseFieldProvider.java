@@ -9,7 +9,8 @@ import priv.hcx.sender.msg.field.editor.FieldEditor;
 import priv.hcx.sender.msg.field.editor.impl.ui.DataBaseFieldEditor;
 
 public class DatabaseFieldProvider implements FieldEditor {
-private String name="DatabaseFieldProvider";
+	private String name = "DatabaseFieldProvider";
+
 	@Override
 	public String getEditorName() {
 		// TODO Auto-generated method stub
@@ -44,6 +45,5 @@ private String name="DatabaseFieldProvider";
 		// TODO Auto-generated method stub
 		return name.equals(this.name);
 	}
-
 
 }

@@ -108,14 +108,14 @@ class JTreePopupMenuListener implements ActionListener, Const {
 				CommonTools.closeSession(session);
 			} else {
 				String tranName = JOptionPane.showInputDialog(tree, GUITool.getName(INPUTBOX_NEW_TRANSACTION_MSG), GUITool.getName(INPUTBOX_NEW_TRANSACTION_TITLE), JOptionPane.QUESTION_MESSAGE);
-				Transaction tran=new Transaction(tranName);
+				Transaction tran = new Transaction(tranName);
 				if (selected.isLeaf()) {
-					selected=(DefaultMutableTreeNode) selected.getParent();
+					selected = (DefaultMutableTreeNode) selected.getParent();
 					selected.add(GUITool.createTreeNode(tran));
 				} else {
 					selected.add(GUITool.createTreeNode(tran));
 				}
-				
+
 				Object bean = GUITool.treeNodeMapping.get(selected);
 				if (bean != null) {
 					Folder par = (Folder) bean;
@@ -123,16 +123,16 @@ class JTreePopupMenuListener implements ActionListener, Const {
 				} else {
 					tran.setFolderid("root");
 				}
-				
+
 				SqlSession session = CommonTools.getSQLSession(true);
 				TransactionDao dao = CommonTools.getMapper(session, TransactionDao.class);
 				dao.save(tran);
-			
+
 				CommonTools.closeSession(session);
 			}
 			tree.expandPath(path);
 		} else if (cmd.equals(MAIN_WINDOW_MSG_EDITOT_TREE_POPUP_DEL)) {
-
+			// TODO delete data from database
 			if (selected.isLeaf()) {
 				int option = JOptionPane.showConfirmDialog(tree, GUITool.getName(DELETE_TRANSACTION_MSG), GUITool.getName(DELETE_TRANSACTION_TITLE), JOptionPane.OK_CANCEL_OPTION,
 						JOptionPane.WARNING_MESSAGE);

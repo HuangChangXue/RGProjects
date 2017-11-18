@@ -21,6 +21,7 @@ public class PreviewPanel extends JPanel {
 	JButton btn_send = new JButton("异步发送");
 	JTextArea txt_send = new JTextArea();
 	JTextArea txt_receive = new JTextArea();
+	JComboBox comboBox = new JComboBox();
 
 	public PreviewPanel() {
 		setLayout(new BorderLayout(0, 0));
@@ -29,7 +30,6 @@ public class PreviewPanel extends JPanel {
 		add(panel, BorderLayout.WEST);
 		panel.setLayout(new MigLayout("", "[73.00px]", "[21px,center][][]"));
 
-		JComboBox comboBox = new JComboBox();
 		panel.add(comboBox, "cell 0 0,growx,aligny center");
 
 		// btn_preview.addActionListener();

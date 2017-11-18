@@ -9,8 +9,9 @@ public class Transaction {
 	String folderid;
 	String headerEditor;
 	String headerEditorConfigName;
+
 	public Transaction() {
-	
+
 	}
 
 	public Transaction(String name) {

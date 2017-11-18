@@ -15,7 +15,9 @@ public class TimeFieldProvider implements FieldEditor {
 		// TODO Auto-generated method stub
 		return name;
 	}
-private String name="TimeFieldProvider";
+
+	private String name = "TimeFieldProvider";
+
 	@Override
 	public String getFieldConfName() {
 		// TODO Auto-generated method stub
@@ -45,6 +47,5 @@ private String name="TimeFieldProvider";
 		// TODO Auto-generated method stub
 		return name.equals(this.name);
 	}
-
 
 }

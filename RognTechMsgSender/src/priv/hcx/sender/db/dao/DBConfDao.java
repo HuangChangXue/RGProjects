@@ -15,5 +15,6 @@ public interface DBConfDao {
 	List<DBConf> queryById(DBConf server);
 
 	List<DBConf> queryAll();
+
 	List<DBConf> queryByName(DBConf server);
 }

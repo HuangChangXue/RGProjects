@@ -9,7 +9,9 @@ import priv.hcx.sender.bean.Transaction;
 
 public interface TransactionDao {
 	void update(Transaction tran);
+
 	void save(Transaction tran);
-	List<Transaction> selectByfolderid(@Param(value="folderid") String folderid);
+
+	List<Transaction> selectByfolderid(@Param(value = "folderid") String folderid);
 
 }

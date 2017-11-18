@@ -2,7 +2,7 @@ package priv.hcx.sender.msg.encoder.impl;
 
 import priv.hcx.sender.msg.encoder.MsgEncoder;
 
-public class XmlEncoder  implements MsgEncoder{
+public class XmlEncoder implements MsgEncoder {
 
 	@Override
 	public String getEncoderName() {
@@ -14,7 +14,5 @@ public class XmlEncoder  implements MsgEncoder{
 		// TODO Auto-generated method stub
 		return null;
 	}
-
-
 
 }

@@ -20,9 +20,10 @@ import priv.hcx.sender.view.Const;
 public class TablePopupMenu implements priv.hcx.sender.view.Const {
 	JTable table = null;
 	String transid;
-	public TablePopupMenu(JTable table,String transactionid) {
+
+	public TablePopupMenu(JTable table, String transactionid) {
 		this.table = table;
-		this.transid=transactionid;
+		this.transid = transactionid;
 		JPopupMenu menu = new JPopupMenu();
 		menu.add(createMenuItem(MAIN_WINDOW_MSG_EDITOT_TABLE_POPUP_NEW));
 		menu.add(createMenuItem(MAIN_WINDOW_MSG_EDITOT_TABLE_POPUP_DEL));
@@ -33,17 +34,18 @@ public class TablePopupMenu implements priv.hcx.sender.view.Const {
 	private JMenuItem createMenuItem(String title) {
 		JMenuItem menuItem = new JMenuItem(GUITool.getName(title));
 		menuItem.setActionCommand(title);
-		menuItem.addActionListener(new TablePopupMenuListener(table,transid));
+		menuItem.addActionListener(new TablePopupMenuListener(table, transid));
 		return menuItem;
 	}
 }
 
 class TablePopupMenuListener implements ActionListener, Const {
 	JTable table = null;
-private String transid=null;
-	public TablePopupMenuListener(JTable table,String transactionid) {
+	private String transid = null;
+
+	public TablePopupMenuListener(JTable table, String transactionid) {
 		this.table = table;
-		this.transid=transactionid;
+		this.transid = transactionid;
 	}
 
 	@Override
@@ -54,27 +56,26 @@ private String transid=null;
 			int[] sel = table.getSelectedRows();
 			for (int i : sel) {
 				model.removeRow(table.convertColumnIndexToModel(i));
-				MsgField field=model.getFieldAt(table.convertColumnIndexToModel(i));
+				MsgField field = model.getFieldAt(table.convertColumnIndexToModel(i));
 				try {
-					CommonTools.doDBSaveOrUpdateOperation(MsgFieldDao.class, "delete", new Class[]{MsgField.class}, field);
+					CommonTools.doDBSaveOrUpdateOperation(MsgFieldDao.class, "delete", new Class[] { MsgField.class }, field);
 				} catch (Exception e1) {
-					
+
 					e1.printStackTrace();
 				}
 			}
-			
 
 		} else if (MAIN_WINDOW_MSG_EDITOT_TABLE_POPUP_NEW.equals(cmd)) {
 			FieldTableModel model = (FieldTableModel) table.getModel();
-			MsgField field=new MsgField(transid);
+			MsgField field = new MsgField(transid);
 			model.addRow(field);
 			try {
-				CommonTools.doDBSaveOrUpdateOperation(MsgFieldDao.class, "saveMsg", new Class[]{MsgField.class}, field);
+				CommonTools.doDBSaveOrUpdateOperation(MsgFieldDao.class, "saveMsg", new Class[] { MsgField.class }, field);
 			} catch (Exception e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
-			
+
 		}
 	}
 

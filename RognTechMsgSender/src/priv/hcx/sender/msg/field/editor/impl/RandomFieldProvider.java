@@ -9,7 +9,8 @@ import priv.hcx.sender.msg.field.editor.FieldEditor;
 import priv.hcx.sender.msg.field.editor.impl.ui.RandomFieldEditor;
 
 public class RandomFieldProvider implements FieldEditor {
-	private String name="RandomFieldProvider";
+	private String name = "RandomFieldProvider";
+
 	@Override
 	public String getEditorName() {
 		// TODO Auto-generated method stub
@@ -45,8 +46,5 @@ public class RandomFieldProvider implements FieldEditor {
 		// TODO Auto-generated method stub
 		return name.equals(this.name);
 	}
-
-
-
 
 }

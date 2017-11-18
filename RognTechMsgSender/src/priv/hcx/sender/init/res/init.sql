@@ -53,3 +53,13 @@ create table if not exists server_conf(
 	encoder varchar2(128) not null, 
 	decoder  varchar2(256) not null
 );
+
+
+create table if not exists Field_const_conf(
+	 id  VARCHAR_IGNORECASE(32) primary key,
+	 fieldID  VARCHAR_IGNORECASE(32) not null,
+	 value varchar2(128) ,
+	isAllowEmpty boolean ,
+	isAllowNewLine boolean
+	);
+

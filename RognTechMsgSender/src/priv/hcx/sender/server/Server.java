@@ -11,12 +11,12 @@ import priv.hcx.sender.server.dao.ServerConfDao;
 import priv.hcx.sender.tool.CommonTools;
 
 public class Server {
-	public static  List<ServerConf> getAllServerConf(){
-		SqlSession   session=CommonTools.getSQLSession(true);
-		ServerConfDao dao=CommonTools.getMapper(session, ServerConfDao.class);
-		 List<ServerConf> ret=dao.queryAll();
-		 CommonTools.closeSession(session);
-		 return ret;
+	public static List<ServerConf> getAllServerConf() {
+		SqlSession session = CommonTools.getSQLSession(true);
+		ServerConfDao dao = CommonTools.getMapper(session, ServerConfDao.class);
+		List<ServerConf> ret = dao.queryAll();
+		CommonTools.closeSession(session);
+		return ret;
 	}
-	
+
 }

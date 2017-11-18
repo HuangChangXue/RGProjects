@@ -8,8 +8,12 @@ import priv.hcx.sender.bean.MsgField;
 
 public interface MsgFieldDao {
 	List<MsgField> queryByTransactonId(@Param("transactionid") String transactionid);
+
 	MsgField queryById(@Param("id") String id);
+
 	void update(MsgField msg);
+
 	void saveMsg(MsgField msg);
+
 	void delete(MsgField msg);
 }

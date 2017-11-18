@@ -6,7 +6,7 @@ public class String2HexEncoder implements MsgEncoder {
 
 	@Override
 	public String getEncoderName() {
-		
+
 		return "String2Hex";
 	}
 
@@ -15,7 +15,5 @@ public class String2HexEncoder implements MsgEncoder {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
-
 
 }

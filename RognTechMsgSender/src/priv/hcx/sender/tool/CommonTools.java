@@ -16,31 +16,45 @@ import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.session.SqlSessionFactoryBuilder;
 
 public class CommonTools {
-	public static SqlSession  getSQLSession(Boolean autoCommit){
-		
+	public static SqlSession getSQLSession(Boolean autoCommit) {
+
 		return sqlSessionFactory.openSession(autoCommit);
 	}
-	public static <T>List<T> doDBQueryOperation(Class daoface,String method, Class<T>t,Class<?>[]  argtyps,Object...args ) throws NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException{
-		SqlSession session=getSQLSession(true);
-		Object o =getMapper(session,daoface);
-		Method m=daoface.getDeclaredMethod(method, argtyps);
-		List<T> ret=(List<T>) m.invoke(o, args);
+
+	public static <T> List<T> doDBQueryOperation(Class daoface, String method, Class<T> t, Class<?>[] argtyps, Object... args) throws Exception {
+		SqlSession session = getSQLSession(true);
+		Object o = getMapper(session, daoface);
+		Method m = daoface.getDeclaredMethod(method, argtyps);
+		List<T> ret = (List<T>) m.invoke(o, args);
 		closeSession(session);
 		return ret;
 	}
-	public static void doDBSaveOrUpdateOperation(Class daoface,String method,Class<?>[]  argtyps,Object...args ) throws NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException{
-		SqlSession session=getSQLSession(true);
-		Object o =getMapper(session,daoface);
-		Method m=daoface.getDeclaredMethod(method, argtyps);
-		 m.invoke(o, args);
-		 closeSession(session);
+
+	public static <T> T doDBQueryOperationSingle(Class daoface, String method, Class<T> t, Class<?>[] argtyps, Object... args) throws Exception {
+		SqlSession session = getSQLSession(true);
+		Object o = getMapper(session, daoface);
+		Method m = daoface.getDeclaredMethod(method, argtyps);
+		T ret = (T) m.invoke(o, args);
+		closeSession(session);
+		return ret;
 	}
-	public static <T>T getMapper(SqlSession session,Class<T> t){
+
+	public static void doDBSaveOrUpdateOperation(Class daoface, String method, Class<?>[] argtyps, Object... args) throws Exception {
+		SqlSession session = getSQLSession(true);
+		Object o = getMapper(session, daoface);
+		Method m = daoface.getDeclaredMethod(method, argtyps);
+		m.invoke(o, args);
+		closeSession(session);
+	}
+
+	public static <T> T getMapper(SqlSession session, Class<T> t) {
 		return session.getMapper(t);
 	}
-	public static void closeSession(SqlSession session){
+
+	public static void closeSession(SqlSession session) {
 		session.close();
 	}
+
 	private static SqlSessionFactory sqlSessionFactory;
 	static {
 
@@ -68,13 +82,13 @@ public class CommonTools {
 	public static String createRandomID() {
 		return UUID.randomUUID().toString().replaceAll("-", "").toUpperCase();
 	}
-	private static char[] charactor="0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ,./;'.+-*\\|<>?:\"{}[]`~!@#$%^&*()_+-=".toCharArray();
-	
-	
-	public static String createRandomString(int len){
-		StringBuilder sb=new StringBuilder();
-		while(--len>0){
-			sb.append(charactor[(int)(Math.random()*charactor.length)]);
+
+	private static char[] charactor = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ,./;'.+-*\\|<>?:\"{}[]`~!@#$%^&*()_+-=".toCharArray();
+
+	public static String createRandomString(int len) {
+		StringBuilder sb = new StringBuilder();
+		while (--len > 0) {
+			sb.append(charactor[(int) (Math.random() * charactor.length)]);
 		}
 		return sb.toString();
 	}

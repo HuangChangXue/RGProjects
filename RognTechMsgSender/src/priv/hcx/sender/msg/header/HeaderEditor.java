@@ -25,22 +25,28 @@ public interface HeaderEditor {
 
 	/**
 	 * 根据指定的配置文件及 字段生成请求头
+	 * 
 	 * @param fields
 	 * @return
 	 */
-	public MsgHead createHead(String name,List<MsgField> fields);
+	public MsgHead createHead(String name, List<MsgField> fields);
+
 	/**
 	 * 保存所有的配置文件
 	 */
 	public void saveConfig();
+
 	/**
 	 * 根据配置名字获取配置的ID
+	 * 
 	 * @param name
 	 * @return
 	 */
 	public String getConfigIdByName(String name);
+
 	/**
 	 * 根据配置的ID获取对应的名字
+	 * 
 	 * @param id
 	 * @return
 	 */

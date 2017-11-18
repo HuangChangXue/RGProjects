@@ -9,11 +9,12 @@ import priv.hcx.sender.msg.field.editor.FieldEditor;
 import priv.hcx.sender.msg.field.editor.impl.ui.FileFieldEditor;
 
 public class FileFieldProvider implements FieldEditor {
-	private String  name="FileFieldProvider";
+	private String name = "FileFieldProvider";
+
 	@Override
 	public String getEditorName() {
 		// TODO Auto-generated method stub
-		 return name;
+		return name;
 	}
 
 	@Override
@@ -45,7 +46,5 @@ public class FileFieldProvider implements FieldEditor {
 		// TODO Auto-generated method stub
 		return name.equals(this.name);
 	}
-
-
 
 }

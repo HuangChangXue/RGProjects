@@ -13,7 +13,7 @@ public class Sender {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 			AppInit.init();
 		} catch (Exception e) {
-		} 
+		}
 		new SenderMainFrame();
 	}
 

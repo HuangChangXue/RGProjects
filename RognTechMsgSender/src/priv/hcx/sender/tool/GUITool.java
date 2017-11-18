@@ -101,18 +101,17 @@ public class GUITool implements Const {
 		if (resize) {
 			frame.setSize(getProperWidthForDisplay(), getProperHeightForDisplay());
 			frame.setLocation(getScreenWidth() / 8, getScreenHeight() / 8);
-		}
-		else {
-			frame.setLocation((getScreenWidth()-frame.getWidth())/2, (getScreenHeight()-frame.getHeight())/2);
+		} else {
+			frame.setLocation((getScreenWidth() - frame.getWidth()) / 2, (getScreenHeight() - frame.getHeight()) / 2);
 		}
 	}
+
 	public static void adjustFrame(JDialog frame, boolean resize) {
 		if (resize) {
 			frame.setSize(getProperWidthForDisplay(), getProperHeightForDisplay());
 			frame.setLocation(getScreenWidth() / 8, getScreenHeight() / 8);
-		}
-		else {
-			frame.setLocation((getScreenWidth()-frame.getWidth())/2, (getScreenHeight()-frame.getHeight())/2);
+		} else {
+			frame.setLocation((getScreenWidth() - frame.getWidth()) / 2, (getScreenHeight() - frame.getHeight()) / 2);
 		}
 	}
 

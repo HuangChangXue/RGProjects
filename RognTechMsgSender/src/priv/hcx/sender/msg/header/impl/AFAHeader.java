@@ -12,20 +12,11 @@ import priv.hcx.sender.msg.header.HeaderEditor;
 
 public class AFAHeader implements HeaderEditor {
 
-
-
 	@Override
 	public JDialog getEditorFrameByName(String name) {
 		// TODO Auto-generated method stub
-		return null; 
+		return null;
 	}
-
-
-
-
-
-
-
 
 	@Override
 	public String getEditorName() {
@@ -35,67 +26,30 @@ public class AFAHeader implements HeaderEditor {
 
 	@Override
 	public List<String> getConfigList() {
-		List ret=new ArrayList<String>();
+		List ret = new ArrayList<String>();
 		ret.add("AAA");
 		ret.add("ABB");
 		ret.add("CAC");
 		return ret;
 	}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 	@Override
-	public MsgHead createHead(String name,List<MsgField> fields) {
+	public MsgHead createHead(String name, List<MsgField> fields) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-
-
-
-
-
-
-
 	@Override
 	public void saveConfig() {
 		// TODO Auto-generated method stub
-		
+
 	}
-
-
-
-
-
-
-
 
 	@Override
 	public String getConfigIdByName(String name) {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
-
-
-
-
-
-
 
 	@Override
 	public String getConfigNameByID(String id) {

@@ -15,10 +15,11 @@ public class SequenceFieldProvider implements FieldEditor {
 		// TODO Auto-generated method stub
 		return name;
 	}
-private String name="SequenceFieldProvider";
+
+	private String name = "SequenceFieldProvider";
+
 	@Deprecated
-	public
-	String getFieldConfName() {
+	public String getFieldConfName() {
 		// TODO Auto-generated method stub
 		return null;
 	}

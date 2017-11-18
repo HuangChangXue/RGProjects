@@ -27,26 +27,27 @@ public class NodeRenderer extends DefaultTreeCellRenderer {
 		this.background = background;
 	}
 
-	Icon nodeicon =createIcon();
-	  private Icon  createIcon() {  
-	        // TODO Auto-generated method stub  
-		  int w=20;int h=20;
-	        BufferedImage iconImage = new BufferedImage(w, h,  
-	                BufferedImage.TYPE_4BYTE_ABGR);  
-	        Graphics2D g2 = iconImage.createGraphics();  
-	        g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION,  
-	                RenderingHints.VALUE_INTERPOLATION_BILINEAR);  
-	        try {
-				g2.drawImage(ImageIO.read(Resources.getResourceAsStream("priv/hcx/sender/init/res/t6.png")), 0, 0, w, h, null);
-			     g2.dispose();  
-			     return new ImageIcon(iconImage);  
-	        } catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}  
-	        return this.getLeafIcon();
-	   
-	    }  
+	Icon nodeicon = createIcon();
+
+	private Icon createIcon() {
+		// TODO Auto-generated method stub
+		int w = 20;
+		int h = 20;
+		BufferedImage iconImage = new BufferedImage(w, h, BufferedImage.TYPE_4BYTE_ABGR);
+		Graphics2D g2 = iconImage.createGraphics();
+		g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+		try {
+			g2.drawImage(ImageIO.read(Resources.getResourceAsStream("priv/hcx/sender/init/res/t6.png")), 0, 0, w, h, null);
+			g2.dispose();
+			return new ImageIcon(iconImage);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return this.getLeafIcon();
+
+	}
+
 	public Component getTreeCellRendererComponent(JTree tree, Object value, boolean selected, boolean expanded, boolean leaf, int row, boolean hasFocus) {
 		DefaultMutableTreeNode node = (DefaultMutableTreeNode) value;
 		super.getTreeCellRendererComponent(tree, value, selected, expanded, leaf, row, hasFocus);
@@ -63,9 +64,8 @@ public class NodeRenderer extends DefaultTreeCellRenderer {
 			} else {
 				icon = getClosedIcon();
 			}
-		}
-		else {
-			icon=nodeicon;
+		} else {
+			icon = nodeicon;
 		}
 		this.setIcon(icon);
 

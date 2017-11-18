@@ -3,8 +3,8 @@ package priv.hcx.sender.db;
 import priv.hcx.sender.tool.CommonTools;
 
 public class DBConf {
-	String id=CommonTools.createRandomID(),name, url, user, pass, driverclass, testsql;
-	
+	String id = CommonTools.createRandomID(), name, url, user, pass, driverclass, testsql;
+
 	public String getName() {
 		return name;
 	}

@@ -2,49 +2,46 @@
 <!DOCTYPE mapper
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="priv.hcx.sender.bean.res.MsgFieldDao">
-	<resultMap type="msgField" id="msgfield">
+<mapper namespace="priv.hcx.sender.msg.field.editor.impl.bean.ConstConfigDao">
+	<resultMap type="constBean" id="constBean">
 		<id column="id" property="id" />
-		<result column="name" property="name" />
-
-		<result column="src" property="src"
-			/>
-		<result column="transactionid" property="transactionid" />
-		<result column="desc" property="desc" />
+		<result column="value" property="value" />
+		<result column="isAllowEmpty" property="isAllowEmpty"/>
+		<result column="fieldID" property="fieldID" />
+		<result column="isAllowNewLine" property="isAllowNewLine" />
 	</resultMap>
 	<sql id="baseCol">
-		id,name,src,transactionid,desc
+		id,value,isAllowEmpty,fieldID,isAllowNewLine
 	</sql>
-	<sql id="table">sender_transaction_field</sql>
+	<sql id="table">Field_const_conf</sql>
 	<sql id="notnullCol">
 		<trim suffix=" " suffixOverrides=",">
 			<if test="id != null"> id,</if>
-			<if test="name != null"> name,</if>
-
-			<if test="src != null"> src,</if>
-			<if test="transactionid != null"> transactionid,</if>
-			<if test="desc != null"> desc,</if>
+			<if test="value != null"> value,</if>
+			<if test="isAllowEmpty != null"> isAllowEmpty,</if>
+			<if test="fieldID != null"> fieldID,</if>
+			<if test="isAllowNewLine != null"> isAllowNewLine,</if>
 		</trim>
 	</sql>
 	<sql id="notnullvalue">
 		<trim suffix=" " suffixOverrides=",">
 			<if test="id != null"> #{id},</if>
-			<if test="name != null"> #{name},</if>
-			<if test="src != null"> #{src},</if>
-			<if test="transactionid != null"> #{transactionid},</if>
-			<if test="desc != null"> #{desc},</if>
+			<if test="value != null"> #{value},</if>
+			<if test="isAllowEmpty != null"> #{isAllowEmpty},</if>
+			<if test="fieldID != null"> #{fieldID},</if>
+			<if test="isAllowNewLine != null"> #{isAllowNewLine},</if>
 		</trim>
 	</sql>
 	<sql id="notnullKeyValues">
 		<trim suffix=" " suffixOverrides=",">
 			<if test="id != null"> id=#{id},</if>
-			<if test="name != null"> name=#{name},</if>
-			<if test="src != null"> src=#{src},</if>
-			<if test="transactionid != null"> transactionid=#{transactionid},</if>
-			<if test="desc != null"> desc=#{desc},</if>
+			<if test="value != null"> value=#{value},</if>
+			<if test="isAllowEmpty != null"> isAllowEmpty=#{isAllowEmpty},</if>
+			<if test="fieldID != null"> fieldID=#{fieldID},</if>
+			<if test="isAllowNewLine != null"> isAllowNewLine=#{isAllowNewLine},</if>
 		</trim>
 	</sql>
-	<select id="queryById" resultType="msgField">
+	<select id="queryById" resultType="constBean">
 		select
 		<include refid="baseCol"></include>
 		from
@@ -54,14 +51,14 @@
 		</where>
 	</select>
 
-	<select id="queryByTransactonId" resultType="msgField"
-		resultMap="msgfield">
+	<select id="queryByFieldId" resultType="constBean"
+		resultMap="constBean">
 		select
 		<include refid="baseCol"></include>
 		from
 		<include refid="table"></include>
 		<where>
-			transactionid=#{transactionid}
+			fieldID=#{fieldID}
 		</where>
 	</select>
 

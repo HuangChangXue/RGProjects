@@ -151,8 +151,8 @@ public class DataBaseConnectionEditorUI extends JDialog {
 		JButton button = new JButton("测试连接");
 		button.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-//				TODO  Test Connection 
-				
+				// TODO Test Connection
+
 			}
 		});
 

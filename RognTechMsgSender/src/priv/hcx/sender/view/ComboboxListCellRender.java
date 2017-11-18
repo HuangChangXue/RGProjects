@@ -7,16 +7,17 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JList;
 
+public class ComboboxListCellRender extends DefaultListCellRenderer {
+	private static ComboboxListCellRender inst = new ComboboxListCellRender();
 
-public 
-class ComboboxListCellRender extends DefaultListCellRenderer {
-	private static ComboboxListCellRender inst=new ComboboxListCellRender();
-	private ComboboxListCellRender(){
-		
+	private ComboboxListCellRender() {
+
 	}
-	public static DefaultListCellRenderer getInst(){
+
+	public static DefaultListCellRenderer getInst() {
 		return inst;
 	}
+
 	private static final long serialVersionUID = -3219293923049578105L;
 
 	@Override

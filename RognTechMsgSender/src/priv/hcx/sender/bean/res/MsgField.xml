@@ -10,6 +10,7 @@
 		<result column="src" property="src"
 			/>
 		<result column="transactionid" property="transactionid" />
+		<result column="desc" property="desc" />
 	</resultMap>
 	<sql id="baseCol">
 		id,name,src,transactionid,desc

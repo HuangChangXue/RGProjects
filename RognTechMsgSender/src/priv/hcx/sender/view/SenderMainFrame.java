@@ -118,7 +118,7 @@ public class SenderMainFrame extends JFrame implements Const {
 		DefaultTreeModel treeModel = new DefaultTreeModel(root) {
 			@Override
 			public boolean isLeaf(Object node) {
-				
+
 				if (node instanceof DefaultMutableTreeNode) {
 					Object bean = GUITool.treeNodeMapping.get(node);
 					if (bean != null) {
@@ -139,31 +139,33 @@ public class SenderMainFrame extends JFrame implements Const {
 
 				DefaultMutableTreeNode selected = (DefaultMutableTreeNode) e.getTreePath().getLastPathComponent();
 				selected = (DefaultMutableTreeNode) selected.getChildAt(e.getChildIndices()[0]);
-				
+
 				Object bean = GUITool.treeNodeMapping.get(selected);
 				if (Folder.class.isAssignableFrom(bean.getClass())) {
-					Folder folder=(Folder) bean;
+					Folder folder = (Folder) bean;
 					folder.setName(selected.toString());
 					SqlSession session = CommonTools.getSQLSession(true);
 					FolderDao dao = CommonTools.getMapper(session, FolderDao.class);
 					dao.update(folder);
 					CommonTools.closeSession(session);
 				} else if (Transaction.class.isAssignableFrom(bean.getClass())) {
-					Transaction tran=(Transaction)bean;
+					Transaction tran = (Transaction) bean;
 					tran.setName(selected.toString());
 					SqlSession session = CommonTools.getSQLSession(true);
 					TransactionDao dao = CommonTools.getMapper(session, TransactionDao.class);
-					dao.update( tran);
+					dao.update(tran);
 					CommonTools.closeSession(session);
 				}
 
 			}
 
 			@Override
-			public void treeNodesInserted(TreeModelEvent e) {}
+			public void treeNodesInserted(TreeModelEvent e) {
+			}
 
 			@Override
-			public void treeNodesRemoved(TreeModelEvent e) {}
+			public void treeNodesRemoved(TreeModelEvent e) {
+			}
 
 			@Override
 			public void treeStructureChanged(TreeModelEvent e) {
@@ -195,6 +197,7 @@ public class SenderMainFrame extends JFrame implements Const {
 		fieldEditorPanel.setBorder(new TitledBorder(GUITool.getName(MAIN_WINDOW_MSG_FIELD_SETTING_BORDER)));
 
 		this.add(mansplit, BorderLayout.CENTER);
+		this.add(new PreviewPanel(), BorderLayout.SOUTH);
 	}
 
 	public void setMessageEditor(Component comp) {
@@ -227,13 +230,10 @@ public class SenderMainFrame extends JFrame implements Const {
 			public void mouseEntered(MouseEvent e) {
 				menu.removeAll();
 				menu.add(GUITool.createMenuItem(MAIN_WINDOW_MENU_CONFIG_SERVER_ADD));
-				// JMenu edit=new
-				// JMenu(GUITool.getName(MAIN_WINDOW_MENU_CONFIG_SERVER_EDIT));
-				// menu.add(edit);
+
 				menu.add(new JSeparator());
 				List<ServerConf> servers = Server.getAllServerConf();
 				for (ServerConf s : servers) {
-					// edit.add(GUITool.createMenuItem(s.getName()));
 					menu.add(GUITool.createMenuItem(s.getName()));
 				}
 			}

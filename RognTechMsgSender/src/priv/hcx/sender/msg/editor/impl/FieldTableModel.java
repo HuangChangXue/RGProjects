@@ -8,14 +8,14 @@ import javax.swing.table.DefaultTableModel;
 import priv.hcx.sender.bean.MsgField;
 
 public class FieldTableModel extends DefaultTableModel {
-	
+
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 	private ArrayList<MsgField> fields = new ArrayList<MsgField>();
-	
-	@Override 
+
+	@Override
 	public void removeRow(int row) {
 		this.fields.remove(row);
 	}
@@ -79,18 +79,22 @@ public class FieldTableModel extends DefaultTableModel {
 
 	@Override
 	public int getRowCount() {
-		if(fields==null) fields= new ArrayList<MsgField>(); 
+		if (fields == null)
+			fields = new ArrayList<MsgField>();
 		return this.fields.size();
 	}
-	public void addRow(MsgField field){
+
+	public void addRow(MsgField field) {
 		this.fields.add(field);
-//		this.fireTableRowsInserted(this.fields.size()-1, this.fields.size()-1);
-//		this.fireTableDataChanged();
+		// this.fireTableRowsInserted(this.fields.size()-1,
+		// this.fields.size()-1);
+		// this.fireTableDataChanged();
 		this.fireTableDataChanged();
 	}
-	
-	public MsgField getFieldAt(int index){
-		if(index<0)return null;
+
+	public MsgField getFieldAt(int index) {
+		if (index < 0)
+			return null;
 		return this.fields.get(index);
 	}
 }
