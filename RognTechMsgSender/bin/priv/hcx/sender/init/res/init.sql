@@ -63,3 +63,17 @@ create table if not exists Field_const_conf(
 	isAllowNewLine boolean
 	);
 
+	
+create table if not exists  Field_Random_conf (
+		id  VARCHAR_IGNORECASE(32) primary key,
+		fieldID  VARCHAR_IGNORECASE(32) not null,
+		containNum boolean ,
+		containCharCap boolean,
+		containCharLow boolean,
+		containCharOther boolean, 
+		numLen varchar2(5),
+		charCapLen varchar2(5),
+		charLowLen varchar2(5),
+		charOtherLen varchar2(5)
+)	;
+

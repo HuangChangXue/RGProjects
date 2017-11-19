@@ -317,3 +317,62 @@ update
 		 sender_transaction_field 
 		  
 		where id=? [42001-195]
+2017-11-19 22:21:35 jdbc[4]: exception
+org.h2.jdbc.JdbcSQLException: Syntax error in SQL statement "INSERT INTO
+		 FIELD_RANDOM_CONF 
+		(
+		 
+		 ID,
+			 CONTAINNUM,
+			 CONTAINCHARCAP,
+			 FIELDID,
+			 CONTAINCHARLOW,
+			 CONTAINCHAROTHER,
+			 NUMLEN,
+			 CHARCAPLEN,
+			 CHARLOWLEN,
+			 CHAROTHERLEN   
+	 
+		)CONTAINNUMS[*] (
+		 
+		 ?,
+			 ?,
+			 ?,
+			 ?,
+			 ?,
+			   ?, 
+			             ?,           
+			         ?,       
+			         ?,       
+			       ?   
+	 
+		) "; expected "DIRECT, SORTED, DEFAULT, VALUES, SET, (, WITH, SELECT, FROM"; SQL statement:
+insert into
+		 Field_Random_conf 
+		(
+		 
+		 id,
+			 containNum,
+			 containCharCap,
+			 fieldID,
+			 containCharLow,
+			 containCharOther,
+			 numLen,
+			 charCapLen,
+			 charLowLen,
+			 charOtherLen   
+	 
+		)containNums (
+		 
+		 ?,
+			 ?,
+			 ?,
+			 ?,
+			 ?,
+			   ?, 
+			             ?,           
+			         ?,       
+			         ?,       
+			       ?   
+	 
+		) [42001-195]

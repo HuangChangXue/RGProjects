@@ -82,8 +82,8 @@ public class ConstFieldEditor extends JPanel {
 
 	public void setConfig(ConstConfigBean config) {
 		this.config = config;
-		this.radio_isAllowNewLine.setEnabled(config.getIsAllowNewLine());
-		this.radio_isallowNull.setEnabled(config.getIsAllowEmpty());
+		this.radio_isAllowNewLine.setSelected(config.getIsAllowNewLine());
+		this.radio_isallowNull.setSelected(config.getIsAllowEmpty());
 		this.txt_value.setText(config.getValue());
 	}
 
@@ -104,8 +104,8 @@ class BtnActionListener implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		System.out.println("AAAA:" + e.getActionCommand());
 		ConstConfigBean bean = this.editor.getConfig();
-		bean.setIsAllowEmpty(this.editor.radio_isallowNull.isEnabled());
-		bean.setIsAllowNewLine(this.editor.radio_isAllowNewLine.isEnabled());
+		bean.setIsAllowEmpty(this.editor.radio_isallowNull.isSelected());
+		bean.setIsAllowNewLine(this.editor.radio_isAllowNewLine.isSelected());
 		bean.setValue(this.editor.txt_value.getText());
 		if ("save".equals(e.getActionCommand())) {
 			try {

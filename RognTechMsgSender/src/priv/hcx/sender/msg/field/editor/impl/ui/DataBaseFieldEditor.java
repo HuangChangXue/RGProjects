@@ -53,6 +53,9 @@ public class DataBaseFieldEditor extends JPanel {
 			}
 		});
 		panel_1.add(button);
+		
+		JButton btnsave = new JButton("保存");
+		panel_1.add(btnsave);
 
 		JSplitPane splitPane = new JSplitPane();
 		splitPane.setOrientation(JSplitPane.VERTICAL_SPLIT);
