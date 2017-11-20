@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+
+<mapper namespace="priv.hcx.sender.msg.field.editor.impl.bean.RandomConfigDao">
+	<resultMap type="dbconfBean" id="dbconfBean">
+		<id column="id" property="id" />
+		<result column="containNum" property="containNum" />
+		<result column="containCharCap" property="containCharCap"/>
+		<result column="fieldID" property="fieldID" />
+		<result column="containCharLow" property="containCharLow" />
+		<result column="containCharOther" property="containCharOther" />
+		<result column="numLen" property="numLen" />
+		<result column="charCapLen" property="charCapLen" />
+		<result column="charLowLen" property="charLowLen" />
+		<result column="charOtherLen" property="charOtherLen" />
+	</resultMap>
+	<sql id="baseCol">
+		id,containNum,containCharCap,fieldID,containCharLow,containCharOther,numLen,charCapLen,charLowLen,charOtherLen
+	</sql>
+	<sql id="table">Field_Random_conf</sql>
+	<sql id="notnullCol">
+		<trim suffix=" " suffixOverrides=",">
+			<if test="id != null"> id,</if>
+			<if test="containNum != null"> containNum,</if>
+			<if test="containCharCap != null"> containCharCap,</if>
+			<if test="fieldID != null"> fieldID,</if>
+			<if test="containCharLow != null"> containCharLow,</if>
+			<if test="containCharOther != null"> containCharOther,</if>
+			<if test="numLen != null"> numLen,</if>
+			<if test="charCapLen != null"> charCapLen,</if>
+			<if test="charLowLen != null"> charLowLen,</if>
+			<if test="charOtherLen != null"> charOtherLen,</if>
+		</trim>
+	</sql>
+	<sql id="notnullcontainNum">
+		<trim suffix=" " suffixOverrides=",">
+			<if test="id != null"> #{id},</if>
+			<if test="containNum != null"> #{containNum},</if>
+			<if test="containCharCap != null"> #{containCharCap},</if>
+			<if test="fieldID != null"> #{fieldID},</if>
+			<if test="containCharLow != null"> #{containCharLow},</if>
+			<if test="containCharOther != null">   #{containCharOther}, </if>
+			<if test="numLen != null">             #{numLen},           </if>
+			<if test="charCapLen != null">         #{charCapLen},       </if>
+			<if test="charLowLen != null">         #{charLowLen},       </if>
+			<if test="charOtherLen != null">       #{charOtherLen},     </if>
+		</trim>
+	</sql>
+	<sql id="notnullKeycontainNums">
+		<trim suffix=" " suffixOverrides=",">
+			<if test="id != null"> id=#{id},</if>
+			<if test="containNum != null"> containNum=#{containNum},</if>
+			<if test="containCharCap != null"> containCharCap=#{containCharCap},</if>
+			<if test="fieldID != null"> fieldID=#{fieldID},</if>
+			<if test="containCharLow != null"> containCharLow=#{containCharLow},</if>
+			<if test="containCharOther != null"> containCharOther=  #{containCharOther}, </if>
+			<if test="numLen != null">        numLen=     #{numLen},           </if>
+			<if test="charCapLen != null">      charCapLen=   #{charCapLen},       </if>
+			<if test="charLowLen != null">       charLowLen=  #{charLowLen},       </if>
+			<if test="charOtherLen != null">     charOtherLen=  #{charOtherLen},     </if>
+		</trim>
+	</sql>
+	<select id="queryById" resultType="dbconfBean">
+		select
+		<include refid="baseCol"></include>
+		from
+		<include refid="table"></include>
+		<where>
+			id=#{id}
+		</where>
+	</select>
+
+	<select id="queryByFieldId" resultType="dbconfBean"
+		resultMap="dbconfBean">
+		select
+		<include refid="baseCol"></include>
+		from
+		<include refid="table"></include>
+		<where>
+			fieldID=#{fieldID}
+		</where>
+	</select>
+
+<delete id="delete">
+	delete 
+		from
+		<include refid="table"></include>
+		<where>
+			id=#{id}
+		</where>
+
+</delete>
+	<insert id="save">
+		insert into
+		<include refid="table"></include>
+		(
+		<include refid="notnullCol"></include>
+		) values  (
+		<include refid="notnullcontainNum"></include>
+		)
+	</insert>
+	<update id="update">
+		update
+		<include refid="table"></include>
+		<set>
+			<include refid="notnullKeycontainNums"></include>
+		</set>
+		where id=#{id}
+	</update>
+</mapper>
