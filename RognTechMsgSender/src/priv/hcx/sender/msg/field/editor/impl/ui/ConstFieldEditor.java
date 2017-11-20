@@ -33,7 +33,12 @@ public class ConstFieldEditor extends JPanel {
 	JTextArea txt_value = new JTextArea();
 
 	private ConstConfigBean config = null;
-
+	public <T> T getFieldValue(Class<T> t){
+		if(config==null)return null;
+		
+		return (T) config.getValue();
+	}
+	
 	public ConstFieldEditor() {
 		setLayout(new BorderLayout(0, 0));
 		this.setPreferredSize(new Dimension(323, 376));

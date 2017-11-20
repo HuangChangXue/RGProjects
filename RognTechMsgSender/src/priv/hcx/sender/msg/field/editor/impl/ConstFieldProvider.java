@@ -35,33 +35,48 @@ public class ConstFieldProvider implements FieldEditor {
 
 	private static ConstFieldEditor inst = null;
 
+	private ConstConfigBean getConfigBean(String fieldId) {
+		List<ConstConfigBean> confs = null;
+		;
+		ConstConfigBean bean = null;
+		try {
+			confs = CommonTools.doDBQueryOperation(ConstConfigDao.class, "queryByFieldId", ConstConfigBean.class, new Class[] { String.class }, fieldId);
+
+			if (confs.size() > 0) {
+				bean = confs.get(0);
+			}
+
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		if (bean == null) {
+			bean = new ConstConfigBean();
+			bean.setFieldID(fieldId);
+		}
+		return bean;
+
+	}
+
 	@Override
 	public JPanel getEditPaneByFieldId(String fieldId) {
 		if (inst == null) {
 			inst = new ConstFieldEditor();
 		}
 		try {
-			List<ConstConfigBean> confs=CommonTools.doDBQueryOperation(ConstConfigDao.class, "queryByFieldId", ConstConfigBean.class, new Class[]{String.class}, fieldId);
-			ConstConfigBean bean=null;
-			if(confs.size()>0){
-				bean=confs.get(0);
-			}
-			else {
-				bean=new ConstConfigBean();
-				bean.setFieldID(fieldId);
-			}
-			inst.setConfig(bean);
+
+			inst.setConfig(getConfigBean(fieldId));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
+
 		return inst;
 	}
 
 	@Override
-	public <T> T getFieldValue(T valueType, String fieldId) {
+	public <T> T getFieldValue(Class<T> valueType, String fieldId) {
 		// TODO Auto-generated method stub
-		return null;
+		return ((ConstFieldEditor) getEditPaneByFieldId(fieldId)).getFieldValue(valueType);
 	}
 
 	@Override

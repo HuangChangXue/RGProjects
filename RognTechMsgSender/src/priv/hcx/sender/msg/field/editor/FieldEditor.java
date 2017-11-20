@@ -32,7 +32,7 @@ public interface FieldEditor {
 	 * @param fieldId
 	 * @return
 	 */
-	<T> T getFieldValue(T valueType, String fieldId);
+	<T> T getFieldValue(Class<T> valueType, String fieldId);
 
 	/**
 	 * 获取相关联的字段的值

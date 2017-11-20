@@ -27,33 +27,45 @@ public class RandomFieldProvider implements FieldEditor {
 		// TODO Auto-generated method stub
 		return null;
 	}
-private static RandomFieldEditor inst=null;
+
+	private static RandomFieldEditor inst = null;
+
 	@Override
 	public JPanel getEditPaneByFieldId(String fieldId) {
-			if(inst==null){
-				inst=new RandomFieldEditor();
+		if (inst == null) {
+			inst = new RandomFieldEditor();
+		}
+		try {
+
+			inst.setConfig(getConfigBean(fieldId));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return inst;
+	}
+
+	private RandomConfigBean getConfigBean(String fieldId) {
+		RandomConfigBean bean = null;
+		try {
+			List<RandomConfigBean> confs = CommonTools.doDBQueryOperation(RandomConfigDao.class, "queryByFieldId", RandomConfigBean.class, new Class[] { String.class }, fieldId);
+
+			if (confs.size() > 0) {
+				bean = confs.get(0);
+			} else {
+				bean = new RandomConfigBean();
+				bean.setFieldID(fieldId);
 			}
-			try {
-				List<RandomConfigBean> confs=CommonTools.doDBQueryOperation(RandomConfigDao.class, "queryByFieldId", RandomConfigBean.class, new Class[]{String.class}, fieldId);
-				RandomConfigBean bean=null;
-				if(confs.size()>0){
-					bean=confs.get(0);
-				}
-				else {
-					bean=new RandomConfigBean();
-					bean.setFieldID(fieldId);
-				}
-				inst.setConfig(bean);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-			return inst;
+		} catch (Exception e) {
+
+		}
+		return bean;
 	}
 
 	@Override
-	public <T> T getFieldValue(T valueType, String fieldId) {
-		// TODO Auto-generated method stub
-		return null;
+	public <T> T getFieldValue(Class<T> valueType, String fieldId) {
+		RandomFieldEditor editor=(RandomFieldEditor) this.getEditPaneByFieldId(fieldId);
+		
+		return editor.getFieldValue(valueType);
 	}
 
 	@Override

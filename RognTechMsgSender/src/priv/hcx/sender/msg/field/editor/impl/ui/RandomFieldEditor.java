@@ -29,6 +29,41 @@ public class RandomFieldEditor extends JPanel {
 	JCheckBox chkCharCap = new JCheckBox("大写字母");
 	JCheckBox chkCharOther = new JCheckBox("其它字符");
 	JCheckBox chkCharLow = new JCheckBox("小写字母");
+	String chaU="abcdefghijklmnopqrstuvwxyz".toUpperCase();
+	String charL=chaU.toLowerCase();
+	String charn="012345678901234567890123456789";
+	String charo=".+-*/`-=[]\\;',./~!@#$%^&*()_{}|\":<>?";
+	public <T> T getFieldValue(Class<T> t){
+		if(bean==null) return null;
+		StringBuilder sb=new StringBuilder();
+		int totalLen=0;
+		if(bean.isContainCharCap()){
+			int un=Integer.valueOf(bean.getCharCapLen());
+			totalLen+=un;
+			while(un-->0)sb.append(chaU);
+		}
+		if(bean.isContainCharLow()){
+			int un=Integer.valueOf(bean.getCharLowLen());
+			totalLen+=un;
+			while(un-->0)sb.append(charL);
+		}
+		if(bean.isContainCharOther()){
+			int un=Integer.valueOf(bean.getCharOtherLen());
+			totalLen+=un;
+			while(un-->0)sb.append(charo);
+		}
+		if(bean.isContainNum()){
+			int un=Integer.valueOf(bean.getNumLen());
+			totalLen+=un;
+			while(un-->0)sb.append(charn);
+		}
+		StringBuilder ret=new StringBuilder();
+		while(totalLen-->0){
+			ret.append(sb.charAt((int) (Math.random()*sb.length())));
+		}
+		return (T) ret.toString();
+		
+	}
 	public RandomFieldEditor() {
 		bean=null;
 		setLayout(new BorderLayout(0, 0));
@@ -137,7 +172,7 @@ class BtnActionListener implements ActionListener {
 				e1.printStackTrace();
 			}
 		} else if ("preview".equalsIgnoreCase(e.getActionCommand())) {
-			//TODO    createRandom value
+			preview.setText(getFieldValue(String.class));
 		}
 	}
 }

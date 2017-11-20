@@ -31,7 +31,7 @@ public class TimeFieldProvider implements FieldEditor {
 	}
 
 	@Override
-	public <T> T getFieldValue(T valueType, String fieldId) {
+	public <T> T getFieldValue(Class<T> valueType, String fieldId) {
 		// TODO Auto-generated method stub
 		return null;
 	}
