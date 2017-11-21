@@ -39,8 +39,8 @@
 		<mapper resource="priv/hcx/sender/bean/res/Folder.xml" />
 		<mapper resource="priv/hcx/sender/bean/res/Server.xml" />
 		<mapper resource="priv/hcx/sender/bean/res/DataBase.xml" />
-		<mapper
-			resource="priv/hcx/sender/msg/field/editor/impl/bean/ConstConfigBean.xml" />
+		<mapper resource="priv/hcx/sender/msg/field/editor/impl/bean/ConstConfigBean.xml" />
 		<mapper resource="priv/hcx/sender/msg/field/editor/impl/bean/RandomConfigBean.xml"/>
+		<mapper resource="priv/hcx/sender/msg/field/editor/impl/bean/DataBaseConfigBean.xml"/>
 	</mappers>
 </configuration>

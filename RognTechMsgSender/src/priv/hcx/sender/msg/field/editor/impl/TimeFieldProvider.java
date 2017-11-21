@@ -5,6 +5,7 @@ import java.util.Map;
 
 import javax.swing.JPanel;
 
+import priv.hcx.sender.bean.MsgField;
 import priv.hcx.sender.msg.field.editor.FieldEditor;
 import priv.hcx.sender.msg.field.editor.impl.ui.TimeFieldEditor;
 
@@ -25,7 +26,7 @@ public class TimeFieldProvider implements FieldEditor {
 	}
 
 	@Override
-	public JPanel getEditPaneByFieldId(String fieldId) {
+	public JPanel getEditPaneByFieldId(String fieldId,List<MsgField> fields) {
 		// TODO Auto-generated method stub
 		return new TimeFieldEditor();
 	}

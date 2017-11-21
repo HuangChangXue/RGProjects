@@ -54,7 +54,7 @@ public class FieldSouceChangeListener implements ItemListener {
 					}
 				}
 
-				SenderMainFrame.getMainFrame().setFieldEdirot(aviliable.get(0).getEditPaneByFieldId(field.getId()));
+				SenderMainFrame.getMainFrame().setFieldEdirot(aviliable.get(0).getEditPaneByFieldId(field.getId(),model.getFields()));
 			} catch (Exception e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();

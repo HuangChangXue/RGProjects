@@ -5,6 +5,8 @@ import java.util.Map;
 
 import javax.swing.JPanel;
 
+import priv.hcx.sender.bean.MsgField;
+
 public interface FieldEditor {
 
 	/**
@@ -23,7 +25,7 @@ public interface FieldEditor {
 	 * @param fieldId
 	 * @return
 	 */
-	JPanel getEditPaneByFieldId(String fieldId);
+	JPanel getEditPaneByFieldId(String fieldId,List<MsgField> fields);
 
 	/**
 	 * 获取对应字段的值

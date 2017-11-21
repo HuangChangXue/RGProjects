@@ -7,6 +7,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import priv.hcx.sender.bean.MsgField;
 import priv.hcx.sender.msg.field.editor.FieldEditor;
 import priv.hcx.sender.msg.field.editor.impl.bean.ConstConfigBean;
 import priv.hcx.sender.msg.field.editor.impl.bean.ConstConfigDao;
@@ -59,7 +60,7 @@ public class ConstFieldProvider implements FieldEditor {
 	}
 
 	@Override
-	public JPanel getEditPaneByFieldId(String fieldId) {
+	public JPanel getEditPaneByFieldId(String fieldId,List<MsgField> fields) {
 		if (inst == null) {
 			inst = new ConstFieldEditor();
 		}
@@ -76,7 +77,7 @@ public class ConstFieldProvider implements FieldEditor {
 	@Override
 	public <T> T getFieldValue(Class<T> valueType, String fieldId) {
 		// TODO Auto-generated method stub
-		return ((ConstFieldEditor) getEditPaneByFieldId(fieldId)).getFieldValue(valueType);
+		return ((ConstFieldEditor) getEditPaneByFieldId(fieldId,null)).getFieldValue(valueType);
 	}
 
 	@Override

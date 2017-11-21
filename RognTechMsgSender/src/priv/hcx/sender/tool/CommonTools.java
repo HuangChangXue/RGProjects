@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.sql.Connection;
+import java.sql.DriverManager;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -14,6 +16,8 @@ import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.session.SqlSessionFactoryBuilder;
+
+import priv.hcx.sender.db.DBConf;
 
 public class CommonTools {
 	public static SqlSession getSQLSession(Boolean autoCommit) {
@@ -91,5 +95,21 @@ public class CommonTools {
 			sb.append(charactor[(int) (Math.random() * charactor.length)]);
 		}
 		return sb.toString();
+	}
+	
+	public static  Connection getDBConfigForTest(DBConf dbconf){
+		String clazz=dbconf.getDriverclass();
+		String user=dbconf.getUser();
+		String pass=dbconf.getPass();
+		String url=dbconf.getUrl();
+		try {
+			Class.forName(clazz);
+			return DriverManager.getConnection(url, user, pass);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+		
 	}
 }

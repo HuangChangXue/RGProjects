@@ -8,7 +8,7 @@ import priv.hcx.sender.bean.MsgField;
 
 public interface ConstConfigDao {
 
-	List<MsgField> queryByFieldId(@Param("fieldID") String fieldID);
+	List<ConstConfigBean> queryByFieldId(@Param("fieldID") String fieldID);
 
 	ConstConfigBean queryById(@Param("id") String id);
 

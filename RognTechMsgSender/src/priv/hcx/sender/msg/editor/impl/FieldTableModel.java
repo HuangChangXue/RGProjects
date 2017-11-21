@@ -1,6 +1,7 @@
 package priv.hcx.sender.msg.editor.impl;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Vector;
 
 import javax.swing.table.DefaultTableModel;
@@ -14,7 +15,9 @@ public class FieldTableModel extends DefaultTableModel {
 	 */
 	private static final long serialVersionUID = 1L;
 	private ArrayList<MsgField> fields = new ArrayList<MsgField>();
-
+	public List<MsgField>  getFields(){
+		return fields;
+	}
 	@Override
 	public void removeRow(int row) {
 		this.fields.remove(row);
@@ -97,4 +100,5 @@ public class FieldTableModel extends DefaultTableModel {
 			return null;
 		return this.fields.get(index);
 	}
+	
 }

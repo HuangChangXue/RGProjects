@@ -59,6 +59,7 @@ public class DefaultMsgEditor implements MsgEditor, Const {
 	FieldTableModel tableModle = new FieldTableModel();
 	private String transactionid = null;
 
+	List<MsgField>  fields=null;
 	@Override
 	public JPanel getEditorPanel(String transactionid) {
 		if (editors.containsKey(transactionid)) {
@@ -104,8 +105,8 @@ public class DefaultMsgEditor implements MsgEditor, Const {
 		editorContainerPanel.add(headSetting, BorderLayout.NORTH);
 
 		try {
-			List<MsgField> msgs = CommonTools.doDBQueryOperation(MsgFieldDao.class, "queryByTransactonId", MsgField.class, new Class[] { String.class }, new String[] { transactionid });
-			for (MsgField msg : msgs) {
+			fields = CommonTools.doDBQueryOperation(MsgFieldDao.class, "queryByTransactonId", MsgField.class, new Class[] { String.class }, new String[] { transactionid });
+			for (MsgField msg : fields) {
 				tableModle.addRow(msg);
 			}
 

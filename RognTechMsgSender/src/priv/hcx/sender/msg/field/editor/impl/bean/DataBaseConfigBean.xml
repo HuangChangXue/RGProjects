@@ -3,64 +3,52 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
   
+<!--
 
-<mapper namespace="priv.hcx.sender.msg.field.editor.impl.bean.RandomConfigDao">
+	private String id =, fieldID;
+	private String previewSql;
+	private String dbconnection;
+	private String fieldMapping;
+-->
+<mapper namespace="priv.hcx.sender.msg.field.editor.impl.bean.DataBaseConfigDao">
 	<resultMap type="dbconfBean" id="dbconfBean">
 		<id column="id" property="id" />
-		<result column="containNum" property="containNum" />
-		<result column="containCharCap" property="containCharCap"/>
 		<result column="fieldID" property="fieldID" />
-		<result column="containCharLow" property="containCharLow" />
-		<result column="containCharOther" property="containCharOther" />
-		<result column="numLen" property="numLen" />
-		<result column="charCapLen" property="charCapLen" />
-		<result column="charLowLen" property="charLowLen" />
-		<result column="charOtherLen" property="charOtherLen" />
+		<result column="previewSql" property="previewSql" />
+		<result column="dbconnection" property="dbconnection" />
+		<result column="fieldMapping" property="fieldMapping" />
+
 	</resultMap>
 	<sql id="baseCol">
-		id,containNum,containCharCap,fieldID,containCharLow,containCharOther,numLen,charCapLen,charLowLen,charOtherLen
+		id,fieldID,previewSql,dbconnection,fieldMapping
 	</sql>
-	<sql id="table">Field_Random_conf</sql>
+	<sql id="table">Field_db_conf</sql>
 	<sql id="notnullCol">
 		<trim suffix=" " suffixOverrides=",">
 			<if test="id != null"> id,</if>
-			<if test="containNum != null"> containNum,</if>
-			<if test="containCharCap != null"> containCharCap,</if>
 			<if test="fieldID != null"> fieldID,</if>
-			<if test="containCharLow != null"> containCharLow,</if>
-			<if test="containCharOther != null"> containCharOther,</if>
-			<if test="numLen != null"> numLen,</if>
-			<if test="charCapLen != null"> charCapLen,</if>
-			<if test="charLowLen != null"> charLowLen,</if>
-			<if test="charOtherLen != null"> charOtherLen,</if>
+			<if test="previewSql != null"> previewSql,</if>
+			<if test="dbconnection != null"> dbconnection,</if>
+			<if test="fieldMapping != null"> fieldMapping,</if>
 		</trim>
 	</sql>
 	<sql id="notnullcontainNum">
 		<trim suffix=" " suffixOverrides=",">
 			<if test="id != null"> #{id},</if>
-			<if test="containNum != null"> #{containNum},</if>
-			<if test="containCharCap != null"> #{containCharCap},</if>
 			<if test="fieldID != null"> #{fieldID},</if>
-			<if test="containCharLow != null"> #{containCharLow},</if>
-			<if test="containCharOther != null">   #{containCharOther}, </if>
-			<if test="numLen != null">             #{numLen},           </if>
-			<if test="charCapLen != null">         #{charCapLen},       </if>
-			<if test="charLowLen != null">         #{charLowLen},       </if>
-			<if test="charOtherLen != null">       #{charOtherLen},     </if>
+			<if test="previewSql != null"> #{previewSql},</if>
+			<if test="dbconnection != null">   #{dbconnection}, </if>
+			<if test="fieldMapping != null">             #{fieldMapping},           </if>
+	
 		</trim>
 	</sql>
 	<sql id="notnullKeycontainNums">
 		<trim suffix=" " suffixOverrides=",">
 			<if test="id != null"> id=#{id},</if>
-			<if test="containNum != null"> containNum=#{containNum},</if>
-			<if test="containCharCap != null"> containCharCap=#{containCharCap},</if>
 			<if test="fieldID != null"> fieldID=#{fieldID},</if>
-			<if test="containCharLow != null"> containCharLow=#{containCharLow},</if>
-			<if test="containCharOther != null"> containCharOther=  #{containCharOther}, </if>
-			<if test="numLen != null">        numLen=     #{numLen},           </if>
-			<if test="charCapLen != null">      charCapLen=   #{charCapLen},       </if>
-			<if test="charLowLen != null">       charLowLen=  #{charLowLen},       </if>
-			<if test="charOtherLen != null">     charOtherLen=  #{charOtherLen},     </if>
+			<if test="previewSql != null"> previewSql=#{previewSql},</if>
+			<if test="dbconnection != null"> dbconnection=  #{dbconnection}, </if>
+			<if test="fieldMapping != null">        fieldMapping=     #{fieldMapping},           </if>
 		</trim>
 	</sql>
 	<select id="queryById" resultType="dbconfBean">

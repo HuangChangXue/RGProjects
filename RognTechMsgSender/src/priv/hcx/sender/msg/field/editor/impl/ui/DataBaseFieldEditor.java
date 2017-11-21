@@ -2,8 +2,10 @@ package priv.hcx.sender.msg.field.editor.impl.ui;
 
 import javax.swing.JPanel;
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.Dimension;
 
+import javax.swing.DefaultCellEditor;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JComboBox;
@@ -13,15 +15,28 @@ import javax.swing.JTextField;
 import java.awt.FlowLayout;
 import javax.swing.JSplitPane;
 import javax.swing.JScrollPane;
+import javax.swing.event.CellEditorListener;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellEditor;
 import javax.swing.BoxLayout;
 
+import org.apache.derby.client.am.ResultSet;
+import org.json.JSONObject;
+
+import com.mysql.jdbc.Connection;
+
+import priv.hcx.sender.bean.MsgField;
 import priv.hcx.sender.db.DBConf;
 import priv.hcx.sender.db.dao.DBConfDao;
+import priv.hcx.sender.msg.field.editor.impl.bean.DataBaseConfigBean;
 import priv.hcx.sender.tool.CommonTools;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.sql.ResultSetMetaData;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.EventObject;
 import java.util.List;
 
 public class DataBaseFieldEditor extends JPanel {
@@ -29,9 +44,12 @@ public class DataBaseFieldEditor extends JPanel {
 	private JTable tbl_fieldmapping;
 	private JTable tbl_datapreview;
 	JComboBox<String> combo_connection = new JComboBox<String>();
+	JComboBox<String> fieldSelections = new JComboBox<String>();
+	private List<MsgField> fields = null;
+
 	public DataBaseFieldEditor() {
 		setLayout(new BorderLayout(0, 0));
-
+		this.bean = null;
 		JPanel panel = new JPanel();
 		add(panel, BorderLayout.NORTH);
 		panel.setPreferredSize(new Dimension(200, 30));
@@ -39,18 +57,18 @@ public class DataBaseFieldEditor extends JPanel {
 		JLabel label = new JLabel("选择数据库：");
 		panel.add(label);
 		try {
-			List<DBConf> daos=CommonTools.doDBQueryOperation(DBConfDao.class, "queryAll", DBConf.class, new Class[]{}, null);
-			if(daos.size()>0){
-				for(DBConf conf:daos){
+			List<DBConf> daos = CommonTools.doDBQueryOperation(DBConfDao.class, "queryAll", DBConf.class, new Class[] {}, null);
+			if (daos.size() > 0) {
+				for (DBConf conf : daos) {
 					combo_connection.addItem(conf.getName());
 				}
 			}
-			
+
 		} catch (Exception e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-		
+
 		panel.add(combo_connection);
 
 		JPanel panel_1 = new JPanel();
@@ -63,15 +81,15 @@ public class DataBaseFieldEditor extends JPanel {
 		txt_querySql = new JTextField();
 		panel_1.add(txt_querySql);
 		txt_querySql.setColumns(10);
-
+		BtnActionListener list = new BtnActionListener();
 		JButton btn_preview = new JButton("预览");
-		btn_preview.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-			}
-		});
+		btn_preview.setActionCommand("preview");
+		btn_preview.addActionListener(list);
 		panel_1.add(btn_preview);
-		
+
 		JButton btn_save = new JButton("保存");
+		btn_save.setActionCommand("save");
+		btn_save.addActionListener(list);
 		panel_1.add(btn_save);
 
 		JSplitPane splitPane = new JSplitPane();
@@ -83,20 +101,38 @@ public class DataBaseFieldEditor extends JPanel {
 		splitPane.setRightComponent(scrollPane);
 
 		tbl_fieldmapping = new JTable();
-		tbl_fieldmapping.setBorder(null);
-		tbl_fieldmapping.setModel(new DefaultTableModel(new Object[][] {}, new String[] { "\u5B57\u6BB5\u540D", "\u6570\u636E\u5E93\u5B57\u6BB5" }) {
-			Class[] columnTypes = new Class[] { Boolean.class, Object.class };
 
-			public Class getColumnClass(int columnIndex) {
-				return columnTypes[columnIndex];
-			}
+		tbl_fieldmapping.setBorder(null);
+		// tbl_fieldmapping.setCellEditor();
+
+		tbl_fieldmapping.setModel(new DefaultTableModel(new Object[][] {}, new String[] { "\u5B57\u6BB5\u540D", "\u6570\u636E\u5E93\u5B57\u6BB5" }) {
 
 			boolean[] columnEditables = new boolean[] { false, true };
 
 			public boolean isCellEditable(int row, int column) {
 				return columnEditables[column];
 			}
+
+			@Override
+			public Object getValueAt(int row, int column) {
+				String key = row + "_" + column;
+				if (!jso.keySet().contains(key)) {
+
+					return "";
+				}
+				return jso.get(key);
+			}
+
+			JSONObject jso = new JSONObject();
+
+			@Override
+			public void setValueAt(Object aValue, int row, int column) {
+				String key = row + "_" + column;
+				jso.put(key, aValue);
+			}
+
 		});
+		tbl_fieldmapping.getColumnModel().getColumn(1).setCellEditor(new DefaultCellEditor(fieldSelections));
 		scrollPane.setViewportView(tbl_fieldmapping);
 
 		JScrollPane scrollPane_1 = new JScrollPane();
@@ -106,4 +142,132 @@ public class DataBaseFieldEditor extends JPanel {
 		scrollPane_1.setViewportView(tbl_datapreview);
 	}
 
+	private DataBaseConfigBean bean = null;
+
+	public void setConfig(DataBaseConfigBean configBean) {
+		this.bean = configBean;
+		DefaultTableModel model = (DefaultTableModel) tbl_fieldmapping.getModel();
+		model.setRowCount(fields.size());
+		String mappingString = bean.getFieldMapping();
+		JSONObject mapping = new JSONObject();
+		if (mappingString != null && mappingString.trim().length() > 0) {
+			mapping = new JSONObject(mappingString);
+		}
+		fieldSelections.removeAllItems();
+		fieldSelections.addItem("");
+		List<String> items = new ArrayList<String>();
+		for (int i = 0; i < fields.size(); i++) {
+			String name = fields.get(i).getName();
+			model.setValueAt(name, i, 0);
+			if (mapping.keySet().contains(name)) {
+				model.setValueAt(mapping.getString(name), i, 1);
+
+				items.add(mapping.getString(name));
+			} else {
+				model.setValueAt("", i, 1);
+			}
+		}
+		for (String item : items) {
+			fieldSelections.addItem(item);
+		}
+
+	}
+
+	public List<MsgField> getFields() {
+		return fields;
+	}
+
+	public void setFields(List<MsgField> fields) {
+		this.fields = fields;
+	}
+
+	class BtnActionListener implements ActionListener {
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			String cmd = e.getActionCommand();
+			if("save".equals(cmd)){
+				
+			}
+			else if("preview".equals(cmd)){
+				String conName=combo_connection.getSelectedItem().toString();
+				System.out.println(conName);
+				DBConf cond=new DBConf();
+				cond.setName(conName);
+				
+				try {
+					List<DBConf> dbconf=CommonTools.doDBQueryOperation(DBConfDao.class, "queryByName", DBConf.class, new Class[]{DBConf.class}, cond	);
+					java.sql.Connection conn=null;
+					try {
+						conn=CommonTools.getDBConfigForTest(dbconf.get(0));
+						String querySql=txt_querySql.getText();
+						Statement stm=conn.createStatement();
+						stm.setFetchSize(10);
+						java.sql.ResultSet rs=stm.executeQuery(querySql);
+						ResultSetMetaData md=rs.getMetaData();
+						int colcnt=md.getColumnCount();
+						fieldSelections.removeAllItems();
+						final 	List<String> header=new ArrayList<String>();
+						for(int i =1;i<=colcnt;i++){
+							String name=md.getColumnLabel(i);
+							header.add(name);
+							fieldSelections.addItem(name);
+						}
+						final List<Object[]> result=new ArrayList<Object[]>();
+						while(rs.next()){
+							Object [] row=new Object[header.size()];
+							for( int i =1;i<colcnt;++i){
+								row[i-1]=rs.getObject(i);
+							}
+							result.add(row);
+						}
+						
+						DefaultTableModel tbm =new DefaultTableModel(){
+							
+							@Override
+							public int getRowCount() {
+								return result.size();
+							}
+
+							@Override
+							public int getColumnCount() {
+								return header.size();
+							}
+
+							@Override
+							public String getColumnName(int column) {
+								return header.get(column-1);
+							}
+
+							@Override
+							public boolean isCellEditable(int row, int column) {
+								return false;
+							}
+
+							@Override
+							public Object getValueAt(int row, int column) {
+								return result.get(row)[column-1];
+							}
+							
+							
+						};
+						
+						tbl_datapreview.setModel(tbm);
+						tbl_datapreview.updateUI();
+					} catch (Exception e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+					finally{
+					
+						try{conn.close();}catch(Exception es){}
+					}
+				} catch (Exception e1) {
+					
+				}
+				
+			}
+		}
+
+	}
 }

@@ -76,4 +76,10 @@ create table if not exists  Field_Random_conf (
 		charLowLen varchar2(5),
 		charOtherLen varchar2(5)
 )	;
-
+create table if not exists Field_db_conf (
+		id  VARCHAR_IGNORECASE(32) primary key,
+		fieldID  VARCHAR_IGNORECASE(32) not null,
+		previewSql varchar2(400),
+		fieldMapping varchar2 (400),
+		DBCONNECTION  varchar2(16)
+);

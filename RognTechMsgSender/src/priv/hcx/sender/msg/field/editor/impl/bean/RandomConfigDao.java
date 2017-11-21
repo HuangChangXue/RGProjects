@@ -8,7 +8,7 @@ import priv.hcx.sender.bean.MsgField;
 
 public interface RandomConfigDao {
 
-	List<MsgField> queryByFieldId(@Param("fieldID") String fieldID);
+	List<RandomConfigBean> queryByFieldId(@Param("fieldID") String fieldID);
 
 	RandomConfigBean queryById(@Param("id") String id);
 
