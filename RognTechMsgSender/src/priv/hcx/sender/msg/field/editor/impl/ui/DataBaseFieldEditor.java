@@ -26,9 +26,12 @@ import org.json.JSONObject;
 import com.mysql.jdbc.Connection;
 
 import priv.hcx.sender.bean.MsgField;
+import priv.hcx.sender.bean.res.MsgFieldDao;
 import priv.hcx.sender.db.DBConf;
 import priv.hcx.sender.db.dao.DBConfDao;
+import priv.hcx.sender.msg.field.editor.impl.DatabaseFieldProvider;
 import priv.hcx.sender.msg.field.editor.impl.bean.DataBaseConfigBean;
+import priv.hcx.sender.msg.field.editor.impl.bean.DataBaseConfigDao;
 import priv.hcx.sender.tool.CommonTools;
 
 import java.awt.event.ActionListener;
@@ -142,17 +145,49 @@ public class DataBaseFieldEditor extends JPanel {
 		scrollPane_1.setViewportView(tbl_datapreview);
 	}
 
-	private DataBaseConfigBean bean = null;
+	private List<DataBaseConfigBean> bean = null;
 
-	public void setConfig(DataBaseConfigBean configBean) {
+	private List<DataBaseConfigBean> getConfigBean(String fieldId) {
+		List<DataBaseConfigBean> confs = null;
+		;
+		try {
+			confs = CommonTools.doDBQueryOperation(DataBaseConfigDao.class, "queryByFieldId", DataBaseConfigBean.class, new Class[] { String.class }, fieldId);
+
+			if (confs == null || confs.size() <= 0) {
+				DataBaseConfigBean bean = new DataBaseConfigBean();
+				bean.setFieldID(fieldId);
+				confs = new ArrayList<DataBaseConfigBean>();
+				confs.add(bean);
+			}
+
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		return confs;
+
+	}
+
+	public void setConfig(List<DataBaseConfigBean> configBean) {
 		this.bean = configBean;
 		DefaultTableModel model = (DefaultTableModel) tbl_fieldmapping.getModel();
 		model.setRowCount(fields.size());
-		String mappingString = bean.getFieldMapping();
 		JSONObject mapping = new JSONObject();
-		if (mappingString != null && mappingString.trim().length() > 0) {
-			mapping = new JSONObject(mappingString);
+
+		for (MsgField field : fields) {
+			List<DataBaseConfigBean> beans = getConfigBean(field.getId());
+			if (beans != null && beans.size() > 0) {
+				configBean.add(beans.get(0));
+			}
+			for (DataBaseConfigBean bean : configBean) {
+
+				if (field.getId().equals(bean.getFieldID())) {
+					mapping.put(field.getName(), bean.getFieldMapping());
+				}
+			}
 		}
+
 		fieldSelections.removeAllItems();
 		fieldSelections.addItem("");
 		List<String> items = new ArrayList<String>();
@@ -186,44 +221,102 @@ public class DataBaseFieldEditor extends JPanel {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			String cmd = e.getActionCommand();
-			if("save".equals(cmd)){
-				
-			}
-			else if("preview".equals(cmd)){
-				String conName=combo_connection.getSelectedItem().toString();
+			if ("save".equals(cmd)) {
+				DefaultTableModel model = (DefaultTableModel) tbl_fieldmapping.getModel();
+				String connecton = combo_connection.getSelectedItem().toString();
+				String sql = txt_querySql.getText();
+
+				int cnt = model.getRowCount();
+				JSONObject mapping = new JSONObject();
+				while (cnt > 0) {
+					String name = (String) model.getValueAt(cnt, 0);
+					String value = (String) model.getValueAt(cnt--, 1);
+
+					for (MsgField field : fields) {
+						if (field.getName().equals(name)) {// 找到对应的field
+							boolean found = false;
+							for (DataBaseConfigBean dbbean : bean) {
+								if (field.getId().equals(dbbean.getFieldID())) {
+									dbbean.setFieldMapping(value);
+									try {
+										DataBaseConfigBean config = CommonTools.doDBQueryOperationSingle(DataBaseConfigDao.class, "queryById", DataBaseConfigBean.class, new Class[] { String.class },
+												dbbean.getId());
+										if (config != null) {
+											found = true;
+											CommonTools.doDBSaveOrUpdateOperation(DataBaseConfigDao.class, "update", new Class[] { DataBaseConfigBean.class }, dbbean);
+											break;
+										}
+									} catch (Exception e1) {
+										e1.printStackTrace();
+									}
+								}
+							}
+							if (!found) {
+								DataBaseConfigBean config = new DataBaseConfigBean();
+								try {
+									config.setPreviewSql(sql);
+									config.setFieldID(field.getId());
+									config.setFieldMapping(value);
+									config.setDbconnection(connecton);
+									CommonTools.doDBSaveOrUpdateOperation(DataBaseConfigDao.class, "save", new Class[] { DataBaseConfigBean.class }, config);
+								} catch (Exception e1) {
+									// TODO Auto-generated catch block
+									e1.printStackTrace();
+								}
+							}
+						}
+					}
+					if (value != null && value.trim().length() > 0) {
+						for (MsgField field : fields) {
+							if (field.getName().equals(name)) {
+								field.setSrc(new DatabaseFieldProvider().getEditorName());
+								try {
+									CommonTools.doDBSaveOrUpdateOperation(MsgFieldDao.class, "update", new Class[] { MsgField.class }, field);
+								} catch (Exception e1) {
+									e1.printStackTrace();
+								}
+								break;
+							}
+						}
+					}
+					mapping.put(name, value);
+				}
+
+			} else if ("preview".equals(cmd)) {
+				String conName = combo_connection.getSelectedItem().toString();
 				System.out.println(conName);
-				DBConf cond=new DBConf();
+				DBConf cond = new DBConf();
 				cond.setName(conName);
-				
+
 				try {
-					List<DBConf> dbconf=CommonTools.doDBQueryOperation(DBConfDao.class, "queryByName", DBConf.class, new Class[]{DBConf.class}, cond	);
-					java.sql.Connection conn=null;
+					List<DBConf> dbconf = CommonTools.doDBQueryOperation(DBConfDao.class, "queryByName", DBConf.class, new Class[] { DBConf.class }, cond);
+					java.sql.Connection conn = null;
 					try {
-						conn=CommonTools.getDBConfigForTest(dbconf.get(0));
-						String querySql=txt_querySql.getText();
-						Statement stm=conn.createStatement();
+						conn = CommonTools.getDBConfigForTest(dbconf.get(0));
+						String querySql = txt_querySql.getText();
+						Statement stm = conn.createStatement();
 						stm.setFetchSize(10);
-						java.sql.ResultSet rs=stm.executeQuery(querySql);
-						ResultSetMetaData md=rs.getMetaData();
-						int colcnt=md.getColumnCount();
+						java.sql.ResultSet rs = stm.executeQuery(querySql);
+						ResultSetMetaData md = rs.getMetaData();
+						int colcnt = md.getColumnCount();
 						fieldSelections.removeAllItems();
-						final 	List<String> header=new ArrayList<String>();
-						for(int i =1;i<=colcnt;i++){
-							String name=md.getColumnLabel(i);
+						final List<String> header = new ArrayList<String>();
+						for (int i = 1; i <= colcnt; i++) {
+							String name = md.getColumnLabel(i);
 							header.add(name);
 							fieldSelections.addItem(name);
 						}
-						final List<Object[]> result=new ArrayList<Object[]>();
-						while(rs.next()){
-							Object [] row=new Object[header.size()];
-							for( int i =1;i<colcnt;++i){
-								row[i-1]=rs.getObject(i);
+						final List<Object[]> result = new ArrayList<Object[]>();
+						while (rs.next()) {
+							Object[] row = new Object[header.size()];
+							for (int i = 1; i <= colcnt; ++i) {
+								row[i - 1] = rs.getObject(i);
 							}
 							result.add(row);
 						}
-						
-						DefaultTableModel tbm =new DefaultTableModel(){
-							
+
+						DefaultTableModel tbm = new DefaultTableModel() {
+
 							@Override
 							public int getRowCount() {
 								return result.size();
@@ -236,7 +329,7 @@ public class DataBaseFieldEditor extends JPanel {
 
 							@Override
 							public String getColumnName(int column) {
-								return header.get(column-1);
+								return header.get(column);
 							}
 
 							@Override
@@ -246,26 +339,27 @@ public class DataBaseFieldEditor extends JPanel {
 
 							@Override
 							public Object getValueAt(int row, int column) {
-								return result.get(row)[column-1];
+								return result.get(row)[column];
 							}
-							
-							
+
 						};
-						
+
 						tbl_datapreview.setModel(tbm);
 						tbl_datapreview.updateUI();
 					} catch (Exception e1) {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
-					}
-					finally{
-					
-						try{conn.close();}catch(Exception es){}
+					} finally {
+
+						try {
+							conn.close();
+						} catch (Exception es) {
+						}
 					}
 				} catch (Exception e1) {
-					
+
 				}
-				
+
 			}
 		}
 

@@ -1,5 +1,6 @@
 package priv.hcx.sender.msg.field.editor.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -50,26 +51,25 @@ public class DatabaseFieldProvider implements FieldEditor {
 	}
 	*/
 	private static DataBaseFieldEditor inst=null;
-	private DataBaseConfigBean getConfigBean(String fieldId) {
+	private List<DataBaseConfigBean> getConfigBean(String fieldId) {
 		List<DataBaseConfigBean> confs = null;
 		;
-		DataBaseConfigBean bean = null;
 		try {
 			confs = CommonTools.doDBQueryOperation(DataBaseConfigDao.class, "queryByFieldId", DataBaseConfigBean.class, new Class[] { String.class }, fieldId);
 
-			if (confs.size() > 0) {
-				bean = confs.get(0);
+			if (confs==null||confs.size() <=0) {
+				DataBaseConfigBean bean = new DataBaseConfigBean();
+				bean.setFieldID(fieldId);
+				confs=new ArrayList<DataBaseConfigBean>();
+				confs.add(bean);
 			}
 
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		if (bean == null) {
-			bean = new DataBaseConfigBean();
-			bean.setFieldID(fieldId);
-		}
-		return bean;
+	
+		return confs;
 
 	}
 	@Override

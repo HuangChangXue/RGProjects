@@ -470,3 +470,12 @@ select
 	at java.awt.EventDispatchThread.pumpEvents(Unknown Source)
 	at java.awt.EventDispatchThread.pumpEvents(Unknown Source)
 	at java.awt.EventDispatchThread.run(Unknown Source)
+2017-11-22 20:42:13 jdbc[4]: exception
+org.h2.jdbc.JdbcSQLException: Syntax error in SQL statement "UPDATE
+		 SENDER_TRANSACTION_FIELD 
+		  
+		WHERE[*] ID=? "; expected "., AS, SET"; SQL statement:
+update
+		 sender_transaction_field 
+		  
+		where id=? [42001-195]
