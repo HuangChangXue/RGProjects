@@ -1,7 +1,9 @@
 package priv.hcx.sender.msg.editor.impl;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Vector;
 
 import javax.swing.table.DefaultTableModel;
@@ -14,9 +16,13 @@ public class FieldTableModel extends DefaultTableModel {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private ArrayList<MsgField> fields = new ArrayList<MsgField>();
+	private Map<Integer ,MsgField> fields = new HashMap<Integer,MsgField>();
 	public List<MsgField>  getFields(){
-		return fields;
+		List<MsgField> ret=new ArrayList<MsgField>();
+		for(MsgField field:fields.values()){
+			ret.add(field);
+		}
+		return ret;
 	}
 	@Override
 	public void removeRow(int row) {
@@ -83,12 +89,12 @@ public class FieldTableModel extends DefaultTableModel {
 	@Override
 	public int getRowCount() {
 		if (fields == null)
-			fields = new ArrayList<MsgField>();
+			fields = new HashMap<Integer,MsgField>();
 		return this.fields.size();
 	}
 
 	public void addRow(MsgField field) {
-		this.fields.add(field);
+		this.fields.put(fields.size(),field);
 		// this.fireTableRowsInserted(this.fields.size()-1,
 		// this.fields.size()-1);
 		// this.fireTableDataChanged();

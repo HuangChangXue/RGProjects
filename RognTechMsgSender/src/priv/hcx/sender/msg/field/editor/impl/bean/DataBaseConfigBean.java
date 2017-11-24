@@ -4,6 +4,7 @@ import priv.hcx.sender.tool.CommonTools;
 
 public class DataBaseConfigBean {
 	private String id = CommonTools.createRandomID(), fieldID;
+	private String groupId= CommonTools.createRandomID();
 	private String previewSql;
 	private String dbconnection;
 	private String fieldMapping;
@@ -46,6 +47,14 @@ public class DataBaseConfigBean {
 
 	public void setFieldMapping(String fieldMapping) {
 		this.fieldMapping = fieldMapping;
+	}
+
+	public String getGroupId() {
+		return groupId;
+	}
+
+	public void setGroupId(String groupId) {
+		this.groupId = groupId;
 	}
 
 }

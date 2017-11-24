@@ -161,7 +161,6 @@ public class DataBaseFieldEditor extends JPanel {
 			}
 
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
@@ -174,17 +173,18 @@ public class DataBaseFieldEditor extends JPanel {
 		DefaultTableModel model = (DefaultTableModel) tbl_fieldmapping.getModel();
 		model.setRowCount(fields.size());
 		JSONObject mapping = new JSONObject();
-
+		combo_connection.setSelectedIndex(0);
+		txt_querySql.setText("");
 		for (MsgField field : fields) {
-			List<DataBaseConfigBean> beans = getConfigBean(field.getId());
-			if (beans != null && beans.size() > 0) {
-				configBean.add(beans.get(0));
-			}
-			for (DataBaseConfigBean bean : configBean) {
 
+			for (DataBaseConfigBean bean : configBean) {
+				if (bean.getDbconnection() != null && bean.getDbconnection().trim().length() > 0) {
+					combo_connection.setSelectedItem(bean.getDbconnection());
+				}
 				if (field.getId().equals(bean.getFieldID())) {
 					mapping.put(field.getName(), bean.getFieldMapping());
 				}
+				txt_querySql.setText(bean.getPreviewSql());
 			}
 		}
 
@@ -206,6 +206,7 @@ public class DataBaseFieldEditor extends JPanel {
 			fieldSelections.addItem(item);
 		}
 
+		tbl_datapreview.setModel(new DefaultTableModel());
 	}
 
 	public List<MsgField> getFields() {
@@ -226,12 +227,43 @@ public class DataBaseFieldEditor extends JPanel {
 				String connecton = combo_connection.getSelectedItem().toString();
 				String sql = txt_querySql.getText();
 
-				int cnt = model.getRowCount();
-				JSONObject mapping = new JSONObject();
-				while (cnt > 0) {
+				int cnt = model.getRowCount()-1;
+				String groupId = CommonTools.createRandomID();
+				while (cnt >= 0) {
 					String name = (String) model.getValueAt(cnt, 0);
 					String value = (String) model.getValueAt(cnt--, 1);
+					if (value != null && value.trim().length() > 0) {
 
+						for (MsgField field : fields) {
+							if (field.getName().equals(name)) {// 找到对应的field
+								try {
+									List<DataBaseConfigBean> configs = CommonTools.doDBQueryOperation(DataBaseConfigDao.class, "queryByFieldId", DataBaseConfigBean.class, new Class[] { String.class },field.getId());
+									if(configs!=null&&configs.size()>0){
+										DataBaseConfigBean config=configs.get(0);
+										config.setGroupId(groupId);
+										config.setPreviewSql(sql);
+										config.setFieldID(field.getId());
+										config.setFieldMapping(value);
+										config.setDbconnection(connecton);
+										config.setGroupId(groupId);
+										CommonTools.doDBSaveOrUpdateOperation(DataBaseConfigDao.class, "update", new Class[] { DataBaseConfigBean.class }, config);
+									}
+									else {
+										DataBaseConfigBean config=new DataBaseConfigBean();
+										config.setPreviewSql(sql);
+										config.setFieldID(field.getId());
+										config.setFieldMapping(value);
+										config.setDbconnection(connecton);
+										config.setGroupId(groupId);
+										CommonTools.doDBSaveOrUpdateOperation(DataBaseConfigDao.class, "save", new Class[] { DataBaseConfigBean.class }, config);
+									}
+								} catch (Exception e1) {}
+							}
+						}
+
+					}
+				}
+/*
 					for (MsgField field : fields) {
 						if (field.getName().equals(name)) {// 找到对应的field
 							boolean found = false;
@@ -243,6 +275,11 @@ public class DataBaseFieldEditor extends JPanel {
 												dbbean.getId());
 										if (config != null) {
 											found = true;
+											config.setGroupId(groupId);
+											config.setPreviewSql(sql);
+											config.setFieldID(field.getId());
+											config.setFieldMapping(value);
+											config.setDbconnection(connecton);
 											CommonTools.doDBSaveOrUpdateOperation(DataBaseConfigDao.class, "update", new Class[] { DataBaseConfigBean.class }, dbbean);
 											break;
 										}
@@ -258,6 +295,7 @@ public class DataBaseFieldEditor extends JPanel {
 									config.setFieldID(field.getId());
 									config.setFieldMapping(value);
 									config.setDbconnection(connecton);
+									config.setGroupId(groupId == null ? config.getGroupId() : groupId);
 									CommonTools.doDBSaveOrUpdateOperation(DataBaseConfigDao.class, "save", new Class[] { DataBaseConfigBean.class }, config);
 								} catch (Exception e1) {
 									// TODO Auto-generated catch block
@@ -281,7 +319,7 @@ public class DataBaseFieldEditor extends JPanel {
 					}
 					mapping.put(name, value);
 				}
-
+*/
 			} else if ("preview".equals(cmd)) {
 				String conName = combo_connection.getSelectedItem().toString();
 				System.out.println(conName);
@@ -300,6 +338,7 @@ public class DataBaseFieldEditor extends JPanel {
 						ResultSetMetaData md = rs.getMetaData();
 						int colcnt = md.getColumnCount();
 						fieldSelections.removeAllItems();
+						fieldSelections.addItem("");
 						final List<String> header = new ArrayList<String>();
 						for (int i = 1; i <= colcnt; i++) {
 							String name = md.getColumnLabel(i);

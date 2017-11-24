@@ -80,7 +80,10 @@ public class DatabaseFieldProvider implements FieldEditor {
 		}
 		try {
 			inst.setFields(fields);
-			inst.setConfig(getConfigBean(fieldId));
+			List<DataBaseConfigBean>  confs=new ArrayList<DataBaseConfigBean>();
+			confs = CommonTools.doDBQueryOperation(DataBaseConfigDao.class, "queryGroupByFieldId", DataBaseConfigBean.class, new Class[] { String.class }, fieldId);
+
+			inst.setConfig(confs);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

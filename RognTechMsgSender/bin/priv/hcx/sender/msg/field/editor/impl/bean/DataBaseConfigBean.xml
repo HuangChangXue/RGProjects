@@ -2,14 +2,9 @@
 <!DOCTYPE mapper
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-  
-<!--
 
-	private String id =, fieldID;
-	private String previewSql;
-	private String dbconnection;
-	private String fieldMapping;
--->
+<!-- private String id =, fieldID; private String previewSql; private String 
+	dbconnection; private String fieldMapping; -->
 <mapper namespace="priv.hcx.sender.msg.field.editor.impl.bean.DataBaseConfigDao">
 	<resultMap type="dbconfBean" id="dbconfBean">
 		<id column="id" property="id" />
@@ -17,10 +12,11 @@
 		<result column="previewSql" property="previewSql" />
 		<result column="dbconnection" property="dbconnection" />
 		<result column="fieldMapping" property="fieldMapping" />
+		<result column="groupId" property="groupId" />
 
 	</resultMap>
 	<sql id="baseCol">
-		id,fieldID,previewSql,dbconnection,fieldMapping
+		id,fieldID,previewSql,dbconnection,fieldMapping,groupId
 	</sql>
 	<sql id="table">Field_db_conf</sql>
 	<sql id="notnullCol">
@@ -30,6 +26,7 @@
 			<if test="previewSql != null"> previewSql,</if>
 			<if test="dbconnection != null"> dbconnection,</if>
 			<if test="fieldMapping != null"> fieldMapping,</if>
+			<if test="groupId != null"> groupId,</if>
 		</trim>
 	</sql>
 	<sql id="notnullcontainNum">
@@ -37,9 +34,10 @@
 			<if test="id != null"> #{id},</if>
 			<if test="fieldID != null"> #{fieldID},</if>
 			<if test="previewSql != null"> #{previewSql},</if>
-			<if test="dbconnection != null">   #{dbconnection}, </if>
-			<if test="fieldMapping != null">             #{fieldMapping},           </if>
-	
+			<if test="dbconnection != null"> #{dbconnection}, </if>
+			<if test="fieldMapping != null"> #{fieldMapping},           </if>
+			<if test="groupId != null"> #{groupId},           </if>
+
 		</trim>
 	</sql>
 	<sql id="notnullKeycontainNums">
@@ -47,8 +45,9 @@
 			<if test="id != null"> id=#{id},</if>
 			<if test="fieldID != null"> fieldID=#{fieldID},</if>
 			<if test="previewSql != null"> previewSql=#{previewSql},</if>
-			<if test="dbconnection != null"> dbconnection=  #{dbconnection}, </if>
-			<if test="fieldMapping != null">        fieldMapping=     #{fieldMapping},           </if>
+			<if test="dbconnection != null"> dbconnection= #{dbconnection}, </if>
+			<if test="fieldMapping != null"> fieldMapping= #{fieldMapping},           </if>
+			<if test="groupId != null"> groupId= #{groupId},           </if>
 		</trim>
 	</sql>
 	<select id="queryById" resultType="dbconfBean">
@@ -61,8 +60,29 @@
 		</where>
 	</select>
 
-	<select id="queryByFieldId" resultType="dbconfBean"
-		resultMap="dbconfBean">
+	<select id="queryGroupByFieldId" resultType="dbconfBean">
+		select
+		<include refid="baseCol"></include>
+		from
+		<include refid="table"></include>
+		<where>
+			groupId in (
+			select
+			groupId
+			from
+			<include refid="table"></include>
+			<where>
+				fieldID=#{fieldID}
+			</where>
+
+			)
+
+		</where>
+
+
+	</select>
+
+	<select id="queryByFieldId" resultType="dbconfBean" resultMap="dbconfBean">
 		select
 		<include refid="baseCol"></include>
 		from
@@ -72,21 +92,21 @@
 		</where>
 	</select>
 
-<delete id="delete">
-	delete 
+	<delete id="delete">
+		delete
 		from
 		<include refid="table"></include>
 		<where>
 			id=#{id}
 		</where>
 
-</delete>
+	</delete>
 	<insert id="save">
 		insert into
 		<include refid="table"></include>
 		(
 		<include refid="notnullCol"></include>
-		) values  (
+		) values (
 		<include refid="notnullcontainNum"></include>
 		)
 	</insert>

@@ -55,10 +55,11 @@ class TablePopupMenuListener implements ActionListener, Const {
 			FieldTableModel model = (FieldTableModel) table.getModel();
 			int[] sel = table.getSelectedRows();
 			for (int i : sel) {
-				model.removeRow(table.convertColumnIndexToModel(i));
-				MsgField field = model.getFieldAt(table.convertColumnIndexToModel(i));
+				
+				MsgField field = model.getFieldAt(table.convertRowIndexToModel(i));
 				try {
 					CommonTools.doDBSaveOrUpdateOperation(MsgFieldDao.class, "delete", new Class[] { MsgField.class }, field);
+					model.removeRow(table.convertRowIndexToModel(i));
 				} catch (Exception e1) {
 
 					e1.printStackTrace();
