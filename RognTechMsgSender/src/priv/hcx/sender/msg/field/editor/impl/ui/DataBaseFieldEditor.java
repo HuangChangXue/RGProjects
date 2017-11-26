@@ -52,7 +52,7 @@ public class DataBaseFieldEditor extends JPanel {
 
 	public DataBaseFieldEditor() {
 		setLayout(new BorderLayout(0, 0));
-		this.bean = null;
+		this.beans = null;
 		JPanel panel = new JPanel();
 		add(panel, BorderLayout.NORTH);
 		panel.setPreferredSize(new Dimension(200, 30));
@@ -145,7 +145,7 @@ public class DataBaseFieldEditor extends JPanel {
 		scrollPane_1.setViewportView(tbl_datapreview);
 	}
 
-	private List<DataBaseConfigBean> bean = null;
+	private List<DataBaseConfigBean> beans = null;
 
 	private List<DataBaseConfigBean> getConfigBean(String fieldId) {
 		List<DataBaseConfigBean> confs = null;
@@ -169,7 +169,7 @@ public class DataBaseFieldEditor extends JPanel {
 	}
 
 	public void setConfig(List<DataBaseConfigBean> configBean) {
-		this.bean = configBean;
+		this.beans = configBean;
 		DefaultTableModel model = (DefaultTableModel) tbl_fieldmapping.getModel();
 		model.setRowCount(fields.size());
 		JSONObject mapping = new JSONObject();
@@ -231,11 +231,17 @@ public class DataBaseFieldEditor extends JPanel {
 				String groupId = CommonTools.createRandomID();
 				while (cnt >= 0) {
 					String name = (String) model.getValueAt(cnt, 0);
-					String value = (String) model.getValueAt(cnt--, 1);
+					String value = (String) model.getValueAt(cnt, 1);
 					if (value != null && value.trim().length() > 0) {
 
 						for (MsgField field : fields) {
-							if (field.getName().equals(name)) {// 找到对应的field
+							if (field.getName().equals(name)&&model.getValueAt(cnt, 0)!=null&&model.getValueAt(cnt, 0).toString().trim().length()>0) {// 找到对应的field
+								field.setSrc(new DatabaseFieldProvider().getEditorName());
+								try {
+									CommonTools.doDBSaveOrUpdateOperation(MsgFieldDao.class, "update", new Class[] { MsgField.class }, field);
+								} catch (Exception e1) {
+									e1.printStackTrace();
+								}
 								try {
 									List<DataBaseConfigBean> configs = CommonTools.doDBQueryOperation(DataBaseConfigDao.class, "queryByFieldId", DataBaseConfigBean.class, new Class[] { String.class },field.getId());
 									if(configs!=null&&configs.size()>0){
@@ -262,6 +268,7 @@ public class DataBaseFieldEditor extends JPanel {
 						}
 
 					}
+					cnt--;
 				}
 /*
 					for (MsgField field : fields) {

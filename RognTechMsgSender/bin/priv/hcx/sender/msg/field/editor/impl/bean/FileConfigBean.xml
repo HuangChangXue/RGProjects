@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- private String id =, fieldID; private String fieldSep; private String 
+	fileName; private String fieldMapping; -->
+<mapper namespace="priv.hcx.sender.msg.field.editor.impl.bean.FileConfigDao">
+	<resultMap type="fileconfBean" id="fileconfBean">
+		<id column="id" property="id" />
+		<result column="fieldID" property="fieldID" />
+		<result column="fieldSep" property="fieldSep" />
+		<result column="fileName" property="fileName" />
+		<result column="fieldMapping" property="fieldMapping" />
+		<result column="groupId" property="groupId" />
+
+	</resultMap>
+	<sql id="baseCol">
+		id,fieldID,fieldSep,fileName,fieldMapping,groupId
+	</sql>
+	<sql id="table">Field_file_conf</sql>
+	<sql id="notnullCol">
+		<trim suffix=" " suffixOverrides=",">
+			<if test="id != null"> id,</if>
+			<if test="fieldID != null"> fieldID,</if>
+			<if test="fieldSep != null"> fieldSep,</if>
+			<if test="fileName != null"> fileName,</if>
+			<if test="fieldMapping != null"> fieldMapping,</if>
+			<if test="groupId != null"> groupId,</if>
+		</trim>
+	</sql>
+	<sql id="notnullcontainNum">
+		<trim suffix=" " suffixOverrides=",">
+			<if test="id != null"> #{id},</if>
+			<if test="fieldID != null"> #{fieldID},</if>
+			<if test="fieldSep != null"> #{fieldSep},</if>
+			<if test="fileName != null"> #{fileName}, </if>
+			<if test="fieldMapping != null"> #{fieldMapping},           </if>
+			<if test="groupId != null"> #{groupId},           </if>
+
+		</trim>
+	</sql>
+	<sql id="notnullKeycontainNums">
+		<trim suffix=" " suffixOverrides=",">
+			<if test="id != null"> id=#{id},</if>
+			<if test="fieldID != null"> fieldID=#{fieldID},</if>
+			<if test="fieldSep != null"> fieldSep=#{fieldSep},</if>
+			<if test="fileName != null"> fileName= #{fileName}, </if>
+			<if test="fieldMapping != null"> fieldMapping= #{fieldMapping},           </if>
+			<if test="groupId != null"> groupId= #{groupId},           </if>
+		</trim>
+	</sql>
+	<select id="queryById" resultType="fileconfBean">
+		select
+		<include refid="baseCol"></include>
+		from
+		<include refid="table"></include>
+		<where>
+			id=#{id}
+		</where>
+	</select>
+
+	<select id="queryGroupByFieldId" resultType="fileconfBean">
+		select
+		<include refid="baseCol"></include>
+		from
+		<include refid="table"></include>
+		<where>
+			groupId in (
+			select
+			groupId
+			from
+			<include refid="table"></include>
+			<where>
+				fieldID=#{fieldID}
+			</where>
+
+			)
+
+		</where>
+
+
+	</select>
+
+	<select id="queryByFieldId" resultType="fileconfBean" resultMap="fileconfBean">
+		select
+		<include refid="baseCol"></include>
+		from
+		<include refid="table"></include>
+		<where>
+			fieldID=#{fieldID}
+		</where>
+	</select>
+
+	<delete id="delete">
+		delete
+		from
+		<include refid="table"></include>
+		<where>
+			id=#{id}
+		</where>
+
+	</delete>
+	<insert id="save">
+		insert into
+		<include refid="table"></include>
+		(
+		<include refid="notnullCol"></include>
+		) values (
+		<include refid="notnullcontainNum"></include>
+		)
+	</insert>
+	<update id="update">
+		update
+		<include refid="table"></include>
+		<set>
+			<include refid="notnullKeycontainNums"></include>
+		</set>
+		where id=#{id}
+	</update>
+</mapper>

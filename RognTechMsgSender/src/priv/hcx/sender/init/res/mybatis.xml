@@ -15,6 +15,7 @@
 		<typeAlias type="priv.hcx.sender.server.ServerConf" alias="server" />
 		<typeAlias type="priv.hcx.sender.db.DBConf" alias="dbconf" />
 		<typeAlias type="priv.hcx.sender.msg.field.editor.impl.bean.DataBaseConfigBean" alias="dbconfBean" />
+		<typeAlias type="priv.hcx.sender.msg.field.editor.impl.bean.FileConfigBean" alias="fileconfBean" />
 		<typeAlias
 			type="priv.hcx.sender.msg.field.editor.impl.bean.ConstConfigBean"
 			alias="constBean" />
@@ -42,5 +43,7 @@
 		<mapper resource="priv/hcx/sender/msg/field/editor/impl/bean/ConstConfigBean.xml" />
 		<mapper resource="priv/hcx/sender/msg/field/editor/impl/bean/RandomConfigBean.xml"/>
 		<mapper resource="priv/hcx/sender/msg/field/editor/impl/bean/DataBaseConfigBean.xml"/>
+		<mapper resource="priv/hcx/sender/msg/field/editor/impl/bean/FileConfigBean.xml"/>
+		
 	</mappers>
 </configuration>

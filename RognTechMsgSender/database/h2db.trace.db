@@ -821,3 +821,30 @@ update
 		 sender_transaction_field 
 		  
 		where id=? [42001-195]
+2017-11-26 20:33:48 jdbc[4]: exception
+org.h2.jdbc.JdbcSQLException: Syntax error in SQL statement "UPDATE
+		 SENDER_TRANSACTION_FIELD 
+		  
+		WHERE[*] ID=? "; expected "., AS, SET"; SQL statement:
+update
+		 sender_transaction_field 
+		  
+		where id=? [42001-195]
+2017-11-26 20:33:49 jdbc[5]: exception
+org.h2.jdbc.JdbcSQLException: Syntax error in SQL statement "UPDATE
+		 SENDER_TRANSACTION_FIELD 
+		  
+		WHERE[*] ID=? "; expected "., AS, SET"; SQL statement:
+update
+		 sender_transaction_field 
+		  
+		where id=? [42001-195]
+2017-11-26 20:35:22 jdbc[4]: exception
+org.h2.jdbc.JdbcSQLException: Syntax error in SQL statement "UPDATE
+		 SENDER_TRANSACTION_FIELD 
+		  
+		WHERE[*] ID=? "; expected "., AS, SET"; SQL statement:
+update
+		 sender_transaction_field 
+		  
+		where id=? [42001-195]
