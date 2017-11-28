@@ -1,31 +1,22 @@
 package priv.hcx.sender.msg.editor.impl;
 
 import java.awt.BorderLayout;
-import java.awt.Component;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.swing.DefaultCellEditor;
-import javax.swing.DefaultListCellRenderer;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
-import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.JTextField;
-import javax.swing.JTree;
 import javax.swing.border.TitledBorder;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
-import javax.swing.table.DefaultTableModel;
 
 import priv.hcx.sender.bean.MsgField;
 import priv.hcx.sender.bean.msg.Message;
@@ -38,24 +29,7 @@ import priv.hcx.sender.view.ComboboxListCellRender;
 import priv.hcx.sender.view.Const;
 
 public class DefaultMsgEditor implements MsgEditor, Const {
-	/*
-	 * @Override public JPanel getEditorPanel(String transactionName, String
-	 * configFileName) { JPanel editorContainerPanel = new JPanel();
-	 * editorContainerPanel.setLayout(new BorderLayout()); JPanel headSetting =
-	 * new JPanel(); headSetting.setBorder(new TitledBorder("消息头设置")); JPanel
-	 * headerPanel = new JPanel(); JLabel jbl = new
-	 * JLabel(GUITool.getName(MAIN_WINDOW_MSG_EDITOR_HEAD_PANEL_HEADER_TYPE));
-	 * JLabel jblfile = new
-	 * JLabel(GUITool.getName(MAIN_WINDOW_MSG_EDITOR_HEAD_PANEL_HEADER_TYPE_CONFIG
-	 * )); headerPanel.add(jbl); headerPanel.add(jblfile);
-	 * headSetting.add(headerPanel);
-	 * 
-	 * editorContainerPanel.add(headSetting, BorderLayout.NORTH); JPanel
-	 * fieldTablePanel = new JPanel(); fieldTablePanel.setBorder(new
-	 * TitledBorder("字段设置")); fieldTablePanel.add(new JLabel("消息头设置选项"));
-	 * editorContainerPanel.add(fieldTablePanel, BorderLayout.CENTER); return
-	 * editorContainerPanel; }
-	 */
+
 	FieldTableModel tableModle = new FieldTableModel();
 	private String transactionid = null;
 
@@ -115,7 +89,6 @@ public class DefaultMsgEditor implements MsgEditor, Const {
 			e1.printStackTrace();
 		}
 
-		// tableModle.setColumnIdentifiers(new String[] { "名字", "描述", "来源"});
 		final JTable table = new JTable(tableModle);
 		tableModle.addTableModelListener(new TableModelListener() {
 
@@ -135,11 +108,7 @@ public class DefaultMsgEditor implements MsgEditor, Const {
 
 			}
 		});
-		// table.setBackground(headerPanel.getBackground());
-		// table.setGridColor(headerPanel.getBackground());
-		// tableModle.addRow(new String[] { "名字", "描述", "来源" });
-		// tableModle.addRow(new String[] { "名字", "描述", "来源" });
-		// tableModle.addRow(new String[] { "名字", "描述", "来源"});
+	
 
 		new TablePopupMenu(table, this.transactionid);
 		table.getSelectionModel().addListSelectionListener(TableRowSelectionListener.getInst(table));

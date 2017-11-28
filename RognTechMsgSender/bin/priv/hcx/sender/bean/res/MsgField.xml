@@ -6,24 +6,23 @@
 	<resultMap type="msgField" id="msgfield">
 		<id column="id" property="id" />
 		<result column="name" property="name" />
-
-		<result column="src" property="src"
-			/>
+		<result column="src" property="src"/>
 		<result column="transactionid" property="transactionid" />
 		<result column="desc" property="desc" />
+		<result column="orderIdx" property="orderIdx" />
 	</resultMap>
 	<sql id="baseCol">
-		id,name,src,transactionid,desc
+		id,name,src,transactionid,desc,orderIdx
 	</sql>
 	<sql id="table">sender_transaction_field</sql>
 	<sql id="notnullCol">
 		<trim suffix=" " suffixOverrides=",">
 			<if test="id != null"> id,</if>
 			<if test="name != null"> name,</if>
-
 			<if test="src != null"> src,</if>
 			<if test="transactionid != null"> transactionid,</if>
 			<if test="desc != null"> desc,</if>
+			<if test="orderIdx != null"> orderIdx,</if>
 		</trim>
 	</sql>
 	<sql id="notnullvalue">
@@ -33,6 +32,7 @@
 			<if test="src != null"> #{src},</if>
 			<if test="transactionid != null"> #{transactionid},</if>
 			<if test="desc != null"> #{desc},</if>
+			<if test="orderIdx != null"> #{orderIdx},</if>
 		</trim>
 	</sql>
 	<sql id="notnullKeyValues">
@@ -42,6 +42,7 @@
 			<if test="src != null"> src=#{src},</if>
 			<if test="transactionid != null"> transactionid=#{transactionid},</if>
 			<if test="desc != null"> desc=#{desc},</if>
+			<if test="orderIdx != null"> orderIdx=#{orderIdx},</if>
 		</trim>
 	</sql>
 	<select id="queryById" resultType="msgField">
@@ -63,6 +64,7 @@
 		<where>
 			transactionid=#{transactionid}
 		</where>
+		order by orderIdx
 	</select>
 
 <delete id="delete">

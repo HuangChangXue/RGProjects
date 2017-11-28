@@ -10,7 +10,12 @@ import javax.swing.JButton;
 import net.miginfocom.swing.MigLayout;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.util.List;
+
 import javax.swing.JSplitPane;
+
+import priv.hcx.sender.server.Server;
+import priv.hcx.sender.server.ServerConf;
 
 public class PreviewPanel extends JPanel {
 	private final JPanel panel_1 = new JPanel();
@@ -21,7 +26,7 @@ public class PreviewPanel extends JPanel {
 	JButton btn_send = new JButton("异步发送");
 	JTextArea txt_send = new JTextArea();
 	JTextArea txt_receive = new JTextArea();
-	JComboBox comboBox = new JComboBox();
+	JComboBox combo_server = new JComboBox();
 
 	public PreviewPanel() {
 		setLayout(new BorderLayout(0, 0));
@@ -30,8 +35,11 @@ public class PreviewPanel extends JPanel {
 		add(panel, BorderLayout.WEST);
 		panel.setLayout(new MigLayout("", "[73.00px]", "[21px,center][][]"));
 
-		panel.add(comboBox, "cell 0 0,growx,aligny center");
-
+		panel.add(combo_server, "cell 0 0,growx,aligny center");
+		List<ServerConf> servers=Server.getAllServerConf();
+		for(ServerConf conf:servers){
+			combo_server.addItem(conf.getName());
+		}
 		// btn_preview.addActionListener();
 		panel.add(btn_preview, "cell 0 1,growx,aligny center");
 

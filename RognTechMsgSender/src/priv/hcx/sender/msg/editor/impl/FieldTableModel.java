@@ -32,10 +32,10 @@ public class FieldTableModel extends DefaultTableModel {
 	@Override
 	public int getColumnCount() {
 
-		return 3;
+		return columns.length;
 	}
 
-	private static String[] columns = { "名字", "描述", "类型" };
+	private static String[] columns = { "名字", "描述", "类型","顺序号" };
 
 	@Override
 	public String getColumnName(int column) {
@@ -63,6 +63,9 @@ public class FieldTableModel extends DefaultTableModel {
 				break;
 			case 2:
 				ret = field.getSrc();
+			break;
+			case 3:
+				ret=field.getOrderIdx();
 			}
 		}
 		return ret;
@@ -80,7 +83,9 @@ public class FieldTableModel extends DefaultTableModel {
 				field.setDesc(aValue.toString());
 				break;
 			case 2:
-				field.setSrc(aValue.toString());
+				field.setSrc(aValue.toString());break;
+			case 3:
+				field.setOrderIdx(Integer.valueOf(aValue+""));
 			}
 		}
 		this.fireTableDataChanged();
@@ -95,10 +100,6 @@ public class FieldTableModel extends DefaultTableModel {
 
 	public void addRow(MsgField field) {
 		this.fields.put(fields.size(),field);
-		// this.fireTableRowsInserted(this.fields.size()-1,
-		// this.fields.size()-1);
-		// this.fireTableDataChanged();
-		this.fireTableDataChanged();
 	}
 
 	public MsgField getFieldAt(int index) {

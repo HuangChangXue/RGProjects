@@ -8,6 +8,7 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
 
+import priv.hcx.sender.bean.MsgField;
 import priv.hcx.sender.bean.Transaction;
 import priv.hcx.sender.msg.editor.MsgEditor;
 import priv.hcx.sender.tool.CommonTools;
@@ -49,6 +50,7 @@ public class TreeNodeListerner extends MouseAdapter {
 						Transaction tran = (Transaction) bean;
 						System.out.println(tran.getId());
 						MsgEditor editor = CommonTools.loadService(MsgEditor.class).get(0);
+						MsgField.initIdx();
 						SenderMainFrame.getMainFrame().setMessageEditor(editor.getEditorPanel(tran.getId()));
 					}
 				}

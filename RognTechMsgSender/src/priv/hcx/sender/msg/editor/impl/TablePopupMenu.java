@@ -70,10 +70,10 @@ class TablePopupMenuListener implements ActionListener, Const {
 			FieldTableModel model = (FieldTableModel) table.getModel();
 			MsgField field = new MsgField(transid);
 			model.addRow(field);
+			model.fireTableDataChanged();
 			try {
 				CommonTools.doDBSaveOrUpdateOperation(MsgFieldDao.class, "saveMsg", new Class[] { MsgField.class }, field);
 			} catch (Exception e1) {
-				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
 

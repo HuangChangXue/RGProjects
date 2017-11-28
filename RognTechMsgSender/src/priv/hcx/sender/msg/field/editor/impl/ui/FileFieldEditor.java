@@ -106,45 +106,7 @@ public class FileFieldEditor extends JPanel {
 		splitPane.setRightComponent(scrollPane_1);
 
 		tab_fieldMapping = new JTable();
-		tab_fieldMapping.setModel(new DefaultTableModel(new Object[][] {}, new String[] { "\u5B57\u6BB5\u540D\u79F0", "\u6587\u4EF6\u57DF\u540D\u79F0" }) {
-			Class[] columnTypes = new Class[] { String.class, Object.class };
-			JSONObject mapping = new JSONObject();
 
-			public Class getColumnClass(int columnIndex) {
-				return columnTypes[columnIndex];
-			}
-
-			@Override
-			public Object getValueAt(int row, int column) {
-
-				String key = row + "_" + column;
-				if(mapping.has(key))
-				return mapping.get(key);
-				return "";
-			}
-
-			@Override
-			public void setValueAt(Object aValue, int row, int column) {
-
-				String key = row + "_" + column;
-				mapping.put(key, aValue);
-			}
-
-			@Override
-			public int getRowCount() {
-				if (mapping == null) {
-					mapping = new JSONObject();
-				}
-				return mapping.length() / 2;
-			}
-
-			@Override
-			public int getColumnCount() {
-				return 2;
-			}
-
-		});
-		tab_fieldMapping.getColumnModel().getColumn(1).setCellEditor(new DefaultCellEditor(fieldSelections));
 		scrollPane_1.setViewportView(tab_fieldMapping);
 
 		JPanel panel_1 = new JPanel();
@@ -169,7 +131,7 @@ public class FileFieldEditor extends JPanel {
 
 	public void setConfig(List<FileConfigBean> confs) {
 		this.confs = confs;
-		JSONObject mapping = new JSONObject();
+		final JSONObject mapping = new JSONObject();
 		fieldSelections.removeAllItems();
 		fieldSelections.addItem("");
 		table_preview.setModel(new DefaultTableModel());
@@ -187,20 +149,59 @@ public class FileFieldEditor extends JPanel {
 			}
 		}
 
-		DefaultTableModel model = (DefaultTableModel) tab_fieldMapping.getModel();
+		DefaultTableModel model = new DefaultTableModel() {
+			Class[] columnTypes = new Class[] { String.class, String.class };
 
-		int cnt = 0;
-		for (MsgField field : fields) {
-			model.setValueAt(field.getName(), cnt, 0);
-			if (mapping.has(field.getName())) {
-				model.setValueAt(mapping.get(field.getName()), cnt, 1);
-			} else {
-				model.setValueAt("", cnt, 1);
-
+			public Class getColumnClass(int columnIndex) {
+				return columnTypes[columnIndex];
 			}
-			cnt++;
-		}
 
+			
+			@Override
+			public Object getValueAt(int row, int column) {
+				String name = fields.get(row).getName();
+				if (column == 0) {
+					return name;
+				} else {
+					if (mapping.has(name)) {
+						return mapping.get(name);
+					}
+					return "";
+				}
+			}
+
+			@Override
+			public int getRowCount() {
+				return fields.size();
+			}
+
+			@Override
+			public int getColumnCount() {
+				return 2;
+			}
+
+
+			@Override
+			public void setValueAt(Object aValue, int row, int column) {
+				String name = fields.get(row).getName();
+				if (column == 0) {
+					
+				} else {
+					mapping.put(name, aValue);
+					
+				}
+			}
+
+
+			@Override
+			public boolean isCellEditable(int row, int column) {
+				return column==1;
+			}
+
+		};
+		tab_fieldMapping.setModel(model);
+
+		tab_fieldMapping.getColumnModel().getColumn(1).setCellEditor(new DefaultCellEditor(fieldSelections));
 	}
 
 	class FieldActionListener implements ActionListener {
@@ -209,27 +210,29 @@ public class FileFieldEditor extends JPanel {
 		public void actionPerformed(ActionEvent e) {
 			String cmd = e.getActionCommand();
 			if ("save".equals(cmd)) {
-				
-				String sep=txt_sep.getText();
-				String file=txt_file.getText();
-				DefaultTableModel dtm=(DefaultTableModel) tab_fieldMapping.getModel();
-				int rowCnt=dtm.getRowCount();
-				String ffName=new FileFieldProvider().getEditorName();
-				for( int i =0;i<rowCnt;i++){//groupId
-					String name=dtm.getValueAt(i, 0).toString();
-					
-					for(MsgField field:fields){
-						if(field.getName().equals(name)&&dtm.getValueAt(i, 0)!=null&&dtm.getValueAt(i, 0).toString().trim().length()>0){
-							field.setSrc(ffName);
-							try {
-								CommonTools.doDBSaveOrUpdateOperation(MsgFieldDao.class, "update", new Class[] { MsgField.class }, field);
-							} catch (Exception e1) {
-								e1.printStackTrace();
-							}
-							boolean isFound=false;
-								for(FileConfigBean config:confs){
-									if(config.getFieldID().equals(field.getId())){
-										isFound=true;
+
+				String sep = txt_sep.getText();
+				String file = txt_file.getText();
+				DefaultTableModel dtm = (DefaultTableModel) tab_fieldMapping.getModel();
+				int rowCnt = dtm.getRowCount();
+				String ffName = new FileFieldProvider().getEditorName();
+				for (int i = 0; i < rowCnt; i++) {// groupId
+					String name = dtm.getValueAt(i, 0).toString();
+
+					for (MsgField field : fields) {
+						if (dtm.getValueAt(i, 1) != null && dtm.getValueAt(i, 1).toString().trim().length() > 0) {
+							if (field.getName().equals(name)) {
+
+								field.setSrc(ffName);
+								try {
+									CommonTools.doDBSaveOrUpdateOperation(MsgFieldDao.class, "update", new Class[] { MsgField.class }, field);
+								} catch (Exception e1) {
+									e1.printStackTrace();
+								}
+								boolean isFound = false;
+								for (FileConfigBean config : confs) {
+									if (config.getFieldID().equals(field.getId())) {
+										isFound = true;
 										config.setFieldMapping(dtm.getValueAt(i, 1).toString());
 										config.setFieldSep(sep);
 										config.setFileName(file);
@@ -240,10 +243,10 @@ public class FileFieldEditor extends JPanel {
 										}
 									}
 								}
-								if(!isFound){
+								if (!isFound) {
 
-									FileConfigBean config=new FileConfigBean();
-								
+									FileConfigBean config = new FileConfigBean();
+
 									config.setFieldID(field.getId());
 									config.setFieldMapping(dtm.getValueAt(i, 1).toString());
 									config.setFieldSep(sep);
@@ -255,8 +258,21 @@ public class FileFieldEditor extends JPanel {
 										// TODO Auto-generated catch block
 										e1.printStackTrace();
 									}
-								
+
 								}
+							}
+						} else {
+							if (field.getName().equals(name)) {
+								for (FileConfigBean config : confs) {
+									if (config.getFieldID().equals(field.getId())) {
+										try {
+											CommonTools.doDBSaveOrUpdateOperation(FileConfigDao.class, "delete", new Class[] { FileConfigBean.class }, config);
+										} catch (Exception e1) {
+											e1.printStackTrace();
+										}
+									}
+								}
+							}
 						}
 					}
 				}

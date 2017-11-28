@@ -3,19 +3,24 @@ package priv.hcx.sender.bean;
 import priv.hcx.sender.tool.CommonTools;
 
 public class MsgField {
+	private int orderIdx;
 	private String name;
 	private String desc;
 	private String src;
 	private String id;
 	private String transactionid;
 	private boolean isValueSet = false;
-
+	private static int idx=0;
+	public  static void initIdx(){
+		idx=0;
+	}
 	public MsgField(String transactionid) {
 		this.id = CommonTools.createRandomID();
 		this.desc = "描述";
 		this.src = CommonTools.loadService(priv.hcx.sender.msg.field.editor.FieldEditor.class).get(0).getEditorName();
 		this.name = "新名称";
 		this.transactionid = transactionid;
+		this.orderIdx=idx++;
 	}
 
 	public MsgField() {
@@ -68,5 +73,15 @@ public class MsgField {
 	public void setValueSet(boolean isValueSet) {
 		this.isValueSet = isValueSet;
 	}
+
+	public int getOrderIdx() {
+		return orderIdx;
+	}
+
+	public void setOrderIdx(int orderIdx) {
+		this.orderIdx = orderIdx;
+	}
+
+
 
 }
