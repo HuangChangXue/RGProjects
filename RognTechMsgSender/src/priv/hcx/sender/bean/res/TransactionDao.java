@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
 
-import priv.hcx.sender.bean.Folder;
 import priv.hcx.sender.bean.Transaction;
 
 public interface TransactionDao {

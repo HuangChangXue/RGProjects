@@ -63,16 +63,13 @@ public class RandomFieldProvider implements FieldEditor {
 	}
 
 	@Override
-	public <T> T getFieldValue(Class<T> valueType, String fieldId) {
-		RandomFieldEditor editor=(RandomFieldEditor) this.getEditPaneByFieldId(fieldId,null);
-		
-		return editor.getFieldValue(valueType);
+	public  void configMsgField(MsgField msg) {
+		msg.setValue(CommonTools.createRandomID());
 	}
 
 	@Override
-	public Map<String, Object> getCombiedFieldsValues(List<String> fieldId) {
-		// TODO Auto-generated method stub
-		return null;
+	public void configcombiedFields(MsgField msg,List<MsgField> fields){
+		msg.setValue(CommonTools.createRandomID());
 	}
 
 	@Override

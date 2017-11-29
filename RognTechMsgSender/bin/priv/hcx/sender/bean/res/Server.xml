@@ -93,5 +93,8 @@
 		<set>
 			<include refid="notnullKeyValues"></include>
 		</set>
+		<where >
+				id=#{id}
+		</where>
 	</update>
 </mapper>

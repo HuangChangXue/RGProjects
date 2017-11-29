@@ -11,6 +11,8 @@ public class MsgField {
 	private String transactionid;
 	private boolean isValueSet = false;
 	private static int idx=0;
+	private Object value=null;
+	
 	public  static void initIdx(){
 		idx=0;
 	}
@@ -80,6 +82,14 @@ public class MsgField {
 
 	public void setOrderIdx(int orderIdx) {
 		this.orderIdx = orderIdx;
+	}
+	public Object getValue() {
+		return value;
+	}
+	public void setValue(Object value) {
+		
+		this.value = value;
+		setValueSet(true);
 	}
 
 

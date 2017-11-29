@@ -13,6 +13,7 @@ import priv.hcx.sender.bean.Transaction;
 import priv.hcx.sender.msg.editor.MsgEditor;
 import priv.hcx.sender.tool.CommonTools;
 import priv.hcx.sender.tool.GUITool;
+import priv.hcx.sender.tool.MessageHelper;
 import priv.hcx.sender.view.SenderMainFrame;
 
 public class TreeNodeListerner extends MouseAdapter {
@@ -51,9 +52,15 @@ public class TreeNodeListerner extends MouseAdapter {
 						System.out.println(tran.getId());
 						MsgEditor editor = CommonTools.loadService(MsgEditor.class).get(0);
 						MsgField.initIdx();
+						MessageHelper.setCurrentSelectedTransaction(tran);
 						SenderMainFrame.getMainFrame().setMessageEditor(editor.getEditorPanel(tran.getId()));
+					} else {
+						MessageHelper.setCurrentSelectedTransaction(null);
 					}
 				}
+			} else {
+				MessageHelper.setCurrentSelectedTransaction(null);
+
 			}
 
 		}

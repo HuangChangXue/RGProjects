@@ -34,7 +34,7 @@ public interface FieldEditor {
 	 * @param fieldId
 	 * @return
 	 */
-	<T> T getFieldValue(Class<T> valueType, String fieldId);
+	void configMsgField(MsgField msg);
 
 	/**
 	 * 获取相关联的字段的值
@@ -42,7 +42,7 @@ public interface FieldEditor {
 	 * @param fieldId
 	 * @return
 	 */
-	Map<String, Object> getCombiedFieldsValues(List<String> fieldId);
+	void configcombiedFields(MsgField msg,List<MsgField> fields);
 
 	/**
 	 * 检查是否支持指定名称的类型进行编辑
@@ -51,4 +51,5 @@ public interface FieldEditor {
 	 * @return
 	 */
 	boolean isAviableforName(String name);
+
 }

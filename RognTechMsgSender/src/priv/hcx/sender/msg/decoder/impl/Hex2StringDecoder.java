@@ -6,7 +6,7 @@ public class Hex2StringDecoder implements MsgDecoder {
 
 	@Override
 	public String getDecoderName() {
-		return this.getClass().getName();
+		return "Hex2StringDecoder";
 	}
 
 }

@@ -1,6 +1,6 @@
 create table if not exists sender_folder(
 	id  VARCHAR_IGNORECASE(32) primary key,
-	name  varchar2(16)not null,
+	name  varchar2(16)not null unique,
 	desc varchar2(64),
 	parentid VARCHAR_IGNORECASE(32),
     reserved1 varchar2(64),
@@ -10,7 +10,7 @@ create table if not exists sender_folder(
 
 create table if not exists  sender_transaction (
 	id  VARCHAR_IGNORECASE(32) primary key,
-    name  varchar2(16)not null,
+    name  varchar2(16)not null unique,
     desc varchar2(64),
     folderid VARCHAR_IGNORECASE(32),
     headerEditor varchar2(64),

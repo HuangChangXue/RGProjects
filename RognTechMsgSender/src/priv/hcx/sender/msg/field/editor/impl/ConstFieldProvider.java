@@ -75,15 +75,15 @@ public class ConstFieldProvider implements FieldEditor {
 	}
 
 	@Override
-	public <T> T getFieldValue(Class<T> valueType, String fieldId) {
+	public void configMsgField(MsgField msg) {
 		// TODO Auto-generated method stub
-		return ((ConstFieldEditor) getEditPaneByFieldId(fieldId,null)).getFieldValue(valueType);
+		ConstConfigBean  bean=getConfigBean(msg.getId());
+		msg.setValue(bean.getValue());
 	}
 
 	@Override
-	public Map<String, Object> getCombiedFieldsValues(List<String> fieldId) {
-		// TODO Auto-generated method stub
-		return null;
+	public void configcombiedFields(MsgField msg,List<MsgField> fields){
+		configMsgField(msg);
 	}
 
 }

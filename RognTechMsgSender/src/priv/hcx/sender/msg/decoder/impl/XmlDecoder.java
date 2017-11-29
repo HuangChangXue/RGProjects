@@ -5,6 +5,6 @@ import priv.hcx.sender.msg.decoder.MsgDecoder;
 public class XmlDecoder implements MsgDecoder {
 	@Override
 	public String getDecoderName() {
-		return this.getClass().getName();
+		return "XmlDecoder";
 	}
 }

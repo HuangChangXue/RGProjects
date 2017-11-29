@@ -156,7 +156,6 @@ public class FileFieldEditor extends JPanel {
 				return columnTypes[columnIndex];
 			}
 
-			
 			@Override
 			public Object getValueAt(int row, int column) {
 				String name = fields.get(row).getName();
@@ -180,22 +179,20 @@ public class FileFieldEditor extends JPanel {
 				return 2;
 			}
 
-
 			@Override
 			public void setValueAt(Object aValue, int row, int column) {
 				String name = fields.get(row).getName();
 				if (column == 0) {
-					
+
 				} else {
 					mapping.put(name, aValue);
-					
+
 				}
 			}
 
-
 			@Override
 			public boolean isCellEditable(int row, int column) {
-				return column==1;
+				return column == 1;
 			}
 
 		};
@@ -232,15 +229,24 @@ public class FileFieldEditor extends JPanel {
 								boolean isFound = false;
 								for (FileConfigBean config : confs) {
 									if (config.getFieldID().equals(field.getId())) {
-										isFound = true;
+										
 										config.setFieldMapping(dtm.getValueAt(i, 1).toString());
 										config.setFieldSep(sep);
 										config.setFileName(file);
 										try {
-											CommonTools.doDBSaveOrUpdateOperation(FileConfigDao.class, "update", new Class[] { FileConfigBean.class }, config);
+											if (CommonTools.doDBQueryOperationSingle(FileConfigDao.class, "queryById", FileConfigBean.class, new Class[] { String.class }, config.getId()) != null) {
+												isFound = true;
+												try {
+													CommonTools.doDBSaveOrUpdateOperation(FileConfigDao.class, "update", new Class[] { FileConfigBean.class }, config);
+												} catch (Exception e1) {
+													e1.printStackTrace();
+												}
+											}
 										} catch (Exception e1) {
+											// TODO Auto-generated catch block
 											e1.printStackTrace();
 										}
+
 									}
 								}
 								if (!isFound) {
