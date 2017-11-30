@@ -44,7 +44,7 @@ public class TableRowSelectionListener implements ListSelectionListener {
 					}
 				}
 			}
-			SenderMainFrame.getMainFrame().setFieldEdirot(aviliable.get(0).getEditPaneByFieldId(field.getId(),model.getFields()));
+			SenderMainFrame.getMainFrame().setFieldEditor(aviliable.get(0).getEditPaneByFieldId(field.getId(),model.getFields()));
 		}
 
 	}

@@ -112,7 +112,7 @@ public class FileFieldProvider implements FieldEditor {
 		Map<String, MsgField> confmsgs = new HashMap<String, MsgField>();
 		for (FileConfigBean bean : configs) {
 			for (MsgField field : fields) {
-				if (field.getId().equals(bean.getFieldID())) {
+				if (field.getId().equals(bean.getFieldID())&&this.name.equals(field.getSrc())) {
 					confmsgs.put(bean.getFieldMapping().toLowerCase(), field);
 					break;
 				}

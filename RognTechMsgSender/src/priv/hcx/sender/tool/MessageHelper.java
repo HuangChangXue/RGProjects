@@ -4,6 +4,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.TreePath;
+
 import priv.hcx.sender.bean.MsgField;
 import priv.hcx.sender.bean.Transaction;
 import priv.hcx.sender.bean.msg.Message;
@@ -12,6 +16,7 @@ import priv.hcx.sender.bean.msg.MsgHead;
 import priv.hcx.sender.bean.msg.MsgTail;
 import priv.hcx.sender.bean.res.MsgFieldDao;
 import priv.hcx.sender.msg.field.editor.FieldEditor;
+import priv.hcx.sender.view.SenderMainFrame;
 
 public class MessageHelper {
 	private static Transaction trans = null;
@@ -25,11 +30,16 @@ public class MessageHelper {
 	}
 
 	public static String getSelectedMsgId() {
-		if (trans != null)
+		if (trans != null) {
 			return trans.getId();
-		return null;
+		} else {
+			
+			trans= SenderMainFrame.getSelectedTransaction();
+			return trans.getId();
+		
+		}
+//		return null;
 	}
-
 
 	static Map<String, priv.hcx.sender.msg.field.editor.FieldEditor> editors = new HashMap<String, priv.hcx.sender.msg.field.editor.FieldEditor>();
 	static {
@@ -47,14 +57,15 @@ public class MessageHelper {
 		field.setId(transId);
 		try {
 			fields = CommonTools.doDBQueryOperation(MsgFieldDao.class, "queryByTransactonId", MsgField.class, new Class[] { String.class }, transId);
-			if(fields==null) return null;
+			if (fields == null)
+				return null;
 			for (MsgField fiel : fields) {
 				if (!fiel.isValueSet()) {
 					FieldEditor editor = editors.get(fiel.getSrc());
 					editor.configcombiedFields(fiel, fields);
 				}
 			}
-			MsgHead header=new MsgHead();
+			MsgHead header = new MsgHead();
 			msg.setHead(header);
 			MsgBody body = new MsgBody();
 			body.setFields(fields);

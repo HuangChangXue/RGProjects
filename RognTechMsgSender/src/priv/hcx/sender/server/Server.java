@@ -18,5 +18,13 @@ public class Server {
 		CommonTools.closeSession(session);
 		return ret;
 	}
-
+	public static  ServerConf getServerConfig(String serverConf){
+		List<ServerConf>  servers=Server.getAllServerConf();
+		for(ServerConf conf:servers){
+			if(serverConf.equals(conf.getName())){
+				return conf	;
+			}
+		}
+		return null;
+	}
 }

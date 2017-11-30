@@ -18,6 +18,8 @@ import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.session.SqlSessionFactoryBuilder;
 
 import priv.hcx.sender.db.DBConf;
+import priv.hcx.sender.msg.decoder.MsgDecoder;
+import priv.hcx.sender.msg.encoder.MsgEncoder;
 
 public class CommonTools {
 	public static SqlSession getSQLSession(Boolean autoCommit) {
@@ -111,5 +113,23 @@ public class CommonTools {
 		}
 		return null;
 		
+	}
+	public static  MsgEncoder getEncoderByName(String name){
+		ArrayList<MsgEncoder>   encoders=CommonTools.loadService(priv.hcx.sender.msg.encoder.MsgEncoder.class);
+		for(MsgEncoder ec:encoders){
+			if(name.equals(ec.getEncoderName())){
+				return ec;
+			}
+		}
+		return null;
+	}
+	public static  MsgDecoder getDecoderByName(String name){
+		ArrayList<MsgDecoder>   encoders=CommonTools.loadService(MsgDecoder.class);
+		for(MsgDecoder ec:encoders){
+			if(name.equals(ec.getDecoderName())){
+				return ec;
+			}
+		}
+		return null;
 	}
 }

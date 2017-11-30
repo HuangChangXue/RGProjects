@@ -36,8 +36,8 @@ public class XmlEncoder implements MsgEncoder {
 		for( int i=0;i<fields.size();++i){
 			MsgField field=fields.get(i);
 			Element el=body.addElement(field.getName());
-			el.addAttribute("desc", field.getDesc());
-			el.addAttribute("id", field.getId());
+//			el.addAttribute("desc", field.getDesc());
+//			el.addAttribute("id", field.getId());
 			el.setText(field.getValue()==null?"":field.getValue().toString());
 		}
 		Element tail=root.addElement("tail");

@@ -22,21 +22,25 @@ import javax.swing.event.TreeModelEvent;
 import javax.swing.event.TreeModelListener;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.TreePath;
 
 import org.apache.ibatis.session.SqlSession;
 
 import priv.hcx.sender.bean.Folder;
+import priv.hcx.sender.bean.MsgField;
 import priv.hcx.sender.bean.Transaction;
 import priv.hcx.sender.bean.res.FolderDao;
 import priv.hcx.sender.bean.res.TransactionDao;
 import priv.hcx.sender.db.DBConf;
 import priv.hcx.sender.db.DataBase;
+import priv.hcx.sender.msg.editor.MsgEditor;
 import priv.hcx.sender.msg.encoder.MsgEncoder;
 import priv.hcx.sender.msg.header.HeaderEditor;
 import priv.hcx.sender.server.Server;
 import priv.hcx.sender.server.ServerConf;
 import priv.hcx.sender.tool.CommonTools;
 import priv.hcx.sender.tool.GUITool;
+import priv.hcx.sender.tool.MessageHelper;
 import priv.hcx.sender.view.tree.JTreePopupMenu;
 import priv.hcx.sender.view.tree.NodeRenderer;
 import priv.hcx.sender.view.tree.TreeNodeListerner;
@@ -108,7 +112,33 @@ public class SenderMainFrame extends JFrame implements Const {
 	public static JTree getNaviTree() {
 		return tree;
 	}
-
+	public static Transaction getSelectedTransaction(){
+		DefaultTreeModel model = (DefaultTreeModel) SenderMainFrame.getMainFrame().getNaviTree().getModel();
+		DefaultMutableTreeNode root = (DefaultMutableTreeNode) model.getRoot();
+		TreePath path=SenderMainFrame.getMainFrame().getNaviTree().getSelectionPath();
+		DefaultMutableTreeNode selected;
+		if (path == null) {
+			selected = root;
+		} else {
+			Object sel = path.getLastPathComponent();
+			selected = (DefaultMutableTreeNode) sel;
+		}
+		Object bean = GUITool.treeNodeMapping.get(selected);
+		
+		if (bean != null) {
+			if (Transaction.class.isAssignableFrom(bean.getClass())) {
+				Transaction tran = (Transaction) bean;
+				System.out.println(tran.getId());
+				MsgEditor editor = CommonTools.loadService(MsgEditor.class).get(0);
+				MsgField.initIdx();
+				MessageHelper.setCurrentSelectedTransaction(tran);
+				return tran;
+			} else {
+				MessageHelper.setCurrentSelectedTransaction(null);
+			}
+		}
+		return null;
+	}
 	private void initMainPanel() {
 
 		DefaultMutableTreeNode root = GUITool.createTreeNode(new Folder("交易类型"));
@@ -207,7 +237,7 @@ public class SenderMainFrame extends JFrame implements Const {
 	private JSplitPane split = new JSplitPane();
 	JPanel fieldEditorPanel = new JPanel();
 
-	public void setFieldEdirot(Component comp) {
+	public void setFieldEditor(Component comp) {
 		fieldEditorPanel.setLayout(new BorderLayout());
 		fieldEditorPanel.removeAll();
 		fieldEditorPanel.add(comp, BorderLayout.CENTER);

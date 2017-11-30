@@ -21,11 +21,14 @@ import java.util.Map;
 import javax.swing.JSplitPane;
 
 import priv.hcx.sender.bean.msg.Message;
+import priv.hcx.sender.msg.decoder.MsgDecoder;
 import priv.hcx.sender.msg.encoder.MsgEncoder;
+import priv.hcx.sender.protel.ProtelHandler;
 import priv.hcx.sender.server.Server;
 import priv.hcx.sender.server.ServerConf;
 import priv.hcx.sender.tool.CommonTools;
 import priv.hcx.sender.tool.MessageHelper;
+import priv.hcx.sender.tool.ProtelHelper;
 
 public class PreviewPanel extends JPanel {
 	private final JPanel panel_1 = new JPanel();
@@ -77,8 +80,11 @@ public class PreviewPanel extends JPanel {
 
 		panel_1.add(btn_clear, "cell 0 0,growx");
 
+		btn_synSend.setActionCommand("synSend");
+		btn_synSend.addActionListener(list);
 		panel_1.add(btn_synSend, "cell 0 1,growx,aligny center");
-
+		btn_send.setActionCommand("send");
+		btn_send.addActionListener(list);
 		panel_1.add(btn_send, "cell 0 2,growx");
 
 		JPanel panel_2 = new JPanel();
@@ -100,6 +106,7 @@ public class PreviewPanel extends JPanel {
 		scrollPane_1.setViewportView(txt_receive);
 	}
 	class PreviewActionListener implements ActionListener {
+		Message messageToSend=null,messageReceived=null;
 		public void actionPerformed(ActionEvent e) {
 			String cmd=e.getActionCommand();
 			String serverName=combo_server.getSelectedIndex()>=0?combo_server.getSelectedItem().toString():null;
@@ -107,27 +114,36 @@ public class PreviewPanel extends JPanel {
 				JOptionPane.showMessageDialog(combo_server, "Please choose a server", "ServerError", JOptionPane.OK_OPTION);
 				return ;
 			}
-			Message message=MessageHelper.getMessage(MessageHelper.getSelectedMsgId());
+			
 			String selectedServer=combo_server.getSelectedItem()==null?null:combo_server.getSelectedItem().toString();
 			if(selectedServer==null) return ;
 			ServerConf sconf=serversKeys.get(selectedServer);
 			String encoderName=sconf.getEncoder();
-			ArrayList<MsgEncoder>   encoders=CommonTools.loadService(priv.hcx.sender.msg.encoder.MsgEncoder.class);
-			MsgEncoder encoder=null;
-			for(MsgEncoder ec:encoders){
-				if(encoderName.equals(ec.getEncoderName())){
-					encoder=ec;
-					break;
-				}
-			}
-			
+			MsgDecoder decoder=CommonTools.getDecoderByName(sconf.getDecoder());
+			MsgEncoder  encoder=CommonTools.getEncoderByName(encoderName);
 			if("preview".equals(cmd)){
-				txt_send.setText(encoder.encodeMsgForDisplay(message));
+				messageToSend =MessageHelper.getMessage(MessageHelper.getSelectedMsgId());
+				txt_send.setText(encoder.encodeMsgForDisplay(messageToSend));
 			}
 			else if("format".equals(cmd)){
-				txt_send.setText(encoder.encodeMsgFormatedForDisplay(message));
+				if(messageToSend==null){
+					messageToSend =MessageHelper.getMessage(MessageHelper.getSelectedMsgId());
+				}
+				txt_send.setText(encoder.encodeMsgFormatedForDisplay(messageToSend));
+			}
+			else if ("synSend".equals(cmd)){
+				if(messageToSend==null){
+					messageToSend =MessageHelper.getMessage(MessageHelper.getSelectedMsgId());
+				}
+				ProtelHandler handler=ProtelHelper.getProtelHandler(sconf.getProtel());
+				messageReceived=handler.doSendMessage(sconf, messageToSend, null);
+				txt_receive.setText(decoder.decodeMsgForDisplay(messageReceived));
+				}
+			else if("send".equals(cmd)){
+				
 			}
 		}
 	}
 }
+
 
