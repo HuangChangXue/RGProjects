@@ -54,7 +54,6 @@ public class TCPProtelHandler implements ProtelHandler {
 				}
 				
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			finally{

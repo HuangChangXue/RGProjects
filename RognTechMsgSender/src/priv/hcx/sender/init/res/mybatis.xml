@@ -20,6 +20,9 @@
 			type="priv.hcx.sender.msg.field.editor.impl.bean.ConstConfigBean"
 			alias="constBean" />
 			<typeAlias type="priv.hcx.sender.msg.field.editor.impl.bean.RandomConfigBean" alias="randomBean"/>
+	
+	<typeAlias type="priv.hcx.sender.msg.decoder.impl.bean.Hex2StringConfigBean" alias ="hex2stringconf"/>
+	<typeAlias type="priv.hcx.sender.msg.decoder.impl.bean.XmlConfigBean" alias ="xmlConfig"/>
 	</typeAliases>
 	<environments default="development">
 		<environment id="development">
@@ -44,6 +47,8 @@
 		<mapper resource="priv/hcx/sender/msg/field/editor/impl/bean/RandomConfigBean.xml"/>
 		<mapper resource="priv/hcx/sender/msg/field/editor/impl/bean/DataBaseConfigBean.xml"/>
 		<mapper resource="priv/hcx/sender/msg/field/editor/impl/bean/FileConfigBean.xml"/>
+		<mapper resource="priv/hcx/sender/msg/decoder/impl/dao/Hex2StringConfigDao.xml"/>
+		<mapper resource="priv/hcx/sender/msg/decoder/impl/dao/XmlConfigDao.xml"/>
 		
 	</mappers>
 </configuration>

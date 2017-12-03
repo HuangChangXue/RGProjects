@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+
+<mapper namespace="priv.hcx.sender.msg.decoder.impl.dao.xmlConfigigDao">
+	<resultMap type="xmlConfig" id="xmlConfig">
+		<id column="id" property="id" />
+		<result column="name" property="name" />
+		<result column="encoding" property="encoding" />
+		<result column="type" property="type" />
+		<result column="rootType" property="rootType" />
+		<result column="rootTagName" property="rootTagName" />
+		<result column="fieldNameType" property="fieldNameType" />
+		<result column="fieldNameTagName" property="fieldNameTagName" />
+		<result column="fielNameAttrName" property="fielNameAttrName" />
+		<result column="fieldValueType" property="fieldValueType" />
+		<result column="fieldValueAttrName" property="fieldValueAttrName" />
+	</resultMap>
+	<sql id="baseColumn">
+		id,name,encoding,type,rootType,rootTagName,fieldNameType,fieldNameTagName,fielNameAttrName,fieldValueType,fieldValueAttrName
+	</sql>
+	<sql id="table">sender_xmlConfig</sql>
+	<sql id="notNullColumns">
+		<trim suffix=" " suffixOverrides=",">
+			<if test="id!=null">id,</if>
+			<if test="name!=null">name,</if>
+			<if test="encoding!=null">encoding,</if>
+			<if test="type!=null">type,</if>
+			<if test="rootType!=null">rootType,</if>
+			<if test="rootTagName!=null">rootTagName,</if>
+			<if test="fieldNameType!=null">fieldNameType,</if>
+			<if test="fieldNameTagName!=null">fieldNameTagName,</if>
+			<if test="fielNameAttrName!=null">fielNameAttrName,</if>
+			<if test="fieldValueType!=null">fieldValueType,</if>
+			<if test="fieldValueAttrName!=null">fieldValueAttrName,</if>
+		</trim>
+	</sql>
+	<sql id="notNullValues">
+		<trim suffix=" " suffixOverrides=",">
+			<if test="id!=null">#{id},</if>
+			<if test="name!=null">#{name},</if>
+			<if test="encoding!=null">#{encoding},</if>
+			<if test="type!=null">#{type},</if>
+			<if test="rootType!=null">#{rootType},</if>
+			<if test="rootTagName!=null">#{rootTagName},</if>
+			<if test="fieldNameType!=null">#{fieldNameType},</if>
+			<if test="fieldNameTagName!=null">#{fieldNameTagName},</if>
+			<if test="fielNameAttrName!=null">#{fielNameAttrName},</if>
+			<if test="fieldValueType!=null">#{fieldValueType},</if>
+			<if test="fieldValueAttrName!=null">#{fieldValueAttrName},</if>
+		</trim>
+	</sql>
+	<sql id="condName">
+		<trim suffix=" " suffixOverrides=",">
+			<if test="name!=null">name=#{name},</if>
+		</trim>
+	</sql>
+	<sql id="condType">
+		<trim suffix=" " suffixOverrides=",">
+			<if test="type!=null">type=#{type},</if>
+		</trim>
+	</sql>
+	<sql id="condid">
+		<trim suffix=" " suffixOverrides="and">
+
+			<trim suffix=" " suffixOverrides=",">
+				<if test="id!=null">id=#{id},</if>
+			</trim>
+		</trim>
+	</sql>
+	<sql id="notnullColumnAndvalues">
+		<trim suffix=" " suffixOverrides=",">
+			<if test="id!=null">id=#{id},</if>
+			<if test="name!=null">name=#{name},</if>
+			<if test="encoding!=null">encoding=#{encoding},</if>
+			<if test="type!=null">type=#{type},</if>
+			<if test="rootType!=null"> rootType=#{rootType},</if>
+			<if test="rootTagName!=null">rootTagName=#{rootTagName},</if>
+			<if test="fieldNameType!=null">fieldNameType=#{fieldNameType},</if>
+			<if test="fieldNameTagName!=null">fieldNameTagName=#{fieldNameTagName},</if>
+			<if test="fielNameAttrName!=null">fielNameAttrName=#{fielNameAttrName},</if>
+			<if test="fieldValueType!=null">fieldValueType=#{fieldValueType},</if>
+			<if test="fieldValueAttrName!=null">fieldValueAttrName=#{fieldValueAttrName},</if>
+		</trim>
+	</sql>
+	<select id="selectByName" resultMap="xmlConfig">
+		select
+		<include refid="baseColumn"></include>
+		from
+		<include refid="table"></include>
+		<where>
+			<include refid="condName"></include>
+		</where>
+	</select>
+
+	<select id="selectAll" resultMap="xmlConfig">
+		select
+		<include refid="baseColumn"></include>
+		from
+		<include refid="table"></include>
+		<where>
+			<include refid="condType"></include>
+		</where>
+	</select>
+	<insert id="save">
+		insert into
+		<include refid="table"></include>
+		(
+
+		<include refid="notNullColumns"></include>
+		)
+		values (
+		<include refid="notNullValues"></include>
+		)
+
+	</insert>
+
+	<update id="update">
+		update
+		<include refid="table"></include>
+		<set>
+			<include refid="notnullColumnAndvalues"></include>
+		</set>
+		<where>
+			<include refid="condid"></include>
+		</where>
+	</update>
+
+</mapper>

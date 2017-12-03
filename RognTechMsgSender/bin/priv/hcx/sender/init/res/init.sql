@@ -44,7 +44,6 @@ create table if not exists sender_dbconf(
 );
 
 
-
 create table if not exists server_conf(
 	id  VARCHAR_IGNORECASE(32) primary key,
 	name varchar2(16) not null unique , 
@@ -52,7 +51,10 @@ create table if not exists server_conf(
 	port varchar2(32) not null,
 	protel varchar2(32) not null, 
 	encoder varchar2(128) not null, 
-	decoder  varchar2(256) not null
+	decoder  varchar2(128) not null,
+	encoderConfigName varchar2(128)  default 'GBK',
+	decoderConfigName varchar2(128)  default 'GBK',
+	serverType varchar2(32) default 'remote'
 );
 
 
@@ -94,4 +96,13 @@ create table if not exists Field_file_conf (
 		fieldMapping varchar2 (400),
 		fileName  varchar2(400),
 		GROUPID  VARCHAR_IGNORECASE(32) 
+);
+
+
+create table if not exists sender_hex2stringconf (
+	id  VARCHAR_IGNORECASE(32) primary key,
+	name  varchar2(16) not null,
+	encoding  varchar2(16) not null,
+	type varchar2(16) not null,
+	CONSTRAINT nametypeUNIQUE UNIQUE(NAME,type)
 );

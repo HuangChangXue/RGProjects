@@ -10,7 +10,6 @@ public class TransHelper {
 	public static Message sendMessage(String serverConf,Message msg){
 		ServerConf conf=Server.getServerConfig(serverConf);
 		String protel=conf.getProtel();
-		
 		return null;
 	}
 		

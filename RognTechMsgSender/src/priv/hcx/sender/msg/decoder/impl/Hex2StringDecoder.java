@@ -3,13 +3,21 @@ package priv.hcx.sender.msg.decoder.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.JDialog;
+
 import priv.hcx.sender.bean.MsgField;
 import priv.hcx.sender.bean.msg.Message;
 import priv.hcx.sender.bean.msg.MsgBody;
 import priv.hcx.sender.bean.msg.MsgHead;
 import priv.hcx.sender.bean.msg.MsgTail;
 import priv.hcx.sender.msg.decoder.MsgDecoder;
+import priv.hcx.sender.msg.decoder.impl.bean.Hex2StringConfigBean;
+import priv.hcx.sender.msg.decoder.impl.dao.Hex2StringConfigDao;
+import priv.hcx.sender.msg.decoder.impl.ui.Hex2StringConfigUI;
+import priv.hcx.sender.tool.CommonTools;
+import priv.hcx.sender.tool.GUITool;
 import priv.hcx.sender.tool.HEX2BIN;
+import priv.hcx.sender.view.SenderMainFrame;
 
 public class Hex2StringDecoder implements MsgDecoder {
 
@@ -69,9 +77,42 @@ public class Hex2StringDecoder implements MsgDecoder {
 			}
 			sb.append(value.subSequence(i, i+2));
 			sb.append(" ");
-			
 		}
 		return  sb.toString();
 	}
+	Hex2StringConfigBean bean=new Hex2StringConfigBean();
+	public JDialog  editDecoderConfigDialog(String config) {
+		bean=null;
+		Hex2StringConfigUI ui=new Hex2StringConfigUI(SenderMainFrame.getMainFrame(),true	);
+		
+//		ui.setVisible(true);
+		if(config!=null){
+			try {
+				 bean=CommonTools.doDBQueryOperationSingle(Hex2StringConfigDao.class, "selectByName", Hex2StringConfigBean.class, new Class[]{String.class}, config	);
+				if(bean==null){
+					bean=new Hex2StringConfigBean();
+					bean.setType("decoder");
+				}
+				ui.setConfig(bean);
+			} catch (Exception e) {
+				
+			}
+		}
+		else {
+			
+			bean=new Hex2StringConfigBean();
+			bean.setType("decoder");
+			ui.setConfig(bean);
+		}
+		GUITool.adjustFrame(ui, false);
+		return ui;
+	}
+
+	@Override
+	public String getCurrentConfigName() {
+		
+		return bean.getName();
+	}
+	
 
 }

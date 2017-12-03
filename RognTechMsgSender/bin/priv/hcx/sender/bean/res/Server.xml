@@ -11,10 +11,15 @@
 		<result column="protel" property="protel" />
 		<result column="encoder" property="encoder" />
 		<result column="decoder" property="decoder" />
+		<result column="encoderConfigName" property="encoderConfigName" />
+		<result column="decoderConfigName" property="decoderConfigName" />
+		<result column="decoder" property="decoder" />
+		<result column="serverType" property="serverType" />
 		<!-- private String id, name, host, port, protel, encoder, decoder; -->
 	</resultMap>
 	<sql id="baseCol">
-		id, name, host, port, protel, encoder, decoder
+		id, name, host, port, protel, encoder,
+		decoder,encoderConfigName,decoderConfigName,serverType
 	</sql>
 	<sql id="table">server_conf</sql>
 	<sql id="notnullCol">
@@ -26,6 +31,9 @@
 			<if test="protel != null"> protel,</if>
 			<if test="encoder != null"> encoder,</if>
 			<if test="decoder != null"> decoder,</if>
+			<if test="encoderConfigName != null"> encoderConfigName,</if>
+			<if test="decoderConfigName != null"> decoderConfigName,</if>
+			<if test="serverType != null"> serverType,</if>
 		</trim>
 	</sql>
 	<sql id="notnullvalue">
@@ -37,6 +45,9 @@
 			<if test="protel != null"> #{protel},</if>
 			<if test="encoder != null"> #{encoder},</if>
 			<if test="decoder != null"> #{decoder},</if>
+			<if test="encoderConfigName != null"> #{encoderConfigName},</if>
+			<if test="decoderConfigName != null"> #{decoderConfigName},</if>
+			<if test="serverType != null"> #{serverType},</if>
 		</trim>
 	</sql>
 	<sql id="notnullKeyValues">
@@ -48,6 +59,9 @@
 			<if test="protel != null">protel= #{protel},</if>
 			<if test="encoder != null">encoder= #{encoder},</if>
 			<if test="decoder != null"> decoder=#{decoder},</if>
+			<if test="encoderConfigName != null"> encoderConfigName=#{encoderConfigName},</if>
+			<if test="decoderConfigName != null"> decoderConfigName=#{decoderConfigName},</if>
+			<if test="serverType != null"> serverType=#{serverType},</if>
 		</trim>
 	</sql>
 
@@ -90,11 +104,12 @@
 	<update id="update">
 		update
 		<include refid="table"></include>
-		<set>
-			<include refid="notnullKeyValues"></include>
-		</set>
-		<where >
-				id=#{id}
+		set 
+		<include refid="notnullKeyValues"></include>
+
+		<where>
+			id=#{id}
 		</where>
 	</update>
+
 </mapper>
