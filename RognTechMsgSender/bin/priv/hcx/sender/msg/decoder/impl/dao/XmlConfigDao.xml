@@ -5,7 +5,7 @@
 
 
 
-<mapper namespace="priv.hcx.sender.msg.decoder.impl.dao.xmlConfigigDao">
+<mapper namespace="priv.hcx.sender.msg.decoder.impl.dao.XmlConfigDao">
 	<resultMap type="xmlConfig" id="xmlConfig">
 		<id column="id" property="id" />
 		<result column="name" property="name" />
@@ -54,8 +54,12 @@
 		</trim>
 	</sql>
 	<sql id="condName">
-		<trim suffix=" " suffixOverrides=",">
-			<if test="name!=null">name=#{name},</if>
+	<trim prefix=" " prefixOverrides="and">
+	
+			<if test="name!=null"> and name=#{name} </if>
+			 
+			<if test="type!=null"> and type=#{type}</if>
+	
 		</trim>
 	</sql>
 	<sql id="condType">

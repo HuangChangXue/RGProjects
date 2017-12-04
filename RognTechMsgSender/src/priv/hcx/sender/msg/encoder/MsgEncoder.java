@@ -12,4 +12,5 @@ public interface MsgEncoder {
 	public String encodeMsgFormatedForDisplay(Message msg);
 	JDialog  editEncoderConfigDialog(String config);
 	String getCurrentConfigName();
+	void setCurrentConfigName(String config);
 }

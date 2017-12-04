@@ -7,7 +7,7 @@ import org.apache.ibatis.annotations.Param;
 import priv.hcx.sender.msg.decoder.impl.bean.XmlConfigBean;
 
 public interface XmlConfigDao {
-	XmlConfigBean selectByName(@Param(value = "name") String name);
+	XmlConfigBean selectByName(@Param(value = "name") String name,@Param(value = "type") String type);
 
 	void save(XmlConfigBean bean);
 

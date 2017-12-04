@@ -31,8 +31,9 @@
 		</trim>
 	</sql>
 	<sql id="condName">
-		<trim suffix=" " suffixOverrides=",">
-			<if test="name!=null">name=#{name},</if>
+		<trim suffix=" " suffixOverrides="">
+			<if test="name!=null">and name=#{name}</if>
+			<if test="type!=null">and  type=#{type}</if>
 		</trim>
 	</sql>
 	<sql id="condType">
@@ -41,11 +42,9 @@
 		</trim>
 	</sql>
 	<sql id="condid">
-		<trim suffix=" " suffixOverrides="and">
-		
-			<trim suffix=" " suffixOverrides=",">
-				<if test="id!=null">id=#{id},</if>
-			</trim>
+		<trim suffix=" " suffixOverrides="and ">
+			<if test="id!=null"> and id=#{id} </if>
+			<if test="type!=null"> and type=#{type} </if>
 		</trim>
 	</sql>
 	<sql id="notnullColumnAndvalues">
@@ -54,7 +53,7 @@
 			<if test="name!=null">name=#{name},</if>
 			<if test="encoding!=null">encoding=#{encoding},</if>
 			<if test="type!=null">type=#{type},</if>
-	
+
 		</trim>
 	</sql>
 	<select id="selectByName" resultMap="hex2stringconf">
@@ -66,8 +65,8 @@
 			<include refid="condName"></include>
 		</where>
 	</select>
-	
-		<select id="selectAll" resultMap="hex2stringconf">
+
+	<select id="selectAll" resultMap="hex2stringconf">
 		select
 		<include refid="baseColumn"></include>
 		from

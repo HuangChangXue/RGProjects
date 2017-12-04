@@ -33,19 +33,60 @@ public class XmlEncoder implements MsgEncoder {
 	public String getEncoderName() {
 		return "XMLEncoder";
 	}
-
+	private String getRootTagName(){
+		if(conf==null)return "root";
+		if(conf.getRootType().equals("AsTrans")){
+			return "TRANS";
+		}
+		else if(conf.getRootType().equals("AsRoot")){
+			return "ROOT";
+		}
+		else if(conf.getRootType().equals("AsSelf")){
+			return conf.getRootTagName();
+		}
+		return "root";
+	}
+	private Element  getEle(Element par ,MsgField field){
+		Element e=null;
+		if(conf==null||conf.getFieldNameType()==null){
+			e=par.addElement(field.getName());
+		}
+		else {
+			
+			if("AsTagName".equals(conf.getFieldNameType())){
+				e=par.addElement(field.getName());
+			}
+			else {
+				e=par.addElement(conf.getFieldNameTagName());
+				e.addAttribute(conf.getFielNameAttrName(), field.getName()==null?"":field.getName().toString());
+			}
+		}
+		if(conf==null||conf.getFieldValueType()==null){
+			e.setText( field.getValue()==null?"":field.getValue().toString());
+		}
+		else {
+			if("AsText".equals(conf.getFieldValueType())){
+				e.setText( field.getValue()==null?"":field.getValue().toString());
+			}
+			else {
+				e.addAttribute(conf.getFieldValueAttrName(),  field.getValue()==null?"":field.getValue().toString())
+;			}
+		}
+		return e;
+	}
 	private Document createDocument(Message msg) {
 		Document doc = DocumentHelper.createDocument();
-		Element root = doc.addElement("root");
+		Element root = doc.addElement(getRootTagName());
 		Element head = root.addElement("head");
 		Element body = root.addElement("body");
 		List<MsgField> fields = msg.getBody().getFields();
 		for (int i = 0; i < fields.size(); ++i) {
 			MsgField field = fields.get(i);
-			Element el = body.addElement(field.getName());
-			// el.addAttribute("desc", field.getDesc());
-			// el.addAttribute("id", field.getId());
-			el.setText(field.getValue() == null ? "" : field.getValue().toString());
+			this.getEle(body, field);
+//			Element el = body.addElement(field.getName());
+//			// el.addAttribute("desc", field.getDesc());
+//			// el.addAttribute("id", field.getId());
+//			el.setText(field.getValue() == null ? "" : field.getValue().toString());
 		}
 		Element tail = root.addElement("tail");
 		return doc;
@@ -118,16 +159,16 @@ public class XmlEncoder implements MsgEncoder {
 		XmlConfigUI dialog = new XmlConfigUI(SenderMainFrame.getMainFrame(), true);
 		if (config != null && config.trim().length() > 0) {
 			try {
-				conf = CommonTools.doDBQueryOperationSingle(XmlConfigDao.class, "selectByName", XmlConfigBean.class, new Class[] { String.class }, config);
-				if (conf == null) {
+				conf = CommonTools.doDBQueryOperationSingle(XmlConfigDao.class, "selectByName", XmlConfigBean.class, new Class[] { String.class ,String.class}, config,"encoder");
+				if(conf==null){
 					conf = new XmlConfigBean();
 					conf.setType("encoder");
-
 				}
 			} catch (Exception e) {
-
+				conf = new XmlConfigBean();
+				conf.setType("encoder");
 			}
-
+			
 		} else {
 			conf = new XmlConfigBean();
 			conf.setType("encoder");
@@ -139,8 +180,24 @@ public class XmlEncoder implements MsgEncoder {
 
 	@Override
 	public String getCurrentConfigName() {
+		return conf.getName();
+	}
+
+	@Override
+	public void setCurrentConfigName(String config) {
 		// TODO Auto-generated method stub
-		return null;
+		if (config != null && config.trim().length() > 0) {
+			try {
+				conf = CommonTools.doDBQueryOperationSingle(XmlConfigDao.class, "selectByName", XmlConfigBean.class, new Class[] { String.class,String.class }, config,"encoder");
+				if (conf == null) {
+					conf = new XmlConfigBean();
+					conf.setType("encoder");
+				}
+				
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			}
 	}
 
 }

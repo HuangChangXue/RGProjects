@@ -1,5 +1,6 @@
 package priv.hcx.sender.msg.encoder.impl;
 
+import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 import javax.swing.JDialog;
@@ -38,6 +39,11 @@ public class String2HexEncoder implements MsgEncoder {
 			MsgField field=fields.get(i);
 			sb.append(field.getName()).append("-").append(field.getValue()).append(";");
 		}
+		try {
+			return sb.toString().getBytes(bean.getEncoding()!=null?bean.getEncoding():"GBK");
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
 		return sb.toString().getBytes();
 	}
 
@@ -70,7 +76,7 @@ public class String2HexEncoder implements MsgEncoder {
 		
 		if(config!=null){
 			try {
-				 bean=CommonTools.doDBQueryOperationSingle(Hex2StringConfigDao.class, "selectByName", Hex2StringConfigBean.class, new Class[]{String.class}, config	);
+				 bean=CommonTools.doDBQueryOperationSingle(Hex2StringConfigDao.class, "selectByName", Hex2StringConfigBean.class, new Class[]{String.class,String.class}, config,"encoder"	);
 				if(bean==null){
 					bean=new Hex2StringConfigBean();
 					bean.setType("encoder");
@@ -99,6 +105,23 @@ public class String2HexEncoder implements MsgEncoder {
 	public String getCurrentConfigName() {
 		
 		return bean.getName();
+	}
+
+
+	@Override
+	public void setCurrentConfigName(String config) {
+		
+		if(config!=null){
+			try {
+				 bean=CommonTools.doDBQueryOperationSingle(Hex2StringConfigDao.class, "selectByName", Hex2StringConfigBean.class, new Class[]{String.class,String.class}, config,"encoder"	);
+				if(bean==null){
+					bean=new Hex2StringConfigBean();
+					bean.setType("encoder");
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
 	}
 	
 }

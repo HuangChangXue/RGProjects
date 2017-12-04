@@ -106,3 +106,18 @@ create table if not exists sender_hex2stringconf (
 	type varchar2(16) not null,
 	CONSTRAINT nametypeUNIQUE UNIQUE(NAME,type)
 );
+
+create table if not exists sender_xmlConfig (
+id VARCHAR_IGNORECASE(32) primary key,
+name varchar2(16) not null,
+encoding varchar2(16) not null,
+type  varchar2(16) not null,
+rootType  varchar2(16) not null,
+rootTagName  varchar2(32) ,
+fieldNameType varchar2(32)  not null  ,
+fieldNameTagName varchar2(32) ,
+fielNameAttrName varchar2(32) ,
+fieldValueType varchar2(32)  not null ,
+fieldValueAttrName varchar2(32) ,
+CONSTRAINT xmlnametypeUNIQUE UNIQUE(NAME,type)
+);

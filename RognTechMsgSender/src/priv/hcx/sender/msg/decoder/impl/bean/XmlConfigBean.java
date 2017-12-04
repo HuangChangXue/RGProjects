@@ -3,6 +3,19 @@ package priv.hcx.sender.msg.decoder.impl.bean;
 import priv.hcx.sender.tool.CommonTools;
 
 public class XmlConfigBean {
+	public void copyBean(XmlConfigBean bean){
+		this.id=bean.id;
+		this.encoding=bean.encoding;
+		this.rootType=bean.rootType;
+		this.rootTagName=bean.rootTagName;
+		this.fieldNameTagName=bean.fieldNameTagName;
+		this.fieldNameType=bean.fieldNameType;
+		this.fielNameAttrName=bean.fielNameAttrName;
+		this.fieldValueType=bean.fieldValueType;
+		this.fieldValueAttrName=bean.fieldValueAttrName;
+		this.name=bean.name;
+		this.type=bean.type;
+	}
 	private String id = CommonTools.createRandomID(), 
 			encoding = "UTF-8", 
 			rootType = "AsTrans", 

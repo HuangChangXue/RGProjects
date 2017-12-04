@@ -120,7 +120,10 @@ public class PreviewPanel extends JPanel {
 			ServerConf sconf=serversKeys.get(selectedServer);
 			String encoderName=sconf.getEncoder();
 			MsgDecoder decoder=CommonTools.getDecoderByName(sconf.getDecoder());
+			decoder.setCurrentConfigName(sconf.getDecoderConfigName());
+			
 			MsgEncoder  encoder=CommonTools.getEncoderByName(encoderName);
+			encoder.setCurrentConfigName(sconf.getDecoderConfigName());
 			if("preview".equals(cmd)){
 				messageToSend =MessageHelper.getMessage(MessageHelper.getSelectedMsgId());
 				txt_send.setText(encoder.encodeMsgForDisplay(messageToSend));

@@ -88,7 +88,7 @@ public class Hex2StringDecoder implements MsgDecoder {
 //		ui.setVisible(true);
 		if(config!=null){
 			try {
-				 bean=CommonTools.doDBQueryOperationSingle(Hex2StringConfigDao.class, "selectByName", Hex2StringConfigBean.class, new Class[]{String.class}, config	);
+				 bean=CommonTools.doDBQueryOperationSingle(Hex2StringConfigDao.class, "selectByName", Hex2StringConfigBean.class, new Class[]{String.class,String.class}, config	,"decoder");
 				if(bean==null){
 					bean=new Hex2StringConfigBean();
 					bean.setType("decoder");
@@ -112,6 +112,18 @@ public class Hex2StringDecoder implements MsgDecoder {
 	public String getCurrentConfigName() {
 		
 		return bean.getName();
+	}
+
+	@Override
+	public void  setCurrentConfigName(String config) {
+		bean=null;
+		if(config!=null){
+			try {
+				 bean=CommonTools.doDBQueryOperationSingle(Hex2StringConfigDao.class, "selectByName", Hex2StringConfigBean.class, new Class[]{String.class,String.class}, config,"decoder"	);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
 	}
 	
 

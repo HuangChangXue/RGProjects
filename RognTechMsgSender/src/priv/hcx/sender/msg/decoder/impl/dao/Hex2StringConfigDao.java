@@ -7,7 +7,7 @@ import org.apache.ibatis.annotations.Param;
 import priv.hcx.sender.msg.decoder.impl.bean.Hex2StringConfigBean;
 
 public interface Hex2StringConfigDao {
-	Hex2StringConfigBean selectByName(@Param(value = "name") String name);
+	Hex2StringConfigBean selectByName(@Param(value = "name") String name,@Param(value = "type") String type);
 
 	void save(Hex2StringConfigBean bean);
 

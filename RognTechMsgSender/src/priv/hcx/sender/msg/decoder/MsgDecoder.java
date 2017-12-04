@@ -11,6 +11,7 @@ public interface MsgDecoder {
 	String  decodeMsgFormatedForDisplay(Message msg);
 	JDialog  editDecoderConfigDialog(String config);
 	String getCurrentConfigName();
+	void setCurrentConfigName(String configName);
 //	public String getEncoderName();
 //
 //	public byte[] encodeMsg(Message msg);

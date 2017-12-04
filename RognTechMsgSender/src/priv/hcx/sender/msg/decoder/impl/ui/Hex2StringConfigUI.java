@@ -99,7 +99,7 @@ public class Hex2StringConfigUI extends JDialog {
 					String name=e.getItem().toString();
 					if(name!=null&&name.trim().length()>0){
 						try {
-							Hex2StringConfigBean	tmp=CommonTools.doDBQueryOperationSingle(Hex2StringConfigDao.class, "selectByName", Hex2StringConfigBean.class, new Class[]{String.class}, name);
+							Hex2StringConfigBean	tmp=CommonTools.doDBQueryOperationSingle(Hex2StringConfigDao.class, "selectByName", Hex2StringConfigBean.class, new Class[]{String.class,String.class}, name,conf.getType());
 							conf.setName(tmp.getName());
 							conf.setEncoding(tmp.getEncoding());
 							txt_ConfigName.setText(conf.getName());

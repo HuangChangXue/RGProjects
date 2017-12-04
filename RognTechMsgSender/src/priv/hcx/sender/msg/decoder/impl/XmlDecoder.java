@@ -40,7 +40,7 @@ public class XmlDecoder implements MsgDecoder {
 		XmlConfigUI dialog=new XmlConfigUI(SenderMainFrame.getMainFrame(),true	);
 		if(config!=null&&config.trim().length()>0){
 			try {
-				conf=CommonTools.doDBQueryOperationSingle(XmlConfigDao.class, "selectByName", XmlConfigBean.class, new Class[]{String.class}, config);
+				conf=CommonTools.doDBQueryOperationSingle(XmlConfigDao.class, "selectByName", XmlConfigBean.class, new Class[]{String.class,String.class}, config,"decoder");
 				if(conf==null){
 					conf=new XmlConfigBean();
 					conf.setType("decoder");
@@ -48,7 +48,8 @@ public class XmlDecoder implements MsgDecoder {
 				}
 				
 			} catch (Exception e) {
-				
+				conf=new XmlConfigBean();
+				conf.setType("decoder");
 			}
 			
 			
@@ -64,7 +65,18 @@ public class XmlDecoder implements MsgDecoder {
 
 	@Override
 	public String getCurrentConfigName() {
-		// TODO Auto-generated method stub
-		return null;
+		return conf.getName();
+	}
+
+	@Override
+	public  void setCurrentConfigName(String config) {
+		if(config!=null&&config.trim().length()>0){
+			try {
+				conf=CommonTools.doDBQueryOperationSingle(XmlConfigDao.class, "selectByName", XmlConfigBean.class, new Class[]{String.class,String.class}, config,"decoder");
+				
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
 	}
 }
