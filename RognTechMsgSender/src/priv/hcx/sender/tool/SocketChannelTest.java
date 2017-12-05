@@ -28,6 +28,7 @@ public class SocketChannelTest {
 	public static void handleRead(SelectionKey key) throws IOException {
 		SocketChannel sc = (SocketChannel) key.channel();
 		ByteBuffer buf = (ByteBuffer) key.attachment();
+		
 		long bytesRead = sc.read(buf);
 		while (bytesRead > 0) {
 			buf.flip();
@@ -41,6 +42,8 @@ public class SocketChannelTest {
 		if (bytesRead == -1) {
 			sc.close();
 		}
+//		 key.interestOps(SelectionKey.OP_READ | SelectionKey.OP_WRITE);
+		 key.interestOps( SelectionKey.OP_WRITE);
 	}
 
 	public static void handleWrite(SelectionKey key) throws IOException {
