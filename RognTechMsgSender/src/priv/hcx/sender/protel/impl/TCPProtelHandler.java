@@ -42,6 +42,7 @@ public class TCPProtelHandler implements ProtelHandler {
 			Socket so = null;
 			try {
 				so = new Socket(host, Integer.valueOf(port));
+				so.setSoTimeout(3000);
 				OutputStream os=so.getOutputStream();
 				os.write(data);
 				os.flush();
@@ -52,7 +53,7 @@ public class TCPProtelHandler implements ProtelHandler {
 				while((len= is.read(tmp))>0){
 					bos.write(tmp, 0, len);
 				}
-				
+				so.shutdownInput();
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

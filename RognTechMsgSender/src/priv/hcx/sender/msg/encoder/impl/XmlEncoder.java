@@ -94,16 +94,20 @@ public class XmlEncoder implements MsgEncoder {
 
 	@Override
 	public byte[] encodeMsg(Message msg) {
-		MsgHead head = msg.getHead();
-		MsgBody body = msg.getBody();
-		List<MsgField> fields = body.getFields();
-		MsgTail tail = msg.getTail();
-		StringBuilder sb = new StringBuilder();
-		for (int i = 0; i < fields.size(); ++i) {
-			MsgField field = fields.get(i);
-			sb.append(field.getName()).append("-").append(field.getValue()).append(";");
+		Document doc = this.createDocument(msg);
+		OutputFormat format = OutputFormat.createCompactFormat();
+		format.setEncoding("GBK");
+		ByteArrayOutputStream bos = new ByteArrayOutputStream();
+
+		try {
+			XMLWriter writer = new XMLWriter(bos, format);
+			writer.write(doc);
+			writer.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
-		return sb.toString().getBytes();
+		return bos.toByteArray();
 	}
 
 	@Override

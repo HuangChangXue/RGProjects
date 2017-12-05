@@ -28,21 +28,23 @@ public class Hex2StringDecoder implements MsgDecoder {
 
 	@Override
 	public Message decodeMsg(byte[] data) {
-		String ret=new String(data);
-		Message msg=new Message();
-		MsgHead head=new MsgHead();
-		MsgBody body=new MsgBody();
-		List<MsgField> fields=new ArrayList<MsgField>();
-		String[] sFields=ret.split(";");
-		for(String s:sFields){
-			MsgField field=new MsgField();
+		String ret = new String(data);
+		Message msg = new Message();
+		MsgHead head = new MsgHead();
+		MsgBody body = new MsgBody();
+		List<MsgField> fields = new ArrayList<MsgField>();
+		String[] sFields = ret.split(";");
+		for (String s : sFields) {
+			if (s == null || s.trim().length() <= 0)
+				continue;
+			MsgField field = new MsgField();
 			fields.add(field);
-			String [] keyValue=s.split("-");
+			String[] keyValue = s.split("-");
 			field.setName(keyValue[0]);
 			field.setValue(keyValue[1]);
 		}
 		body.setFields(fields);
-		MsgTail tail=new MsgTail();
+		MsgTail tail = new MsgTail();
 		msg.setBody(body);
 		msg.setTail(tail);
 		msg.setHead(head);
@@ -50,57 +52,59 @@ public class Hex2StringDecoder implements MsgDecoder {
 	}
 
 	private byte[] encodeMsg(Message msg) {
-		MsgHead head=msg.getHead();
-		MsgBody body=msg.getBody();
-		List<MsgField> fields=	body.getFields();
-		MsgTail tail=msg.getTail();
-		StringBuilder sb=new StringBuilder();
-		for(int i =0;i<fields.size();++i){
-			MsgField field=fields.get(i);
+		MsgHead head = msg.getHead();
+		MsgBody body = msg.getBody();
+		List<MsgField> fields = body.getFields();
+		MsgTail tail = msg.getTail();
+		StringBuilder sb = new StringBuilder();
+		for (int i = 0; i < fields.size(); ++i) {
+			MsgField field = fields.get(i);
 			sb.append(field.getName()).append("-").append(field.getValue()).append(";");
 		}
 		return sb.toString().getBytes();
 	}
+
 	@Override
 	public String decodeMsgForDisplay(Message msg) {
-		String ret=HEX2BIN.encode(encodeMsg(msg));
+		String ret = HEX2BIN.encode(encodeMsg(msg));
 		return ret;
 	}
 
 	@Override
 	public String decodeMsgFormatedForDisplay(Message msg) {
-		String value=decodeMsgForDisplay(msg);
-		StringBuilder sb=new StringBuilder();
-		for( int i=0;i<value.length();i+=2){
-			if(i%32==0){
+		String value = decodeMsgForDisplay(msg);
+		StringBuilder sb = new StringBuilder();
+		for (int i = 0; i < value.length(); i += 2) {
+			if (i % 32 == 0) {
 				sb.append("\n");
 			}
-			sb.append(value.subSequence(i, i+2));
+			sb.append(value.subSequence(i, i + 2));
 			sb.append(" ");
 		}
-		return  sb.toString();
+		return sb.toString();
 	}
-	Hex2StringConfigBean bean=new Hex2StringConfigBean();
-	public JDialog  editDecoderConfigDialog(String config) {
-		bean=null;
-		Hex2StringConfigUI ui=new Hex2StringConfigUI(SenderMainFrame.getMainFrame(),true	);
-		
-//		ui.setVisible(true);
-		if(config!=null){
+
+	Hex2StringConfigBean bean = new Hex2StringConfigBean();
+
+	public JDialog editDecoderConfigDialog(String config) {
+		bean = null;
+		Hex2StringConfigUI ui = new Hex2StringConfigUI(SenderMainFrame.getMainFrame(), true);
+
+		// ui.setVisible(true);
+		if (config != null) {
 			try {
-				 bean=CommonTools.doDBQueryOperationSingle(Hex2StringConfigDao.class, "selectByName", Hex2StringConfigBean.class, new Class[]{String.class,String.class}, config	,"decoder");
-				if(bean==null){
-					bean=new Hex2StringConfigBean();
+				bean = CommonTools.doDBQueryOperationSingle(Hex2StringConfigDao.class, "selectByName", Hex2StringConfigBean.class, new Class[] { String.class, String.class }, config, "decoder");
+				if (bean == null) {
+					bean = new Hex2StringConfigBean();
 					bean.setType("decoder");
 				}
 				ui.setConfig(bean);
 			} catch (Exception e) {
-				
+
 			}
-		}
-		else {
-			
-			bean=new Hex2StringConfigBean();
+		} else {
+
+			bean = new Hex2StringConfigBean();
 			bean.setType("decoder");
 			ui.setConfig(bean);
 		}
@@ -110,21 +114,20 @@ public class Hex2StringDecoder implements MsgDecoder {
 
 	@Override
 	public String getCurrentConfigName() {
-		
+
 		return bean.getName();
 	}
 
 	@Override
-	public void  setCurrentConfigName(String config) {
-		bean=null;
-		if(config!=null){
+	public void setCurrentConfigName(String config) {
+		bean = null;
+		if (config != null) {
 			try {
-				 bean=CommonTools.doDBQueryOperationSingle(Hex2StringConfigDao.class, "selectByName", Hex2StringConfigBean.class, new Class[]{String.class,String.class}, config,"decoder"	);
+				bean = CommonTools.doDBQueryOperationSingle(Hex2StringConfigDao.class, "selectByName", Hex2StringConfigBean.class, new Class[] { String.class, String.class }, config, "decoder");
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}
 	}
-	
 
 }
