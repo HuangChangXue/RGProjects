@@ -60,7 +60,7 @@ public class DatabaseFieldProvider implements FieldEditor {
 		List<DataBaseConfigBean> confs = null;
 		;
 		try {
-			confs = CommonTools.doDBQueryOperation(DataBaseConfigDao.class, "queryByFieldId", DataBaseConfigBean.class, new Class[] { String.class }, fieldId);
+			confs = CommonTools.doDBQueryOperation(DataBaseConfigDao.class, "queryGroupByFieldId", DataBaseConfigBean.class, new Class[] { String.class }, fieldId);
 
 			if (confs == null || confs.size() <= 0) {
 				DataBaseConfigBean bean = new DataBaseConfigBean();
@@ -105,34 +105,42 @@ public class DatabaseFieldProvider implements FieldEditor {
 	@Override
 	public void configcombiedFields(MsgField msg, List<MsgField> fields) {
 		List<DataBaseConfigBean> dbConfigs = getConfigBean(msg.getId());
-		if(!cachedData.containsKey(dbConfigs.get(0).getDbconnection())){
-			loadDbResult(dbConfigs.get(0).getDbconnection(),dbConfigs.get(0).getPreviewSql());
+		if (!cachedData.containsKey(dbConfigs.get(0).getDbconnection())) {
+			loadDbResult(dbConfigs.get(0).getDbconnection(), dbConfigs.get(0).getPreviewSql());
 		}
-		JSONArray resultData=cachedData.get(dbConfigs.get(0).getDbconnection());
-		JSONObject cur=resultData.getJSONObject(0);
+		JSONArray resultData = cachedData.get(dbConfigs.get(0).getDbconnection());
+		if (resultData.length() <= 0) {
+			loadDbResult(dbConfigs.get(0).getDbconnection(), dbConfigs.get(0).getPreviewSql());
+			resultData = cachedData.get(dbConfigs.get(0).getDbconnection());
+		}
+		JSONObject cur = resultData.getJSONObject(0);
 		resultData.remove(0);
-		
-		Map<String, MsgField> confmsgs=new HashMap<String,MsgField>();
-		for(DataBaseConfigBean bean:dbConfigs){
-			for(MsgField field:fields){
-				if(field.getId().equals(bean.getFieldID())){
+
+		Map<String, MsgField> confmsgs = new HashMap<String, MsgField>();
+		for (DataBaseConfigBean bean : dbConfigs) {
+			for (MsgField field : fields) {
+				if (field.getId().equals(bean.getFieldID())) {
 					confmsgs.put(bean.getFieldMapping().toLowerCase(), field);
 					break;
 				}
 			}
 		}
-		
-		for(String s:cur.keySet()){
-			MsgField field=confmsgs.get(s.toLowerCase());
-			field.setValue(cur.get(s));
+
+		for (String s : cur.keySet()) {
+			String key = s.toLowerCase();
+			if (confmsgs.containsKey(key)) {
+				MsgField field = confmsgs.get(key);
+				field.setValue(cur.get(s));
+			}
 		}
-		
+
 	}
-	
-	Map<String ,JSONArray> cachedData=new HashMap<String,JSONArray>();
-	private  void loadDbResult(String  connName,String sql){
-		if(!cachedData.containsKey(connName)){
-			return ;
+
+	Map<String, JSONArray> cachedData = new HashMap<String, JSONArray>();
+
+	private void loadDbResult(String connName, String sql) {
+		if (cachedData.containsKey(connName)) {
+			return;
 		}
 		DBConf conf = new DBConf();
 		conf.setName(connName);
@@ -140,38 +148,39 @@ public class DatabaseFieldProvider implements FieldEditor {
 		try {
 			dbconf = CommonTools.doDBQueryOperation(DBConfDao.class, "queryByName", DBConf.class, new Class[] { DBConf.class }, conf);
 		} catch (Exception e1) {
-			
+
 			e1.printStackTrace();
 		}
 		java.sql.Connection conn = null;
 		try {
 			conn = CommonTools.getDBConfigForTest(dbconf.get(0));
-			Statement stm=conn.createStatement();
-			ResultSet rst=stm.executeQuery(sql);
-			ResultSetMetaData md=rst.getMetaData();
-			String[] names=new String[md.getColumnCount()];
-			for(int i =1;i<=names.length;++i){
-				names[i]=md.getColumnLabel(i);
+			Statement stm = conn.createStatement();
+			ResultSet rst = stm.executeQuery(sql);
+			ResultSetMetaData md = rst.getMetaData();
+			String[] names = new String[md.getColumnCount()];
+			for (int i = 1; i <= names.length; ++i) {
+				names[i - 1] = md.getColumnLabel(i);
 			}
-			JSONArray conRst=new JSONArray();
-			while(rst.next()){
-				JSONObject row=new JSONObject();
-				for(int i=0;i<names.length;++i){
+			JSONArray conRst = new JSONArray();
+			while (rst.next()) {
+				JSONObject row = new JSONObject();
+				for (int i = 0; i < names.length; ++i) {
 					row.put(names[i], rst.getObject(names[i]));
 				}
 				conRst.put(row);
 			}
-			cachedData.put(connName, conRst	);
-			
+			cachedData.put(connName, conRst);
+
 		} catch (Exception e) {
-		}
-		finally{
+			e.printStackTrace();
+		} finally {
 			try {
 				conn.close();
-			} catch (SQLException e) {}
+			} catch (SQLException e) {
+			}
 		}
 	}
-	
+
 	@Override
 	public boolean isAviableforName(String name) {
 		// TODO Auto-generated method stub
