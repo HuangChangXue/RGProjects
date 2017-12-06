@@ -107,6 +107,7 @@ public class XmlEncoder implements MsgEncoder {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		System.out.println(new String(bos.toByteArray()));
 		return bos.toByteArray();
 	}
 

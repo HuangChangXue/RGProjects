@@ -36,6 +36,7 @@ public class TCPProtelHandler implements ProtelHandler {
 		String host = serverConf.getHost();
 		String port = serverConf.getPort();
 		MsgEncoder encoder = CommonTools.getEncoderByName(serverConf.getEncoder());
+		encoder.setCurrentConfigName(serverConf.getEncoderConfigName());
 		if (encoder != null) {
 			ByteArrayOutputStream bos=new ByteArrayOutputStream();
 			byte[] data = encoder.encodeMsg(msg);
@@ -65,6 +66,7 @@ public class TCPProtelHandler implements ProtelHandler {
 				}
 			}
 			MsgDecoder decoder=CommonTools.getDecoderByName(serverConf.getDecoder());
+			decoder.setCurrentConfigName(serverConf.getDecoderConfigName());
 			return decoder.decodeMsg(bos.toByteArray());
 		}
 		return null;

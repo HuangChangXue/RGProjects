@@ -45,6 +45,8 @@ public class ServerTool {
 
 		private void handleAccept(SelectionKey key) {
 			ServerSocketChannel ssChannel = (ServerSocketChannel) key.channel();
+		
+//			key.interestOps(SelectionKey.OP_ACCEPT);s
 			try {
 				int port = ssChannel.socket().getLocalPort();
 				String hostname = ssChannel.socket().getInetAddress().getHostAddress();
@@ -58,6 +60,7 @@ public class ServerTool {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+			
 		}
 
 		private void handleRead(SelectionKey key) {
@@ -66,12 +69,12 @@ public class ServerTool {
 			try {
 				long len = sc.read(buf);
 
-				buf.putChar('\n').putChar('\r');
+//				buf.putChar('\n').putChar('\r');
 				// System.out.println(new String(buf.));
 				// buf.clear();
 
 			} catch (IOException e) {
-				key.cancel();
+//				key.cancel();
 			}
 
 			key.interestOps( SelectionKey.OP_WRITE);
@@ -87,7 +90,7 @@ public class ServerTool {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-			key.cancel();
+//			key.cancel();
 //			buf.compact();
 			
 //			key.interestOps(SelectionKey.)
@@ -120,16 +123,18 @@ public class ServerTool {
 						Iterator<SelectionKey> iter = selector.selectedKeys().iterator();
 						while (iter.hasNext()) {
 							SelectionKey slk = iter.next();
-							if (slk.isAcceptable()) {
+							if (slk.isValid()&&slk.isAcceptable()) {
 								handleAccept(slk);
 							}
-							if (slk.isReadable()) {
+							if (slk.isValid()&&slk.isReadable()) {
 								handleRead(slk);
 							}
-							if (slk.isWritable()) {
+							if (slk.isValid()&&slk.isWritable()) {
 								handleWrite(slk);
 							}
+							iter.remove();
 						}
+					
 					}
 
 				}

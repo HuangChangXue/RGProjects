@@ -119,9 +119,7 @@ public class PreviewPanel extends JPanel {
 			if(selectedServer==null) return ;
 			ServerConf sconf=serversKeys.get(selectedServer);
 			String encoderName=sconf.getEncoder();
-			MsgDecoder decoder=CommonTools.getDecoderByName(sconf.getDecoder());
-			decoder.setCurrentConfigName(sconf.getDecoderConfigName());
-			
+	
 			MsgEncoder  encoder=CommonTools.getEncoderByName(encoderName);
 			encoder.setCurrentConfigName(sconf.getDecoderConfigName());
 			if("preview".equals(cmd)){
@@ -140,6 +138,9 @@ public class PreviewPanel extends JPanel {
 				}
 				ProtelHandler handler=ProtelHelper.getProtelHandler(sconf.getProtel());
 				messageReceived=handler.doSendMessage(sconf, messageToSend, null);
+				MsgDecoder decoder=CommonTools.getDecoderByName(sconf.getDecoder());
+				decoder.setCurrentConfigName(sconf.getDecoderConfigName());
+				
 				txt_receive.setText(decoder.decodeMsgForDisplay(messageReceived));
 				}
 			else if("send".equals(cmd)){

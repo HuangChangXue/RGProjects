@@ -30,15 +30,15 @@ public class SocketChannelTest {
 		ByteBuffer buf = (ByteBuffer) key.attachment();
 		
 		long bytesRead = sc.read(buf);
-		while (bytesRead > 0) {
-			buf.flip();
-			while (buf.hasRemaining()) {
-				System.out.print((char) buf.get());
-			}
-			System.out.println();
-			buf.clear();
-			bytesRead = sc.read(buf);
-		}
+//		while (bytesRead > 0) {
+//			buf.flip();
+//			while (buf.hasRemaining()) {
+//				System.out.print((char) buf.get());
+//			}
+//			System.out.println();
+//			buf.clear();
+//			bytesRead = sc.read(buf);
+//		}
 		if (bytesRead == -1) {
 			sc.close();
 		}
@@ -54,6 +54,8 @@ public class SocketChannelTest {
 			sc.write(buf);
 		}
 		buf.compact();
+//		key.cancel();
+		sc.close();
 	}
 
 	public static void selector() {
@@ -74,18 +76,19 @@ public class SocketChannelTest {
 				Iterator<SelectionKey> iter = selector.selectedKeys().iterator();
 				while (iter.hasNext()) {
 					SelectionKey key = iter.next();
-					if (key.isAcceptable()) {
+					if (key.isValid()&&key.isAcceptable()) {
 						handleAccept(key);
 					}
-					if (key.isReadable()) {
+					if (key.isValid()&&key.isReadable()) {
 						handleRead(key);
 					}
-					if (key.isWritable() && key.isValid()) {
+					if ( key.isValid()&&key.isWritable() ) {
 						handleWrite(key);
 					}
-					if (key.isConnectable()) {
+					if (key.isValid()&&key.isConnectable()) {
 						System.out.println("isConnectable = true");
 					}
+					
 					iter.remove();
 				}
 			}
